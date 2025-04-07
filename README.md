@@ -48,16 +48,14 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
     vetor_ordernar_mergesort(vetor);            // v
     ```
 
-- [ ] Criar TAD para uma lista encadeada (ou lista simplesmente encadeada, ou ainda **LSE**) para as questões II e V.
+- [x] Criar TAD para uma lista encadeada (ou lista simplesmente encadeada, ou ainda **LSE**) para as questões II e V.
     ```c
     // No "lse.h" ou "lse.c" ...
-    lse_criar(tamanho);                 // ^ 
-    lse_criar_ordenado(tamanho);        // |
+    lse_criar();                        // ^ 
     lse_criar_com_vetor(vetor);         // |
     lse_liberar(lista);                 // | Questão II
     lse_imprimir(lista, inicio, fim);   // |
-    lse_buscar_seq(lista, valor);       // |
-    lse_buscar_bin(lista, valor);       // v
+    lse_buscar_seq(lista, valor);       // v
     lse_acessar(lista, indice);         // ^
     lse_inserir_inicio(lista, valor);   // | Utilitários (privados)
     lse_inserir_final(lista, valor);    // v    
