@@ -1,8 +1,16 @@
+#include <time.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
 #include "vetor.h"
 #include "lse.h"
 
-//Tamanho do Vetor
+// Tamanho do Vetor
 #define N 1000000
+
+// Quantidade de repetições da busca binária/sequencial
+#define I 30
 
 double tempo_execucao(void (*funcao)(int[], int, int), int vet[], int tam, int valor){
     clock_t inicio = clock();
@@ -15,11 +23,11 @@ int main(int argc, char** argv) {
     // Questão 1
     srand(time(NULL));
 
-    double tempos_sequencial[30], tempos_binaria[30];
+    double tempos_sequencial[I], tempos_binaria[I];
     double soma_sequencial = 0, soma_binaria = 0;
 
     //Busca sequencial 30 vezes
-    for(int i=0; i<30; i++){
+    for(int i=0; i<I; i++){
         int vet_sequencial[N];
         gerar_aleatorio(vet_sequencial, N); //Gera vetor aleatorio
         int valor_busca = rand() % 1000000 + 1; //Gera valor aleatorio
@@ -27,7 +35,7 @@ int main(int argc, char** argv) {
         soma_sequencial += tempos_sequencial[i];
     }
     //Busca binaria 30 vezes
-    for(int i=0; i<30; i++){
+    for(int i=0; i<I; i++){
         int vet_binario[N];
         gerar_aleatorio(vet_binario, N); //Gera vetor aleatorio
         ordenar(vet_binario, N); //Ordena vetor
@@ -59,13 +67,13 @@ int main(int argc, char** argv) {
     //Exibição de teste
     printf("Dados da Q1:\n");
     
-    printf("Busca Sequencial: \n");
-    printf("Media do tempo: %.6f s\n", media_sequencial);
-    printf("Desvio Padrao: %.6f s\n\n", desvio_sequencial);
+    printf("* Busca Sequencial: \n");
+    printf("  Media do tempo: %.6f s\n", media_sequencial);
+    printf("  Desvio Padrao: %.6f s\n\n", desvio_sequencial);
 
-    printf("Busca Binaria: \n");
-    printf("Media do tempo: %.6f s\n", media_binaria);
-    printf("Desvio Padrao: %.6f s\n\n", desvio_binario);
+    printf("* Busca Binaria: \n");
+    printf("  Media do tempo: %.6f s\n", media_binaria);
+    printf("  Desvio Padrao: %.6f s\n\n", desvio_binario);
 
     // Questão 2
 
