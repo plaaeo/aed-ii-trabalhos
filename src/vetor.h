@@ -11,5 +11,6 @@ typedef struct vetor_t {
 /// Defina aqui as funções para usar o TAD "vetor_t"
 
 ///Gera um vetor com valores aleatórios
-void *gerar_aleatorio(vet[], tam)
-///
+void *gerar_aleatorio(int vet[], int tam)
+///Ordenar vetor
+void ordenar(int vet[], int tam)
