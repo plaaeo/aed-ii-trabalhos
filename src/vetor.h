@@ -21,5 +21,3 @@ int busca_sequencial(int vet[], int tam, int valor);
 ///Faz uma Busca Binaria pelo vetor
 int busca_binaria(int vet[], int tam, int valor);
 
-///Calcula o tempo de execução das buscas
-double tempo_execucao(void (*funcao)(int[], int, int), int vet[], int tam, int valor);
