@@ -1,2 +1,2 @@
 build:
-	gcc -lm -I src/ -o out/trab1 src/*.c
+	gcc src/*.c -o out/trab1.o -I src/ -lm 
