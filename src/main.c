@@ -1,6 +1,9 @@
 #include "vetor.h"
 #include "lse.h"
 
+//Tamanho do Vetor
+#define N 1000000
+
 int main(int argc, char** argv) {
     // Questão 1
     srand(time(NULL));
