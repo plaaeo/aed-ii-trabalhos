@@ -4,6 +4,13 @@
 //Tamanho do Vetor
 #define N 1000000
 
+double tempo_execucao(void (*funcao)(int[], int, int), int vet[], int tam, int valor){
+    clock_t inicio = clock();
+    funcao(vet, tam, valor);
+    clock_t fim = clock();
+    return ((double)(fim-inicio)) / CLOCKS_PER_SEC;
+}
+
 int main(int argc, char** argv) {
     // Questão 1
     srand(time(NULL));
