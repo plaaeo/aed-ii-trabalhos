@@ -6,6 +6,9 @@
 #include "lse.h"
 #include "vetor.h"
 
+// Defina "true" para imprimir os valores usados para busca nas questões
+const bool debug_imprimir_vetores = false;
+
 // A quantidade de clocks em 1 microsegundo
 #define CLOCKS_PER_US (CLOCKS_PER_SEC / 1000000)
 
@@ -20,6 +23,7 @@ void medir_fim(double *medicoes, int i) {
 // - `N` é o tamanho dos vetores aleatórios; 
 // - `I` é a quantidade de repetições de cada algorítmo de busca.
 void questao1(unsigned int seed, int N, int I) {
+    printf("Dados da Q1:\n");
     srand(seed);
 
     double tempos_sequencial[I], tempos_binaria[I];
@@ -37,6 +41,10 @@ void questao1(unsigned int seed, int N, int I) {
         vetor_busca_sequencial(vet_sequencial, N, valor_busca);
         medir_fim(tempos_sequencial, i);
 
+        if (debug_imprimir_vetores) {
+            printf("  <Vetor seq. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_sequencial[0], vet_sequencial[1]);
+        }
+
         soma_sequencial += tempos_sequencial[i];
     }
 
@@ -51,6 +59,10 @@ void questao1(unsigned int seed, int N, int I) {
         medir_inicio(tempos_binaria, i);
         vetor_busca_binaria(vet_binario, N, valor_busca);
         medir_fim(tempos_binaria, i);
+
+        if (debug_imprimir_vetores) {
+            printf("  <Vetor bin. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_binario[0], vet_binario[1]);
+        }
 
         soma_binaria += tempos_binaria[i];
     }
@@ -74,8 +86,6 @@ void questao1(unsigned int seed, int N, int I) {
     double desvio_binario = sqrt(soma_quadrados_binario / I);
 
     // Exibição de teste
-    printf("Dados da Q1:\n");
-
     printf("* Busca Sequencial: \n");
     printf("  Media do tempo: %.6f us\n", media_sequencial);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_sequencial);
@@ -90,6 +100,7 @@ void questao1(unsigned int seed, int N, int I) {
 // - `N` é o tamanho das listas aleatórias; 
 // - `I` é a quantidade de repetições da busca sequencial.
 void questao2(unsigned int seed, int N, int I) {
+    printf("Dados da Q2:\n");
     srand(seed);
 
     double tempos[I];
@@ -110,6 +121,12 @@ void questao2(unsigned int seed, int N, int I) {
 
         medir_fim(tempos, i);
 
+        if (debug_imprimir_vetores) {
+
+            printf("  <LSE %d> (x = %d) ", i + 1, valor_busca);
+            lse_imprimir(lse, 0, 2);
+        }
+
         soma_tempos += tempos[i];
     }
 
@@ -127,7 +144,6 @@ void questao2(unsigned int seed, int N, int I) {
     double desvio_tempos = sqrt(soma_quadrados / I);
     
     // Exibição de teste
-    printf("Dados da Q2:\n");
     printf("* Busca Sequencial: \n");
     printf("  Media do tempo: %.6f us\n", media_tempos);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_tempos);
