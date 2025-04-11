@@ -15,12 +15,10 @@
 // Quantidade de repetições da busca binária/sequencial
 #define I 30
 
-double tempo_execucao(int (*funcao)(vetor_t, int, int), vetor_t vet, int tam,
-                      int valor) {
-    clock_t inicio = clock();
-    funcao(vet, tam, valor);
-    clock_t fim = clock();
-    return ((double)(fim - inicio)) / CLOCKS_PER_US;
+void medir_inicio(double *medicoes, int i) { medicoes[i] = clock(); }
+
+void medir_fim(double *medicoes, int i) {
+    medicoes[i] = (double)(clock() - medicoes[i]) / CLOCKS_PER_US;
 }
 
 int main(int argc, char **argv) {
@@ -34,9 +32,14 @@ int main(int argc, char **argv) {
     for (int i = 0; i < I; i++) {
         int vet_sequencial[N];
         vetor_gerar_aleatorio(vet_sequencial, N); // Gera vetor aleatorio
-        int valor_busca = rand() % 1000000 + 1;   // Gera valor aleatorio
-        tempos_sequencial[i] = tempo_execucao(vetor_busca_sequencial,
-                                              vet_sequencial, N, valor_busca);
+
+        // Medir busca sequencial
+        int valor_busca = rand() % 1000000 + 1; // Gera valor aleatorio
+
+        medir_inicio(tempos_sequencial, i);
+        vetor_busca_sequencial(vet_sequencial, N, valor_busca);
+        medir_fim(tempos_sequencial, i);
+
         soma_sequencial += tempos_sequencial[i];
     }
     // Busca binaria 30 vezes
@@ -44,9 +47,13 @@ int main(int argc, char **argv) {
         int vet_binario[N];
         vetor_gerar_ordenado(vet_binario, N); // Gera vetor aleatório ordenado
 
+        // Medir busca binária
         int valor_busca = rand() % 1000000 + 1; // Gera valor aleatorio
-        tempos_binaria[i] =
-            tempo_execucao(vetor_busca_binaria, vet_binario, N, valor_busca);
+        
+        medir_inicio(tempos_binaria, i);
+        vetor_busca_binaria(vet_binario, N, valor_busca);
+        medir_fim(tempos_binaria, i);
+
         soma_binaria += tempos_binaria[i];
     }
 
