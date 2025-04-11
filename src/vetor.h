@@ -2,21 +2,23 @@
 #include <stddef.h>
 
 /// TAD para um vetor de inteiros.
-typedef struct vetor_t {
-    int *vetor;
-    size_t tamanho;
-} vetor_t;
-
-/// ...
-/// Defina aqui as funções para usar o TAD "vetor_t"
+typedef int vetor_t[];
 
 /// Gera um vetor com valores aleatórios
-void vetor_gerar_aleatorio(int vet[], int tam);
-/// Ordena o vetor
-void vetor_ordenar(int vet[], int tam);
+void vetor_gerar_aleatorio(vetor_t vet, int tam);
 
-/// Buscas
+/// Gera um vetor com valores ordenados aleatórios
+void vetor_gerar_ordenado(vetor_t vet, int tam);
+
+/// -- Ordenação --
+
+/// Ordena o vetor usando o selection sort
+void vetor_ordenar_selection(vetor_t vet, int tam);
+
+/// -- Buscas --
+
 /// Faz uma Busca Sequencial pelo vetor
-int vetor_busca_sequencial(int vet[], int tam, int valor);
+int vetor_busca_sequencial(vetor_t vet, int tam, int valor);
+
 /// Faz uma Busca Binaria pelo vetor
-int vetor_busca_binaria(int vet[], int tam, int valor);
+int vetor_busca_binaria(vetor_t vet, int tam, int valor);
