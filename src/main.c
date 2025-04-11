@@ -86,11 +86,11 @@ void questao1(unsigned int seed, int N, int I) {
     double desvio_binario = sqrt(soma_quadrados_binario / I);
 
     // Exibição de teste
-    printf("* Busca Sequencial: \n");
+    printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
     printf("  Media do tempo: %.6f us\n", media_sequencial);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_sequencial);
 
-    printf("* Busca Binaria: \n");
+    printf("* Busca Binaria (%d elementos, %d vezes): \n", N, I);
     printf("  Media do tempo: %.6f us\n", media_binaria);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_binario);
 }
@@ -144,23 +144,31 @@ void questao2(unsigned int seed, int N, int I) {
     double desvio_tempos = sqrt(soma_quadrados / I);
     
     // Exibição de teste
-    printf("* Busca Sequencial: \n");
+    printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
     printf("  Media do tempo: %.6f us\n", media_tempos);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_tempos);
+}
+
+void questao3(unsigned int seed) {
+    // ...
 }
 
 int main(int argc, char **argv) {
     // Salvar a seed aleatória para re-gerar os vetores da Q1 na Q2
     unsigned int seed = time(NULL);
 
+    int N = 1000000;
+    int I = 30;
+    
+    if (argc > 1) sscanf(argv[1], " %d", &N);
+    if (argc > 2) sscanf(argv[2], " %d", &I);
+
     // Questão 1
-    questao1(seed, 1000000, 30);
+    questao1(seed, N, I);
 
     // Questão 2
-    questao2(seed, 1000000, 30);
+    questao2(seed, N, I);
 
     // Questão 3
-
-    // .....
-    printf("Dados da Q3:\n");
+    questao3(seed);
 }
