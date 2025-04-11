@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "lse.h"
@@ -11,7 +12,7 @@ struct lse_no_t {
 struct lse_t {
     lse_no_t *cabeca;
     lse_no_t *cauda;
-    size_t tamanho;
+    int tamanho;
 };
 
 /// Cria um nó da lista encadeada.
@@ -61,6 +62,7 @@ bool lse_inserir_final(lse_t *lista, int valor) {
     return true;
 };
 
+/// Cria uma lista encadeada vazia.
 lse_t *lse_criar() {
     lse_t *lse = malloc(sizeof(lse_t));
 
@@ -73,10 +75,14 @@ lse_t *lse_criar() {
     return lse;
 };
 
-lse_t *lse_criar_com_vetor(const vetor_t *vetor) {
+lse_t *lse_criar_aleatorio(int tam) {
     lse_t *lista = lse_criar();
 
-    // TODO: Fazer quando a implementação do vetor estiver completa.
+    // Inserir itens aleatórios entre 1 e 1 milhão na LSE
+    for (int i = 0; i < tam; i++) {
+        int val = rand() % 1000000;
+        lse_inserir_final(lista, val + 1);
+    }
 
     return lista;
 };
@@ -92,8 +98,8 @@ void lse_liberar(lse_t *lista) {
     free(lista);
 };
 
-void lse_imprimir(const lse_t *lista, size_t inicio, size_t fim) {
-    size_t idx = 0;
+void lse_imprimir(const lse_t *lista, int inicio, int fim) {
+    int idx = 0;
     lse_no_t *no = lista->cabeca;
 
     printf("[ ");
@@ -121,8 +127,8 @@ void lse_imprimir(const lse_t *lista, size_t inicio, size_t fim) {
     printf(" ]\n");
 };
 
-bool lse_buscar_seq(const lse_t *lista, int valor, size_t *indice) {
-    size_t idx = 0;
+bool lse_busca_sequencial(const lse_t *lista, int valor, int *indice) {
+    int idx = 0;
     lse_no_t *no = lista->cabeca;
 
     while (no) {
@@ -139,8 +145,8 @@ bool lse_buscar_seq(const lse_t *lista, int valor, size_t *indice) {
     return false;
 };
 
-bool lse_acessar(const lse_t *lista, size_t indice, int *valor) {
-    size_t idx = 0;
+bool lse_acessar(const lse_t *lista, int indice, int *valor) {
+    int idx = 0;
     lse_no_t *no = lista->cabeca;
 
     while (no) {

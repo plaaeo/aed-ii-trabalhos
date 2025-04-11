@@ -32,7 +32,7 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
 
 # Tarefas e Sugestões
 
-- [ ] Criar TAD para um vetor para as questões I, III e V. <br>    
+- [x] Criar TAD para um vetor para as questões I, III e V. <br>    
     ```c
     // No "vetor.h" ou "vetor.c" ...
     vetor_criar_aleatorio(tamanho);             // ^

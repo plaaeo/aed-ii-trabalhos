@@ -5,7 +5,7 @@
 // Gera um vetor com valores aleatórios
 void vetor_gerar_aleatorio(vetor_t vet, int tam) {
     for (int i = 0; i < tam; i++) {
-        vet[i] = rand() % 1000000 + 1; // Valores aleatórios entre 1 e 1 milhão
+        vet[i] = 1 + (rand() % 1000000); // Valores aleatórios entre 1 e 1 milhão
     }
 }
 

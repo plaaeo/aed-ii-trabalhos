@@ -22,8 +22,11 @@ void medir_fim(double *medicoes, int i) {
 }
 
 int main(int argc, char **argv) {
+    // Salvar a seed aleatória para re-gerar os vetores da Q1 na Q2
+    unsigned int seed = time(NULL);
+
     // Questão 1
-    srand(time(NULL));
+    srand(seed);
 
     double tempos_sequencial[I], tempos_binaria[I];
     double soma_sequencial = 0, soma_binaria = 0;
@@ -34,7 +37,7 @@ int main(int argc, char **argv) {
         vetor_gerar_aleatorio(vet_sequencial, N); // Gera vetor aleatorio
 
         // Medir busca sequencial
-        int valor_busca = rand() % 1000000 + 1; // Gera valor aleatorio
+        int valor_busca = 1 + (rand() % 1000000); // Gera valor aleatorio
 
         medir_inicio(tempos_sequencial, i);
         vetor_busca_sequencial(vet_sequencial, N, valor_busca);
@@ -42,13 +45,14 @@ int main(int argc, char **argv) {
 
         soma_sequencial += tempos_sequencial[i];
     }
+
     // Busca binaria 30 vezes
     for (int i = 0; i < I; i++) {
         int vet_binario[N];
         vetor_gerar_ordenado(vet_binario, N); // Gera vetor aleatório ordenado
 
         // Medir busca binária
-        int valor_busca = rand() % 1000000 + 1; // Gera valor aleatorio
+        int valor_busca = 1 + (rand() % 1000000); // Gera valor aleatorio
         
         medir_inicio(tempos_binaria, i);
         vetor_busca_binaria(vet_binario, N, valor_busca);
@@ -57,25 +61,23 @@ int main(int argc, char **argv) {
         soma_binaria += tempos_binaria[i];
     }
 
-    // Calcular a media sequencial
+    // Calcular a media sequencial e binária
     double media_sequencial = soma_sequencial / I;
+    double media_binaria = soma_binaria / I;
 
-    // Calcular desvio padrao sequencial
+    // Calcular desvio padrao sequencial e binário
     double soma_quadrados_sequencial = 0;
+    double soma_quadrados_binario = 0;
+
     for (int i = 0; i < I; i++) {
         soma_quadrados_sequencial +=
             pow(tempos_sequencial[i] - media_sequencial, 2);
-    }
-    double desvio_sequencial = sqrt(soma_quadrados_sequencial / I);
 
-    // Calcular a media binaria
-    double media_binaria = soma_binaria / I;
-
-    // Calcular desvio padrao binario
-    double soma_quadrados_binario = 0;
-    for (int i = 0; i < I; i++) {
         soma_quadrados_binario += pow(tempos_binaria[i] - media_binaria, 2);
     }
+
+    // Calcular desvio padrao sequencial e binario
+    double desvio_sequencial = sqrt(soma_quadrados_sequencial / I);
     double desvio_binario = sqrt(soma_quadrados_binario / I);
 
     // Exibição de teste
@@ -88,10 +90,9 @@ int main(int argc, char **argv) {
     printf("* Busca Binaria: \n");
     printf("  Media do tempo: %.6f us\n", media_binaria);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_binario);
-
+    
     // Questão 2
 
-    // .....
     printf("Dados da Q2:\n");
 
     // Questão 3
