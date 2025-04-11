@@ -135,7 +135,8 @@ bool lse_busca_sequencial(const lse_t *lista, int valor, int *indice) {
     while (no) {
         // Retornar quando o primeiro valor for encontrado.
         if (no->valor == valor) {
-            *indice = idx;
+            if (indice)
+                (*indice) = idx;
             return true;
         }
 

@@ -21,7 +21,9 @@ void vetor_gerar_ordenado(vetor_t vet, int tam) {
     }
 }
 
-// Ordena o vetor
+// -- Ordenação
+
+// Ordena o vetor usando selection sort
 void vetor_ordenar_selection(vetor_t vet, int tam) {
     for (int i = 0; i < tam - 1; i++) {
         for (int j = i + 1; j < tam; j++) {
@@ -34,7 +36,7 @@ void vetor_ordenar_selection(vetor_t vet, int tam) {
     }
 }
 
-// Buscas
+// -- Buscas -- 
 int vetor_busca_sequencial(vetor_t vet, int tam, int valor) {
     for (int i = 0; i < tam; i++) {
         if (vet[i] == valor) {
