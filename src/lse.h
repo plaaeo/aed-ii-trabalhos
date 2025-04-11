@@ -1,6 +1,6 @@
 #pragma once
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "vetor.h"
 
@@ -23,9 +23,11 @@ void lse_liberar(lse_t *lista);
 void lse_imprimir(const lse_t *lista, size_t inicio, size_t fim);
 
 /// Busca um item na lista encadeada sequencialmente.
-/// Caso o valor seja encontrado, o ponteiro `indice` é atualizado e a função retorna `true`.
-bool lse_buscar_seq(const lse_t *lista, int valor, size_t* indice);
+/// Caso o valor seja encontrado, o ponteiro `indice` é atualizado e a função
+/// retorna `true`.
+bool lse_buscar_seq(const lse_t *lista, int valor, size_t *indice);
 
 /// Acessa um item na lista encadeada dado um índice.
-/// Caso o indice exista, o ponteiro `valor` é atualizado e a função retorna `true`.
-bool lse_acessar(const lse_t *lista, size_t indice, int* valor);
+/// Caso o indice exista, o ponteiro `valor` é atualizado e a função retorna
+/// `true`.
+bool lse_acessar(const lse_t *lista, size_t indice, int *valor);
