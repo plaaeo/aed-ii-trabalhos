@@ -9,23 +9,17 @@
 // A quantidade de clocks em 1 microsegundo
 #define CLOCKS_PER_US (CLOCKS_PER_SEC / 1000000)
 
-// Tamanho do Vetor
-#define N 1000000
-
-// Quantidade de repetições da busca binária/sequencial
-#define I 30
-
 void medir_inicio(double *medicoes, int i) { medicoes[i] = clock(); }
 
 void medir_fim(double *medicoes, int i) {
     medicoes[i] = (double)(clock() - medicoes[i]) / CLOCKS_PER_US;
 }
 
-int main(int argc, char **argv) {
-    // Salvar a seed aleatória para re-gerar os vetores da Q1 na Q2
-    unsigned int seed = time(NULL);
-
-    // Questão 1
+// Imprime os dados da questão 1
+// - `seed` é a semente usada para gerar os vetores aleatórios; 
+// - `N` é o tamanho dos vetores aleatórios; 
+// - `I` é a quantidade de repetições de cada algorítmo de busca.
+void questao1(unsigned int seed, int N, int I) {
     srand(seed);
 
     double tempos_sequencial[I], tempos_binaria[I];
@@ -76,7 +70,6 @@ int main(int argc, char **argv) {
         soma_quadrados_binario += pow(tempos_binaria[i] - media_binaria, 2);
     }
 
-    // Calcular desvio padrao sequencial e binario
     double desvio_sequencial = sqrt(soma_quadrados_sequencial / I);
     double desvio_binario = sqrt(soma_quadrados_binario / I);
 
@@ -90,10 +83,65 @@ int main(int argc, char **argv) {
     printf("* Busca Binaria: \n");
     printf("  Media do tempo: %.6f us\n", media_binaria);
     printf("  Desvio Padrao: %.6f us\n\n", desvio_binario);
-    
-    // Questão 2
+}
 
+// Imprime os dados da questão 2
+// - `seed` é a semente usada para gerar as listas aleatórias; 
+// - `N` é o tamanho das listas aleatórias; 
+// - `I` é a quantidade de repetições da busca sequencial.
+void questao2(unsigned int seed, int N, int I) {
+    srand(seed);
+
+    double tempos[I];
+    double soma_tempos = 0;
+    
+    for (int i = 0; i < I; i++) {
+        // Gerar lista com itens aleatórios
+        lse_t *lse = lse_criar_aleatorio(N);
+
+        // Gerar valor aleatorio
+        int valor_busca = 1 + (rand() % 1000000); 
+
+        // Medir busca sequencial
+        medir_inicio(tempos, i);
+        
+        int resultado = 0;
+        bool _encontrado = lse_busca_sequencial(lse, valor_busca, &resultado);
+
+        medir_fim(tempos, i);
+
+        soma_tempos += tempos[i];
+    }
+
+    // Calcular a media dos tempos
+    double media_tempos = soma_tempos / I;
+
+    // Calcular desvio padrao dos tempos
+    double soma_quadrados = 0;
+
+    for (int i = 0; i < I; i++) {
+        double diff = tempos[i] - media_tempos;
+        soma_quadrados += diff * diff;
+    }
+
+    double desvio_tempos = sqrt(soma_quadrados / I);
+    
+    // Exibição de teste
     printf("Dados da Q2:\n");
+    printf("* Busca Sequencial: \n");
+    printf("  Media do tempo: %.6f us\n", media_tempos);
+    printf("  Desvio Padrao: %.6f us\n\n", desvio_tempos);
+}
+
+int main(int argc, char **argv) {
+    // Salvar a seed aleatória para re-gerar os vetores da Q1 na Q2
+    unsigned int seed = time(NULL);
+
+    // Questão 1
+    questao1(seed, 1000000, 30);
+
+    // Questão 2
+    questao2(seed, 1000000, 30);
 
     // Questão 3
 

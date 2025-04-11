@@ -35,7 +35,7 @@ bool lse_inserir_inicio(lse_t *lista, int valor) {
         return false;
 
     if (!lista->cauda) {
-        lista->cauda = lista->cabeca = no;
+        lista->cauda = (lista->cabeca = no);
     } else {
         no->prox = lista->cabeca;
         lista->cabeca = no;
@@ -53,9 +53,10 @@ bool lse_inserir_final(lse_t *lista, int valor) {
         return false;
 
     if (!lista->cauda) {
-        lista->cabeca = lista->cauda = no;
+        lista->cabeca = (lista->cauda = no);
     } else {
         lista->cauda->prox = no;
+        lista->cauda = no;
         lista->tamanho++;
     }
 
