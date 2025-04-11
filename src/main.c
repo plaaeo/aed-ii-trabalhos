@@ -6,6 +6,9 @@
 #include "lse.h"
 #include "vetor.h"
 
+// A quantidade de clocks em 1 microsegundo
+#define CLOCKS_PER_US (CLOCKS_PER_SEC / 1000000)
+
 // Tamanho do Vetor
 #define N 1000000
 
@@ -17,7 +20,7 @@ double tempo_execucao(int (*funcao)(vetor_t, int, int), vetor_t vet, int tam,
     clock_t inicio = clock();
     funcao(vet, tam, valor);
     clock_t fim = clock();
-    return ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+    return ((double)(fim - inicio)) / CLOCKS_PER_US;
 }
 
 int main(int argc, char **argv) {
@@ -72,12 +75,12 @@ int main(int argc, char **argv) {
     printf("Dados da Q1:\n");
 
     printf("* Busca Sequencial: \n");
-    printf("  Media do tempo: %.6f s\n", media_sequencial);
-    printf("  Desvio Padrao: %.6f s\n\n", desvio_sequencial);
+    printf("  Media do tempo: %.6f us\n", media_sequencial);
+    printf("  Desvio Padrao: %.6f us\n\n", desvio_sequencial);
 
     printf("* Busca Binaria: \n");
-    printf("  Media do tempo: %.6f s\n", media_binaria);
-    printf("  Desvio Padrao: %.6f s\n\n", desvio_binario);
+    printf("  Media do tempo: %.6f us\n", media_binaria);
+    printf("  Desvio Padrao: %.6f us\n\n", desvio_binario);
 
     // Questão 2
 
