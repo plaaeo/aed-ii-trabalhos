@@ -79,9 +79,9 @@ lse_t *lse_criar() {
 lse_t *lse_criar_aleatorio(int tam) {
     lse_t *lista = lse_criar();
 
-    // Inserir itens aleatórios entre 1 e 1 milhão na LSE
+    // Inserir itens aleatórios entre 1 e `tam` na LSE
     for (int i = 0; i < tam; i++) {
-        int val = rand() % 1000000;
+        int val = rand() % tam;
         lse_inserir_final(lista, val + 1);
     }
 

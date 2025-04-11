@@ -46,7 +46,7 @@ void questao1(unsigned int seed, int N, int I) {
         vetor_gerar_aleatorio(vet_sequencial, N); // Gera vetor aleatorio
 
         // Medir busca sequencial
-        int valor_busca = 1 + (rand() % 1000000); // Gera valor aleatorio
+        int valor_busca = 1 + (rand() % N); // Gera valor aleatorio
 
         if (debug_imprimir_vetores) {
             printf("  <Vetor seq. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_sequencial[0], vet_sequencial[1]);
@@ -66,7 +66,7 @@ void questao1(unsigned int seed, int N, int I) {
         vetor_gerar_ordenado(vet_binario, N);
 
         // Gera valor aleatorio
-        int valor_busca = 1 + (rand() % 1000000);
+        int valor_busca = 1 + (rand() % N);
 
         if (debug_imprimir_vetores) {
             printf("  <Vetor bin. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_binario[0], vet_binario[1]);
@@ -113,7 +113,7 @@ void questao2(unsigned int seed, int N, int I) {
         lse_t *lse = lse_criar_aleatorio(N);
 
         // Gerar valor aleatorio
-        int valor_busca = 1 + (rand() % 1000000); 
+        int valor_busca = 1 + (rand() % N); 
 
         if (debug_imprimir_vetores) {
             printf("  <LSE %d> (x = %d) ", i + 1, valor_busca);
@@ -124,8 +124,9 @@ void questao2(unsigned int seed, int N, int I) {
         medir_inicio(tempos, i);
         lse_busca_sequencial(lse, valor_busca, NULL);
         medir_fim(tempos, i);
-        
+
         soma_tempos += tempos[i];
+        lse_liberar(lse);
     }
 
     // Calcular a media e desvio padrão dos tempos medidos
