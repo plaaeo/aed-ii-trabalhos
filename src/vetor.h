@@ -13,6 +13,9 @@ void vetor_gerar_ordenado(vetor_t vet, int tam);
 /// Copia os dados do vetor `origem` pro vetor `destino`
 void vetor_copiar(vetor_t origem, vetor_t destino, int tam);
 
+/// Imprime os valores do vetor na saída padrão.
+void vetor_imprimir(vetor_t vet, int tam, int inicio, int fim);
+
 /// -- Ordenação --
 
 /// Ordena o vetor usando o selection sort

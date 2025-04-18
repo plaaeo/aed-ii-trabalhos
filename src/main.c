@@ -30,11 +30,31 @@ double desvio_padrao(double media, double* medicoes, int tam) {
     return sqrt(soma_quadrados / tam);
 }
 
+/// Dados retornados de `questao1(...)`
+typedef struct res_q1_t {
+    double bin_avg, bin_std;
+    double seq_avg, seq_std;
+} res_q1_t;
+
+/// Dados retornados de `questao2(...)`
+typedef struct res_q2_t {
+    double seq_avg, seq_std;
+} res_q2_t;
+
+/// Dados retornados de `questao2(...)`
+typedef struct res_q3_t {
+    double bub_avg, bub_std;
+    double ins_avg, ins_std;
+    double sel_avg, sel_std;
+    double qui_avg, qui_std;
+    double mer_avg, mer_std;
+} res_q3_t;
+
 // Imprime os dados da questão 1
 // - `seed` é a semente usada para gerar os vetores aleatórios; 
 // - `N` é o tamanho dos vetores aleatórios; 
 // - `I` é a quantidade de repetições de cada algorítmo de busca.
-void questao1(FILE *saida, unsigned int seed, int N, int I) {
+res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
     srand(seed);
 
     double tempos_sequencial[I], tempos_binaria[I];
@@ -88,27 +108,19 @@ void questao1(FILE *saida, unsigned int seed, int N, int I) {
     double desvio_sequencial = desvio_padrao(media_sequencial, tempos_sequencial, I);
     double desvio_binario = desvio_padrao(media_binaria, tempos_binaria, I);
 
-    if (saida) {
-        // Imprimir no arquivo de saída caso presente
-        fprintf(saida, "Sequencial (Vetor),%d,%.6f\n", N, media_sequencial);
-        fprintf(saida, "Binaria (Vetor),%d,%.6f\n", N, media_binaria);
-    } else {
-        // Exibição de teste
-        printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_sequencial);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_sequencial);
-
-        printf("* Busca Binaria (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_binaria);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_binario);
-    }
+    return (res_q1_t) {
+        .seq_avg = media_sequencial,
+        .seq_std = desvio_sequencial,
+        .bin_avg = media_binaria,
+        .bin_std = desvio_binario,
+    };
 }
 
 // Imprime os dados da questão 2
 // - `seed` é a semente usada para gerar as listas aleatórias; 
 // - `N` é o tamanho das listas aleatórias; 
 // - `I` é a quantidade de repetições da busca sequencial.
-void questao2(FILE *saida, unsigned int seed, int N, int I) {
+res_q2_t questao2(FILE *saida, unsigned int seed, int N, int I) {
     srand(seed);
 
     double tempos[I];
@@ -139,22 +151,17 @@ void questao2(FILE *saida, unsigned int seed, int N, int I) {
     double media_tempos = soma_tempos / (double) I;
     double desvio_tempos = desvio_padrao(media_tempos, tempos, I);
     
-    if (saida) {
-        // Imprimir no arquivo de saída caso presente
-        fprintf(saida, "Sequencial (LSE),%d,%.6f\n", N, media_tempos);
-    } else {
-        // Exibição de teste
-        printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_tempos);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_tempos);
-    }
+    return (res_q2_t) {
+        .seq_avg = media_tempos,
+        .seq_std = desvio_tempos,
+    };
 }
 
 // Imprime os dados da questão 2
 // - `seed` é a semente usada para gerar os vetores aleatórios; 
 // - `N` é o tamanho dos vetores aleatórios; 
 // - `I` é a quantidade de repetições dos algorítmos de ordenação.
-void questao3(FILE *saida, unsigned int seed, int N, int I) {
+res_q3_t questao3(FILE *saida, unsigned int seed, int N, int I) {
     srand(seed);
 
     int original[N], copia[N];
@@ -216,32 +223,19 @@ void questao3(FILE *saida, unsigned int seed, int N, int I) {
            desvio_s = desvio_padrao(media_s, tempo_s, N),
            desvio_q = desvio_padrao(media_q, tempo_q, N),
            desvio_m = desvio_padrao(media_m, tempo_m, N);
-    
-    if (saida) {
-        // Imprimir no arquivo de saída caso presente
-        fprintf(saida, "Bubble,%d,%.6f\n", N, media_b);
-        fprintf(saida, "Insertion,%d,%.6f\n", N, media_i);
-        fprintf(saida, "Selection,%d,%.6f\n", N, media_s);
-        fprintf(saida, "Quicksort,%d,%.6f\n", N, media_q);
-        fprintf(saida, "Merge,%d,%.6f\n", N, media_m);
-    } else {
-        // Imprimir dados temporais
-        printf("* Bubble Sort (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_b);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_b);
-        printf("* Insertion Sort (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_i);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_i);
-        printf("* Selection Sort (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_s);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_s);
-        printf("* Quicksort (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_q);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_q);
-        printf("* Merge Sort (%d elementos, %d vezes): \n", N, I);
-        printf("  Media do tempo: %.6f us\n", media_m);
-        printf("  Desvio Padrao: %.6f us\n\n", desvio_m);
-    }
+
+    return (res_q3_t) {
+        .bub_avg = media_b,
+        .bub_std = desvio_b,
+        .ins_avg = media_i,
+        .ins_std = desvio_i,
+        .sel_avg = media_s,
+        .sel_std = desvio_s,
+        .qui_avg = media_q,
+        .qui_std = desvio_q,
+        .mer_avg = media_m,
+        .mer_std = desvio_m,
+    };
 }
 
 // Imprime os dados da questão 5.
@@ -295,24 +289,107 @@ int main(int argc, char **argv) {
     
     // Selecionar questão pela linha de comando
     if (argc > 1) sscanf(argv[1], " %d", &questao);
-    if (questao < 0 || questao > 5) questao = 0;
+    if (questao < -1 || questao > 5) questao = 0;
+
+    // Questão -1: Verificação das funções
+    if (questao == -1) {
+        int N = 30;
+        int vet[N];
+        
+        // Gerar e imprimir vetor aleatório
+        vetor_gerar_aleatorio(vet, N);
+        
+        printf("v = \t\t");
+        vetor_imprimir(vet, N, 0, N);
+
+        // Testar ordenações e busca binária
+        int copia[N];
+        
+        // Medir o bubble sort
+        vetor_copiar(vet, copia, N);
+        vetor_ordenar_bubble(copia, N);
+        printf("bubble = \t");
+        vetor_imprimir(copia, N, 0, N);
+
+        // Medir o insertion sort
+        vetor_copiar(vet, copia, N);
+        vetor_ordenar_insertion(copia, N);
+        printf("insertion = \t");
+        vetor_imprimir(copia, N, 0, N);
+
+        // Medir o selection sort
+        vetor_copiar(vet, copia, N);
+        vetor_ordenar_selection(copia, N);
+        printf("selection = \t");
+        vetor_imprimir(copia, N, 0, N);
+
+        // Medir o quicksort
+        vetor_copiar(vet, copia, N);
+        vetor_ordenar_quick(copia, 0, N);
+        printf("quick = \t");
+        vetor_imprimir(copia, N, 0, N);
+
+        // Medir o merge sort
+        vetor_copiar(vet, copia, N);
+        vetor_ordenar_merge(copia, 0, N);
+        printf("merge = \t");
+        vetor_imprimir(copia, N, 0, N);
+
+        // Busca o valor do meio do vetor (busca sequencial)
+        int ref = copia[N / 2];
+        int x = vetor_busca_sequencial(vet, N, ref);
+        printf("(seq) v[%d] = %d; vet[(ref = %d)] = %d;\n", x, vet[x], ref, vet[ref]);
+        
+        x = vetor_busca_binaria(copia, N, ref);
+        printf("(bin) v[%d] = %d; vet[(ref = %d)] = %d;\n", x, copia[x], ref, copia[ref]);
+    }
 
     // Questão 1
-    if (questao == 0 || questao == 1) {
+    if (questao == 0 || questao == 1) {        
+        int N = 1000000, I = 30;
+        res_q1_t res = questao1(NULL, seed, N, I);
+
         printf("Dados da Q1:\n");
-        questao1(NULL, seed, 1000000, 30);
+        printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.seq_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.seq_std);
+        printf("* Busca Binaria (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.bin_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.bin_std);
     }
 
     // Questão 2
     if (questao == 0 || questao == 2) {
+        int N = 1000000, I = 30;
+        res_q2_t res = questao2(NULL, seed, N, I);
+
         printf("Dados da Q2:\n");
-        questao2(NULL, seed, 1000000, 30);
+        printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.seq_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.seq_std);
     }
 
     // Questão 3
     if (questao == 0 || questao == 3) {
+        int N = 100000, I = 10;
+        res_q3_t res = questao3(NULL, seed, N, I);
+        
         printf("Dados da Q3:\n");
-        questao3(NULL, seed, 100000, 10);
+        printf("* Bubble Sort (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.bub_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.bub_std);
+        printf("* Insertion Sort (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.ins_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.ins_std);
+        printf("* Selection Sort (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.sel_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.sel_std);
+        printf("* Quicksort (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.qui_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.qui_std);
+        printf("* Merge Sort (%d elementos, %d vezes): \n", N, I);
+        printf("  Media do tempo: %.6f us\n", res.mer_avg);
+        printf("  Desvio Padrao: %.6f us\n\n", res.mer_std);
     }
 
     // Questão 4/5

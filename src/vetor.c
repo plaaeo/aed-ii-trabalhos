@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "vetor.h"
 
@@ -13,20 +14,36 @@ void vetor_gerar_aleatorio(vetor_t vet, int tam) {
 
 // Gera um vetor com valores aleatórios ordenados
 void vetor_gerar_ordenado(vetor_t vet, int tam) {
-    int acc = 0;
-    for (int i = 0; i < tam; i++) {
-        vet[i] = acc + (rand() % 3); // Valores aleatórios entre 0 e 2
-
-        // Garante que o próximo valor sempre será >= o anterior
-        if (vet[i] > acc)
-            acc = vet[i];
-    }
+    vetor_gerar_aleatorio(vet, tam);
+    vetor_ordenar_merge(vet, 0, tam);
 }
 
 /// Copia os dados do vetor `origem` pro vetor `destino`
 void vetor_copiar(vetor_t origem, vetor_t destino, int tam) {
     memcpy(destino, origem, tam * sizeof(int));
 }
+
+/// Imprime os valores do vetor na saída padrão.
+void vetor_imprimir(vetor_t vet, int tam, int inicio, int fim) {
+    printf("[ ");
+
+    if (inicio != 0)
+        printf("..., ");
+
+    fim = tam < fim ? tam : fim;
+    for (int i = inicio; i < fim; i++) {
+        printf("%d", vet[i]);
+
+        // Printar vírgula caso ainda hajam mais elementos para imprimir
+        if ((i + 1) < fim)
+            printf(", ");
+    }
+
+    if (fim != tam)
+        printf(", ...");
+
+    printf(" ]\n");
+};
 
 // -- Ordenação
 
