@@ -302,60 +302,7 @@ int main(int argc, char **argv) {
     
     // Selecionar questão pela linha de comando
     if (argc > 1) sscanf(argv[1], " %d", &questao);
-    if (questao < -1 || questao > 5) questao = 0;
-
-    // Questão -1: Verificação das funções
-    if (questao == -1) {
-        int N = 30;
-        int vet[N];
-        
-        // Gerar e imprimir vetor aleatório
-        vetor_gerar_aleatorio(vet, N);
-        
-        printf("v = \t\t");
-        vetor_imprimir(vet, N, 0, N);
-
-        // Testar ordenações e busca binária
-        int copia[N];
-        
-        // Medir o bubble sort
-        vetor_copiar(vet, copia, N);
-        vetor_ordenar_bubble(copia, N);
-        printf("bubble = \t");
-        vetor_imprimir(copia, N, 0, N);
-
-        // Medir o insertion sort
-        vetor_copiar(vet, copia, N);
-        vetor_ordenar_insertion(copia, N);
-        printf("insertion = \t");
-        vetor_imprimir(copia, N, 0, N);
-
-        // Medir o selection sort
-        vetor_copiar(vet, copia, N);
-        vetor_ordenar_selection(copia, N);
-        printf("selection = \t");
-        vetor_imprimir(copia, N, 0, N);
-
-        // Medir o quicksort
-        vetor_copiar(vet, copia, N);
-        vetor_ordenar_quick(copia, 0, N);
-        printf("quick = \t");
-        vetor_imprimir(copia, N, 0, N);
-
-        // Medir o merge sort
-        vetor_copiar(vet, copia, N);
-        vetor_ordenar_merge(copia, 0, N);
-        printf("merge = \t");
-        vetor_imprimir(copia, N, 0, N);
-
-        // Busca o valor do meio do vetor (busca sequencial)
-        int ref = copia[N / 2];
-        int x = vetor_busca_sequencial(vet, N, ref);
-        printf("(seq) v[%d] = %d; vet[(ref = %d)] = %d;\n", x, vet[x], ref, vet[ref]);
-        
-        x = vetor_busca_binaria(copia, N, ref);
-        printf("(bin) v[%d] = %d; vet[(ref = %d)] = %d;\n", x, copia[x], ref, copia[ref]);
-    }
+    if (questao < 0 || questao > 5) questao = 0;
 
     // Questão 1
     if (questao == 0 || questao == 1) {        
