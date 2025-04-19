@@ -1,3 +1,13 @@
+/**
+ * Algorítmos e Estruturas de Dados II - Turma CB01
+ * Trabalho 1 - Tipos Abstratos de Dados (TADs)
+ * 
+ * Aluno: Paulo Victor Fernandes de Melo
+ * Aluno: João Luiz Rodrigues da Silva
+ * Aluna: Rebecca Aimée Lima de Lima
+ * Aluna: Beatriz Jacaúna Martins
+**/
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
