@@ -1,3 +1,9 @@
+# Trabalho 1 - Tipos Abstratos de Dados
+- **Aluno:** Paulo Victor Fernandes de Melo
+- **Aluno:** João Luiz Rodrigues da Silva
+- **Aluna:** Rebecca Aimée Lima de Lima
+- **Aluna:** Beatriz Jacaúna Martins
+
 # Estrutura
 
 O diretório do projeto segue a seguinte estrutura.
@@ -5,12 +11,15 @@ O diretório do projeto segue a seguinte estrutura.
 ```
 out/                Pasta de saída dos executáveis gerados pelo GCC.
 src/                Pasta contendo o código do trabalho.
+doc/                Pasta contendo o documento final, com as tabelas e gráficos.
 .gitignore          Lista de arquivos removidos do envio para o GitHub.
 Makefile            Instruções para build do arquivo, leia mais abaixo.
 README.md           O arquivo que você está lendo agora.
 ```
 
 Os códigos relevantes ao trabalho devem ser armazenados na pasta `src`, e os executáveis gerados pelo GCC irão para o `out`. Os conteúdos da pasta `out` são filtrados para **não serem enviados** ao GitHub pelo arquivo chamado `.gitignore`.
+
+Ao executar o código do trabalho, o programa irá gerar alguns arquivos com a extensão `.csv`, contendo os dados de cada questão. Os dados usados no documento final do trabalho podem ser encontrados na pasta `out/csv-final/`.
 
 # Como buildar
 
@@ -30,7 +39,7 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
 
 - **Questão V.** Apresentar gráficos mostrando o tempo de execução médio variando o tamanho do vetor nas questões I, II e III.
 
-# Tarefas e Sugestões
+# Tarefas e Sugestões para a equipe
 
 - [x] Criar TAD para um vetor para as questões I, III e V. <br>    
     ```c
