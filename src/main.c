@@ -6,9 +6,6 @@
 #include "lse.h"
 #include "vetor.h"
 
-// Defina "true" para imprimir os valores usados para busca nas questões
-const bool debug_imprimir_vetores = false;
-
 // A quantidade de clocks em 1 microsegundo
 #define CLOCKS_PER_US (CLOCKS_PER_SEC / 1000000)
 
@@ -32,17 +29,21 @@ double desvio_padrao(double media, double* medicoes, int tam) {
 
 /// Dados retornados de `questao1(...)`
 typedef struct res_q1_t {
+    double *seq_dt, *bin_dt;
     double bin_avg, bin_std;
     double seq_avg, seq_std;
 } res_q1_t;
 
 /// Dados retornados de `questao2(...)`
 typedef struct res_q2_t {
+    double *seq_dt;
     double seq_avg, seq_std;
 } res_q2_t;
 
 /// Dados retornados de `questao2(...)`
 typedef struct res_q3_t {
+    double *bub_dt, *ins_dt,
+           *sel_dt, *qui_dt, *mer_dt;
     double bub_avg, bub_std;
     double ins_avg, ins_std;
     double sel_avg, sel_std;
@@ -54,10 +55,11 @@ typedef struct res_q3_t {
 // - `seed` é a semente usada para gerar os vetores aleatórios; 
 // - `N` é o tamanho dos vetores aleatórios; 
 // - `I` é a quantidade de repetições de cada algorítmo de busca.
-res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
+res_q1_t questao1(unsigned int seed, int N, int I) {
     srand(seed);
 
-    double tempos_sequencial[I], tempos_binaria[I];
+    double *tempos_sequencial = malloc(I * sizeof(double)),
+           *tempos_binaria = malloc(I * sizeof(double));
     double soma_sequencial = 0, soma_binaria = 0;
 
     // Busca sequencial 30 vezes
@@ -67,10 +69,6 @@ res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
 
         // Medir busca sequencial
         int valor_busca = 1 + (rand() % N); // Gera valor aleatorio
-
-        if (debug_imprimir_vetores) {
-            printf("  <Vetor seq. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_sequencial[0], vet_sequencial[1]);
-        }
 
         medir_inicio(tempos_sequencial, i);
         vetor_busca_sequencial(vet_sequencial, N, valor_busca);
@@ -88,10 +86,6 @@ res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
         // Gera valor aleatorio
         int valor_busca = 1 + (rand() % N);
 
-        if (debug_imprimir_vetores) {
-            printf("  <Vetor bin. %d> (x = %d) [ %d, %d, ... ]\n", i + 1, valor_busca, vet_binario[0], vet_binario[1]);
-        }
-        
         // Medir busca binária
         medir_inicio(tempos_binaria, i);
         vetor_busca_binaria(vet_binario, N, valor_busca);
@@ -109,6 +103,8 @@ res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
     double desvio_binario = desvio_padrao(media_binaria, tempos_binaria, I);
 
     return (res_q1_t) {
+        .seq_dt = tempos_sequencial,
+        .bin_dt = tempos_binaria,
         .seq_avg = media_sequencial,
         .seq_std = desvio_sequencial,
         .bin_avg = media_binaria,
@@ -120,10 +116,10 @@ res_q1_t questao1(FILE *saida, unsigned int seed, int N, int I) {
 // - `seed` é a semente usada para gerar as listas aleatórias; 
 // - `N` é o tamanho das listas aleatórias; 
 // - `I` é a quantidade de repetições da busca sequencial.
-res_q2_t questao2(FILE *saida, unsigned int seed, int N, int I) {
+res_q2_t questao2(unsigned int seed, int N, int I) {
     srand(seed);
 
-    double tempos[I];
+    double *tempos = malloc(I * sizeof(double));
     double soma_tempos = 0;
     
     for (int i = 0; i < I; i++) {
@@ -132,11 +128,6 @@ res_q2_t questao2(FILE *saida, unsigned int seed, int N, int I) {
 
         // Gerar valor aleatorio
         int valor_busca = 1 + (rand() % N); 
-
-        if (debug_imprimir_vetores) {
-            printf("  <LSE %d> (x = %d) ", i + 1, valor_busca);
-            lse_imprimir(lse, 0, 2);
-        }
 
         // Medir busca sequencial
         medir_inicio(tempos, i);
@@ -152,6 +143,7 @@ res_q2_t questao2(FILE *saida, unsigned int seed, int N, int I) {
     double desvio_tempos = desvio_padrao(media_tempos, tempos, I);
     
     return (res_q2_t) {
+        .seq_dt = tempos,
         .seq_avg = media_tempos,
         .seq_std = desvio_tempos,
     };
@@ -161,11 +153,15 @@ res_q2_t questao2(FILE *saida, unsigned int seed, int N, int I) {
 // - `seed` é a semente usada para gerar os vetores aleatórios; 
 // - `N` é o tamanho dos vetores aleatórios; 
 // - `I` é a quantidade de repetições dos algorítmos de ordenação.
-res_q3_t questao3(FILE *saida, unsigned int seed, int N, int I) {
+res_q3_t questao3(unsigned int seed, int N, int I) {
     srand(seed);
 
     int original[N], copia[N];
-    double tempo_b[I], tempo_i[I], tempo_s[I], tempo_q[I], tempo_m[I];
+    double *tempo_b = malloc(I * sizeof(double)),
+           *tempo_i = malloc(I * sizeof(double)),
+           *tempo_s = malloc(I * sizeof(double)),
+           *tempo_q = malloc(I * sizeof(double)),
+           *tempo_m = malloc(I * sizeof(double));
     double soma_b = 0, soma_i = 0, soma_s = 0, soma_q = 0, soma_m = 0;
 
     // Executa 10 rodadas
@@ -212,19 +208,24 @@ res_q3_t questao3(FILE *saida, unsigned int seed, int N, int I) {
 
     // Calcular as médias
     double media_b = soma_b / (double) I,
-           media_i = soma_b / (double) I,
+           media_i = soma_i / (double) I,
            media_s = soma_s / (double) I,
            media_q = soma_q / (double) I,
            media_m = soma_m / (double) I;
     
     // Calcular os desvios padrão
-    double desvio_b = desvio_padrao(media_b, tempo_b, N),
-           desvio_i = desvio_padrao(media_b, tempo_b, N),
-           desvio_s = desvio_padrao(media_s, tempo_s, N),
-           desvio_q = desvio_padrao(media_q, tempo_q, N),
-           desvio_m = desvio_padrao(media_m, tempo_m, N);
+    double desvio_b = desvio_padrao(media_b, tempo_b, I),
+           desvio_i = desvio_padrao(media_i, tempo_i, I),
+           desvio_s = desvio_padrao(media_s, tempo_s, I),
+           desvio_q = desvio_padrao(media_q, tempo_q, I),
+           desvio_m = desvio_padrao(media_m, tempo_m, I);
 
     return (res_q3_t) {
+        .bub_dt = tempo_b,
+        .ins_dt = tempo_i,
+        .sel_dt = tempo_s,
+        .qui_dt = tempo_q,
+        .mer_dt = tempo_m,
         .bub_avg = media_b,
         .bub_std = desvio_b,
         .ins_avg = media_i,
@@ -252,8 +253,8 @@ void questao5(unsigned int seed, const char* nome_busca, const char* nome_ordena
     else printf("  (nao foi possivel abrir o arquivo '%s')", nome_ordenacao);
 
     // Imprimir cabeçalho dos CSVs
-    if (busca) fprintf(busca, "Nome,Tamanho,Tempo (us)\n");
-    if (ordenacao) fprintf(ordenacao, "Nome,Tamanho,Tempo (us)\n");
+    if (busca) fprintf(busca, "Tamanho,Busca seq. em vetor,Busca bin. em vetor,Busca seq. em lista\n");
+    if (ordenacao) fprintf(ordenacao, "Tamanho,Bubble Sort,Insertion Sort,Selection Sort,Quicksort,Merge Sort\n");
 
     for (int i = 0; i < 10; i++) {
         // Executar testes de busca (caso o arquivo esteja aberto)
@@ -261,9 +262,14 @@ void questao5(unsigned int seed, const char* nome_busca, const char* nome_ordena
             int tam = (i + 1) * 100000;
             
             printf("* Executando buscas com %d elementos...\n", tam);
-            questao2(busca, seed, tam, 1);
-            questao1(busca, seed, tam, 1);
-            printf("  Finalizado\n");
+            res_q1_t r1 = questao1(seed, tam, 1);
+            res_q2_t r2 = questao2(seed, tam, 1);
+            fprintf(busca, "%d,%lf,%lf,%lf\n", tam, r1.seq_avg, r1.bin_avg, r2.seq_avg);
+
+            // Liberar vetores de tempo
+            free(r1.seq_dt);
+            free(r1.bin_dt);
+            free(r2.seq_dt);
         }
 
         // Executar testes de ordenação (caso o arquivo esteja aberto)
@@ -271,8 +277,15 @@ void questao5(unsigned int seed, const char* nome_busca, const char* nome_ordena
             int tam = (i + 1) * 10000;
             
             printf("* Executando ordenacao com %d elementos...\n", tam);
-            questao3(ordenacao, seed, tam, 1);
-            printf("  Finalizado\n");
+            res_q3_t r3 = questao3(seed, tam, 1);
+            fprintf(ordenacao, "%d,%lf,%lf,%lf,%lf,%lf\n", tam, r3.bub_avg, r3.ins_avg, r3.sel_avg, r3.qui_avg, r3.mer_avg);
+            
+            // Liberar vetores de tempo
+            free(r3.bub_dt);
+            free(r3.ins_dt);
+            free(r3.sel_dt);
+            free(r3.qui_dt);
+            free(r3.mer_dt);
         }
     }
 
@@ -347,8 +360,8 @@ int main(int argc, char **argv) {
     // Questão 1
     if (questao == 0 || questao == 1) {        
         int N = 1000000, I = 30;
-        res_q1_t res = questao1(NULL, seed, N, I);
-
+        res_q1_t res = questao1(seed, N, I);
+        
         printf("Dados da Q1:\n");
         printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
         printf("  Media do tempo: %.6f us\n", res.seq_avg);
@@ -356,24 +369,59 @@ int main(int argc, char **argv) {
         printf("* Busca Binaria (%d elementos, %d vezes): \n", N, I);
         printf("  Media do tempo: %.6f us\n", res.bin_avg);
         printf("  Desvio Padrao: %.6f us\n\n", res.bin_std);
+
+        // Salvar dados em um arquivo
+        FILE *q1csv = fopen("q1.csv", "w");
+        if (q1csv) {
+            printf("  (escrevendo dados da questao 1 em 'q1.csv')\n");
+            
+            // Imprimir dados em formato csv
+            fprintf(q1csv, "-,Busca seq. em vetor,Busca bin. em vetor\n");
+            for (int i = 0; i < I; i++)
+                fprintf(q1csv, "It. %d,%lf,%lf\n", i + 1, res.seq_dt[i], res.bin_dt[i]);
+
+            fprintf(q1csv, "Media,%lf,%lf\n", res.seq_avg, res.bin_avg);
+            fprintf(q1csv, "Desvio padrao,%lf,%lf\n", res.seq_std, res.bin_std);
+            fclose(q1csv);
+        }
+
+        free(res.seq_dt);
+        free(res.bin_dt);
     }
 
     // Questão 2
     if (questao == 0 || questao == 2) {
         int N = 1000000, I = 30;
-        res_q2_t res = questao2(NULL, seed, N, I);
+        res_q2_t res = questao2(seed, N, I);
 
         printf("Dados da Q2:\n");
         printf("* Busca Sequencial (%d elementos, %d vezes): \n", N, I);
         printf("  Media do tempo: %.6f us\n", res.seq_avg);
         printf("  Desvio Padrao: %.6f us\n\n", res.seq_std);
+
+        // Salvar dados em um arquivo
+        FILE *q2csv = fopen("q2.csv", "w");
+        if (q2csv) {
+            printf("  (escrevendo dados da questao 2 em 'q2.csv')\n");
+            
+            // Imprimir dados em formato csv
+            fprintf(q2csv, "-,Busca seq. em lista encadeada\n");
+            for (int i = 0; i < I; i++)
+                fprintf(q2csv, "It. %d,%lf\n", i + 1, res.seq_dt[i]);
+
+            fprintf(q2csv, "Media,%lf\n", res.seq_avg);
+            fprintf(q2csv, "Desvio padrao,%lf\n", res.seq_std);
+            fclose(q2csv);
+        }
+
+        free(res.seq_dt);
     }
 
     // Questão 3
     if (questao == 0 || questao == 3) {
         int N = 100000, I = 10;
-        res_q3_t res = questao3(NULL, seed, N, I);
-        
+        res_q3_t res = questao3(seed, N, I);
+       
         printf("Dados da Q3:\n");
         printf("* Bubble Sort (%d elementos, %d vezes): \n", N, I);
         printf("  Media do tempo: %.6f us\n", res.bub_avg);
@@ -390,6 +438,27 @@ int main(int argc, char **argv) {
         printf("* Merge Sort (%d elementos, %d vezes): \n", N, I);
         printf("  Media do tempo: %.6f us\n", res.mer_avg);
         printf("  Desvio Padrao: %.6f us\n\n", res.mer_std);
+
+        // Salvar dados em um arquivo
+        FILE *q3csv = fopen("q3.csv", "w");
+        if (q3csv) {
+            printf("  (escrevendo dados da questao 3 em 'q3.csv')\n");
+            
+            // Imprimir dados em formato csv
+            fprintf(q3csv, "-,Bubble,Insertion,Selection,Quick,Merge\n");
+            for (int i = 0; i < I; i++)
+                fprintf(q3csv, "It. %d,%lf,%lf,%lf,%lf,%lf\n", i + 1, res.bub_dt[i], res.ins_dt[i], res.sel_dt[i], res.qui_dt[i], res.mer_dt[i]);
+
+            fprintf(q3csv, "Media,%lf,%lf,%lf,%lf,%lf\n", res.bub_avg, res.ins_avg, res.sel_avg, res.qui_avg, res.mer_avg);
+            fprintf(q3csv, "Desvio padrao,%lf,%lf,%lf,%lf,%lf\n", res.bub_std, res.ins_std, res.sel_std, res.qui_std, res.mer_std);
+            fclose(q3csv);
+        }
+
+        free(res.bub_dt);
+        free(res.ins_dt);
+        free(res.sel_dt);
+        free(res.qui_dt);
+        free(res.mer_dt);
     }
 
     // Questão 4/5

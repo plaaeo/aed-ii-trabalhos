@@ -2,7 +2,7 @@
 #include <stddef.h>
 
 /// TAD para um vetor de inteiros.
-typedef int vetor_t[];
+typedef int* vetor_t;
 
 /// Gera um vetor com valores aleatórios
 void vetor_gerar_aleatorio(vetor_t vet, int tam);
