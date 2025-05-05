@@ -1,4 +1,4 @@
-# Trabalho 1 - Tipos Abstratos de Dados
+# Trabalho 2 - Árvores Binárias de Pesquisa
 - **Aluno:** Paulo Victor Fernandes de Melo
 - **Aluno:** João Luiz Rodrigues da Silva
 - **Aluna:** Rebecca Aimée Lima de Lima
@@ -24,48 +24,3 @@ Ao executar o código do trabalho, o programa irá gerar alguns arquivos com a e
 # Como buildar
 
 Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execute o comando `make`. Isso executará todos os comandos do `gcc` necessários para buildar os executáveis do trabalho, que estarão na pasta `out`.
-
-# Questões
-
-- **Questão I.** Implementar vetor com **1.000.000 inteiros** e medir o tempo de execução da **busca sequencial** e **busca ordenada** com 30 valores de busca diferentes cada.
-
-- **Questão II.** Fazer o mesmo da questão I, porém utilizando também uma lista encadeada. <br>
-  Deve-se selecionar 30 valores de busca diferentes, e depois utilizá-los em **ambos** os algorítmos de busca.
-
-- **Questão III.** Implementar vetor com 100.000 inteiros e medir o tempo de execução do bubble sort, insertion sort, selection sort, quicksort e merge sort. <br>
-  Escolha 10 vetores diferentes com valores aleatórios, executando cada algorítmo de ordenação nesses 10 vetores.
-
-- **Questão IV.** Apresentar os tempos de execução, médias e desvio padrão das questões I, II e III em uma tabela.
-
-- **Questão V.** Apresentar gráficos mostrando o tempo de execução médio variando o tamanho do vetor nas questões I, II e III.
-
-# Tarefas e Sugestões para a equipe
-
-- [x] Criar TAD para um vetor para as questões I, III e V. <br>    
-    ```c
-    // No "vetor.h" ou "vetor.c" ...
-    vetor_criar_aleatorio(tamanho);             // ^
-    vetor_criar_ordenado(tamanho);              // |
-    vetor_liberar(vetor);                       // | Questão I
-    vetor_imprimir(vetor, inicio, fim);         // |
-    vetor_buscar_seq(vetor, valor);             // |
-    vetor_buscar_bin(vetor, valor);             // v
-    vetor_ordernar_bubble(vetor);               // ^
-    vetor_ordernar_insertion(vetor);            // |
-    vetor_ordernar_selection(vetor);            // | Questão III
-    vetor_ordernar_quicksort(vetor);            // |
-    vetor_ordernar_mergesort(vetor);            // v
-    ```
-
-- [x] Criar TAD para uma lista encadeada (ou lista simplesmente encadeada, ou ainda **LSE**) para as questões II e V.
-    ```c
-    // No "lse.h" ou "lse.c" ...
-    lse_criar();                        // ^ 
-    lse_criar_com_vetor(vetor);         // |
-    lse_liberar(lista);                 // | Questão II
-    lse_imprimir(lista, inicio, fim);   // |
-    lse_buscar_seq(lista, valor);       // v
-    lse_acessar(lista, indice);         // ^
-    lse_inserir_inicio(lista, valor);   // | Utilitários (privados)
-    lse_inserir_final(lista, valor);    // v    
-    ```
