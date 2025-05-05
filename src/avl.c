@@ -1,6 +1,7 @@
+#include "avl.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "avl.h"
 
 struct avl_t {
     int val;
@@ -9,9 +10,9 @@ struct avl_t {
     avl_t *dir;
 };
 
-avl_t* avl_criar(int val) {
+avl_t *avl_criar(int val) {
     avl_t *avl = malloc(sizeof(avl_t));
-    
+
     if (avl) {
         avl->val = val;
         avl->fator = 0;
@@ -21,14 +22,17 @@ avl_t* avl_criar(int val) {
     return avl;
 };
 
-int *avl_buscar(avl_t** avl, int n) {
+int *avl_buscar(avl_t **avl, int n) {
     if (!avl) return NULL;
 
     avl_t *no = *avl;
-    
-    if (no->val == n) return &no->val;
-    else if (n < no->val) return avl_buscar(&no->esq, n);
-    else return avl_buscar(&no->dir, n);
+
+    if (no->val == n)
+        return &no->val;
+    else if (n < no->val)
+        return avl_buscar(&no->esq, n);
+    else
+        return avl_buscar(&no->dir, n);
 };
 
 void interno_rot_dir(avl_t **raiz, avl_t *B) {
@@ -63,19 +67,20 @@ int interno_inserir(avl_t **avl, int n) {
 
     printf("fator(%d) = %d\n", no->val, no->fator);
 
-
     if (!*sub) {
         (*sub) = avl_criar(n);
         return 0;
     } else {
         interno_inserir(sub, n);
 
-        if (no->fator == -2) interno_rot_dir(avl, *sub);
-        else if (no->fator == 2) interno_rot_esq(avl, *sub);
+        if (no->fator == -2)
+            interno_rot_dir(avl, *sub);
+        else if (no->fator == 2)
+            interno_rot_esq(avl, *sub);
     }
 }
 
-void avl_inserir(avl_t** avl, int n) {
+void avl_inserir(avl_t **avl, int n) {
     if (!avl) return;
 
     // Árvore vazia
@@ -88,6 +93,6 @@ void avl_inserir(avl_t** avl, int n) {
     return;
 };
 
-int avl_remover(avl_t** avl, int n);
+int avl_remover(avl_t **avl, int n);
 
-int avl_altura(avl_t* avl);
+int avl_altura(avl_t *avl);
