@@ -35,49 +35,106 @@ int *avl_buscar(avl_t **avl, int n) {
         return avl_buscar(&no->dir, n);
 };
 
-void interno_rot_dir(avl_t **raiz, avl_t *B) {
-    avl_t *A = *raiz;
-    avl_t *tmp = B->dir;
+avl_t *interno_rot_dir(avl_t *A, avl_t *B) {
+    // Trocar subarvores
+    A->esq = B->dir;
     B->dir = A;
-    A->esq = tmp;
-    *raiz = B;
     A->fator = B->fator = 0;
+    return B;
 }
 
-void interno_rot_esq(avl_t **raiz, avl_t *B) {
-    avl_t *A = *raiz;
-    avl_t *tmp = B->esq;
+avl_t *interno_rot_esq(avl_t *A, avl_t *B) {
+    // Trocar subarvores
+    A->dir = B->esq;
     B->esq = A;
-    A->dir = tmp;
-    *raiz = B;
     A->fator = B->fator = 0;
+    return B;
 }
 
-int interno_inserir(avl_t **avl, int n) {
-    avl_t **sub = NULL;
-    avl_t *no = *avl;
+avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
+    avl_t *aux = B->esq;
 
+    // Rotacionar B com Aux à direita
+    interno_rot_dir(B, aux);
+
+    // Rotacionar A com Aux à esquerda
+    return interno_rot_esq(A, aux);
+
+    // TODO: ajustar os fatores de balanceamento
+}
+
+avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
+    avl_t *aux = B->dir;
+
+    // Rotacionar B com Aux à esquerda
+    interno_rot_esq(B, aux);
+
+    // Rotacionar A com Aux à direita
+    return interno_rot_dir(A, aux);
+
+    // TODO: ajustar os fatores de balanceamento
+}
+
+avl_t *interno_inserir(avl_t *no, int n) {
     if (n <= no->val) {
-        sub = &no->esq;
-        no->fator -= 1;
+        // O valor a ser inserido está na subarvore à esquerda.
+        if (!no->esq) {
+            no->esq = avl_criar(n);
+            no->fator -= 1;
+            return no;
+        }
+
+        int previo = no->esq->fator;
+        no->esq = interno_inserir(no->esq, n);
+
+        // O fator de balanceamento da subárvore esq. aumentou/diminuiu,
+        // ou seja, a subárvore cresceu.
+        if (no->esq->fator && previo != no->esq->fator) {
+            if (no->fator == 0) {
+                // Não é realizada rotação neste nó, logo, seu fator muda,
+                // pois a altura da subárvore mudou!
+                no->fator -= 1;
+            } else if (no->esq->fator < 0) {
+                // 'no' é a subárvore mais próxima do valor inserido
+                // com fator < 0.
+                return interno_rot_dir(no, no->esq);
+            } else if (no->esq->fator > 0) {
+                // 'no' é a subárvore mais próxima do valor inserido
+                // com fator > 0.
+                return interno_rotd_esq(no, no->esq);
+            }
+        }
     } else {
-        sub = &no->dir;
-        no->fator += 1;
+        // O valor a ser inserido está na subarvore à direita.
+        if (!no->dir) {
+            no->dir = avl_criar(n);
+            no->fator += 1;
+            return no;
+        }
+
+        int previo = no->dir->fator;
+        no->dir = interno_inserir(no->dir, n);
+
+        // O fator de balanceamento da subárvore dir. aumentou/diminuiu,
+        // ou seja, a subárvore cresceu.
+        if (no->dir->fator && previo != no->dir->fator) {
+            if (no->fator == 0) {
+                // Não é realizada rotação neste nó, logo, seu fator muda,
+                // pois a altura da subárvore mudou!
+                no->fator += 1;
+            } else if (no->dir->fator < 0) {
+                // 'no' é a subárvore mais próxima do valor inserido
+                // com fator < 0.
+                return interno_rotd_dir(no, no->dir);
+            } else if (no->dir->fator > 0) {
+                // 'no' é a subárvore mais próxima do valor inserido
+                // com fator > 0.
+                return interno_rot_esq(no, no->dir);
+            }
+        }
     }
 
-    printf("fator(%d) = %d\n", no->val, no->fator);
-
-    if (!*sub) {
-        (*sub) = avl_criar(n);
-        return 0;
-    } else {
-        interno_inserir(sub, n);
-
-        if (no->fator == -2)
-            interno_rot_dir(avl, *sub);
-        else if (no->fator == 2)
-            interno_rot_esq(avl, *sub);
-    }
+    return no;
 }
 
 void avl_inserir(avl_t **avl, int n) {
@@ -89,7 +146,7 @@ void avl_inserir(avl_t **avl, int n) {
         return;
     }
 
-    interno_inserir(avl, n);
+    *avl = interno_inserir(*avl, n);
     return;
 };
 
