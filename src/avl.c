@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ESQUERDA 0
+#define DIREITA 1
+
 struct avl_t {
     int val;
     int fator;
-    avl_t *esq;
-    avl_t *dir;
+    avl_t *sub[2];
 };
 
 avl_t *avl_criar(int val) {
@@ -16,7 +18,7 @@ avl_t *avl_criar(int val) {
     if (avl) {
         avl->val = val;
         avl->fator = 0;
-        avl->esq = avl->dir = NULL;
+        avl->sub[0] = avl->sub[1] = NULL;
     }
 
     return avl;
@@ -30,37 +32,37 @@ int *avl_buscar(avl_t **avl, int n) {
     if (no->val == n)
         return &no->val;
     else if (n < no->val)
-        return avl_buscar(&no->esq, n);
+        return avl_buscar(&no->sub[ESQUERDA], n);
     else
-        return avl_buscar(&no->dir, n);
+        return avl_buscar(&no->sub[DIREITA], n);
 };
 
 avl_t *interno_rot_dir(avl_t *A, avl_t *B) {
     // Trocar subarvores
-    A->esq = B->dir;
-    B->dir = A;
+    A->sub[ESQUERDA] = B->sub[DIREITA];
+    B->sub[DIREITA] = A;
     A->fator = B->fator = 0;
     return B;
 }
 
 avl_t *interno_rot_esq(avl_t *A, avl_t *B) {
     // Trocar subarvores
-    A->dir = B->esq;
-    B->esq = A;
+    A->sub[DIREITA] = B->sub[ESQUERDA];
+    B->sub[ESQUERDA] = A;
     A->fator = B->fator = 0;
     return B;
 }
 
 avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
-    avl_t *aux = B->esq;
+    avl_t *aux = B->sub[ESQUERDA];
 
     // Rotacionar B com Aux à direita
-    B->esq = aux->dir;
-    aux->dir = B;
+    B->sub[ESQUERDA] = aux->sub[DIREITA];
+    aux->sub[DIREITA] = B;
 
     // Rotacionar A com Aux à esquerda
-    A->dir = aux->esq;
-    aux->esq = A;
+    A->sub[DIREITA] = aux->sub[ESQUERDA];
+    aux->sub[ESQUERDA] = A;
 
     // Suponha que
     // - 'A' (fb. +2) tenha as subárvores [alpha, B]
@@ -91,15 +93,15 @@ avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
 }
 
 avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
-    avl_t *aux = B->dir;
+    avl_t *aux = B->sub[DIREITA];
 
     // Rotacionar B com Aux à esquerda
-    B->dir = aux->esq;
-    aux->esq = B;
+    B->sub[DIREITA] = aux->sub[ESQUERDA];
+    aux->sub[ESQUERDA] = B;
 
     // Rotacionar A com Aux à direita
-    A->esq = aux->dir;
-    aux->dir = A;
+    A->sub[ESQUERDA] = aux->sub[DIREITA];
+    aux->sub[DIREITA] = A;
 
     // (Leia a explicação dentro da função `interno_rotd_dir` primeiro!)
     // Neste caso, as suposições iniciais ainda valem, porém:
@@ -114,65 +116,52 @@ avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
     return aux;
 }
 
+avl_t *interno_rebalancear(avl_t *no, int d) {
+    int dd = no->sub[d]->fator + 1;
+
+    switch (dd + d) {
+        // Caso em que houve inserção à esquerda da subárvore esquerda
+        case 0: return interno_rot_dir(no, no->sub[d]);
+
+        // Caso em que houve inserção à esquerda da subárvore direita
+        case 1: return interno_rotd_dir(no, no->sub[d]);
+
+        // Caso em que houve inserção à direita da subárvore esquerda
+        case 2: return interno_rotd_esq(no, no->sub[d]);
+
+        // Caso em que houve inserção à direita da subárvore direita
+        case 3: return interno_rot_esq(no, no->sub[d]);
+    }
+
+    // Código inalcançável (em casos normais)
+    return NULL;
+}
+
 avl_t *interno_inserir(avl_t *no, int n) {
-    // Buscar local de inserção de 'n'
-    if (n <= no->val) {
-        if (!no->esq) {
-            no->esq = avl_criar(n);
-            no->fator -= 1;
-            return no;
-        }
+    // Define a direção onde o nó buscado está
+    int d = (n <= no->val) ? ESQUERDA : DIREITA;
 
-        int previo = no->esq->fator;
-        no->esq = interno_inserir(no->esq, n);
+    // O fb. equivalente à essa direção (-1 pra esquerda, 1 pra direita)
+    int fb = (d << 1) - 1;
 
-        // Verifica se o fator de balanceamento da subárvore
-        // esq. aumentou/diminuiu, ou seja, se a subárvore cresceu.
-        if (no->esq->fator && !previo) {
-            if (no->fator >= 0) {
-                // A subárvore 'no' foi rebalanceada/desbalanceou para a esq.
-                no->fator -= 1;
-            }
-            // Daqui em diante, o fb de 'no' se tornaria -2, logo,
-            // precisamos decidir como rebalancear a árvore.
-            else if (no->esq->fator < 0) {
-                // A subárvore à esq. (B) tem fb = -1, logo,
-                // usaremos uma rotação simples à direita.
-                return interno_rot_dir(no, no->esq);
-            } else if (no->esq->fator > 0) {
-                // A subárvore à esq. (B) tem fb = 1, logo,
-                // usaremos uma rotação dupla à esquerda.
-                return interno_rotd_esq(no, no->esq);
-            }
-        }
-    } else {
-        if (!no->dir) {
-            no->dir = avl_criar(n);
-            no->fator += 1;
-            return no;
-        }
+    // Inserir diretamente
+    if (!no->sub[d]) {
+        no->sub[d] = avl_criar(n);
+        no->fator += fb;
+        return no;
+    }
 
-        int previo = no->dir->fator;
-        no->dir = interno_inserir(no->dir, n);
+    int previo = no->sub[d]->fator;
+    no->sub[d] = interno_inserir(no->sub[d], n);
 
-        // Verifica se o fator de balanceamento da subárvore
-        // dir. aumentou/diminuiu, ou seja, se a subárvore cresceu.
-        if (no->dir->fator && !previo) {
-            if (no->fator <= 0) {
-                // A subárvore 'no' foi rebalanceada/desbalanceou para a dir.
-                no->fator += 1;
-            }
-            // Daqui em diante, o fb de 'no' se tornaria 2, logo,
-            // precisamos decidir como rebalancear a árvore.
-            else if (no->dir->fator < 0) {
-                // A subárvore à dir. (B) tem fb = -1, logo,
-                // usaremos uma rotação dupla à direita.
-                return interno_rotd_dir(no, no->dir);
-            } else if (no->dir->fator > 0) {
-                // A subárvore à dir. (B) tem fb = 1, logo,
-                // usaremos uma rotação simples à esquerda.
-                return interno_rot_esq(no, no->dir);
-            }
+    // Verifica se o fator de balanceamento da subárvore
+    // aumentou/diminuiu, ou seja, se a subárvore cresceu.
+    if (!previo && no->sub[d]->fator) {
+        if (no->fator == fb) {
+            // O fb. da árvore se tornaria -2/+2
+            return interno_rebalancear(no, d);
+        } else {
+            no->fator += fb;
         }
     }
 
@@ -191,40 +180,41 @@ void avl_inserir(avl_t **avl, int n) {
 avl_t *interno_remover(avl_t *no, int n) {
     // Buscar valor a ser removido
     if (n < no->val) {
-        if (!no->esq) return no;
+        if (!no->sub[ESQUERDA]) return no;
 
         // Detectar mudança na altura da subárvore
-        int previo = no->esq->fator;
-        no->esq = interno_remover(no->esq, n);
+        int previo = no->sub[ESQUERDA]->fator;
+        no->sub[ESQUERDA] = interno_remover(no->sub[ESQUERDA], n);
     } else if (n > no->val) {
-        if (!no->dir) return no;
+        if (!no->sub[DIREITA]) return no;
 
         // Detectar mudança na altura da subárvore
-        int previo = no->dir->fator;
-        no->dir = interno_remover(no->dir, n);
+        int previo = no->sub[DIREITA]->fator;
+        no->sub[DIREITA] = interno_remover(no->sub[DIREITA], n);
     } else {
-        if (!no->esq) {
-            avl_t *dir = no->dir;
+        if (!no->sub[ESQUERDA]) {
+            avl_t *dir = no->sub[DIREITA];
+            
             free(no);
             return dir;
-        } else if (!no->dir) {
-            avl_t *esq = no->esq;
+        } else if (!no->sub[DIREITA]) {
+            avl_t *esq = no->sub[ESQUERDA];
             free(no);
             return esq;
         }
 
         // Encontrar menor nó da subárvore direita
-        avl_t* menor = no->dir;
-        while (menor->esq) menor = menor->esq;
+        avl_t* menor = no->sub[DIREITA];
+        while (menor->sub[ESQUERDA]) menor = menor->sub[ESQUERDA];
 
         // Detectar mudança na altura da subárvore
-        int previo = no->dir->fator;
-        no->dir = interno_remover(no->dir, menor->val);
+        int previo = no->sub[DIREITA]->fator;
+        no->sub[DIREITA] = interno_remover(no->sub[DIREITA], menor->val);
 
-        if (!no->dir) {
+        if (!no->sub[DIREITA]) {
             // Remoção de folha
             no->fator -= 1;
-        } else if (previo && !no->dir->fator) {
+        } else if (previo && !no->sub[DIREITA]->fator) {
             // O fb. da subárvore se tornou zero, logo ela diminuiu
             no->fator -= 1;
         }

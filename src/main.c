@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
     avl_inserir(&avl, 5);
     avl_inserir(&avl, 6);
     avl_inserir(&avl, 7);
-    avl_inserir(&avl, 17);
+    avl_inserir(&avl, 16);
     avl_inserir(&avl, 15);
     avl_inserir(&avl, 14);
-    avl_inserir(&avl, 16);
+    // avl_inserir(&avl, 16);
 
     printf("oii :3\n");
 }
