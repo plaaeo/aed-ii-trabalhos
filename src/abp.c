@@ -36,12 +36,6 @@ abp_t* buscar(abp_t* raiz, int valor) {
         return buscar(raiz->direita, valor);
 }
 
-// Encontra o menor valor da ávore
-abp_t* minimo(abp_t* raiz) {
-    while (raiz->esquerda != NULL) raiz = raiz->esquerda;
-    return raiz;
-}
-
 // remove um valor da arvore
 abp_t* remover(abp_t* raiz, int valor) {
     if (raiz == NULL) return NULL;
@@ -62,9 +56,24 @@ abp_t* remover(abp_t* raiz, int valor) {
             return temp;
         }
         // No com dois filhos
-        abp_t* temp = minimo(raiz->direita);
+        abp_t* temp = raiz->direita;
+        if (temp->esquerda) {
+            abp_t *pai = NULL;
+
+            do {
+                pai = temp;
+                temp = temp->esquerda;
+            } while(temp->esquerda != NULL);
+
+            // Remover diretamente da árvore
+            pai->esquerda = NULL;
+        } else {
+            // A subárvore à direita é folha
+            raiz->direita = NULL;
+        }
+
         raiz->valor = temp->valor;
-        raiz->direita = remover(raiz->direita, temp->valor);
+        free(temp);
     }
     return raiz;
 }
