@@ -190,11 +190,52 @@ void avl_inserir(avl_t **avl, int n) {
 
 avl_t *interno_remover(avl_t *no, int n) {
     // Buscar valor a ser removido
-    if (n <= no->val) {
-        return interno_remover(no->esq, n);
+    if (n < no->val) {
+        if (!no->esq) return no;
+
+        // Detectar mudança na altura da subárvore
+        int previo = no->esq->fator;
+        no->esq = interno_remover(no->esq, n);
+    } else if (n > no->val) {
+        if (!no->dir) return no;
+
+        // Detectar mudança na altura da subárvore
+        int previo = no->dir->fator;
+        no->dir = interno_remover(no->dir, n);
     } else {
-        return interno_remover(no->dir, n);
+        if (!no->esq) {
+            avl_t *dir = no->dir;
+            free(no);
+            return dir;
+        } else if (!no->dir) {
+            avl_t *esq = no->esq;
+            free(no);
+            return esq;
+        }
+
+        // Encontrar menor nó da subárvore direita
+        avl_t* menor = no->dir;
+        while (menor->esq) menor = menor->esq;
+
+        // Detectar mudança na altura da subárvore
+        int previo = no->dir->fator;
+        no->dir = interno_remover(no->dir, menor->val);
+
+        if (!no->dir) {
+            // Remoção de folha
+            no->fator -= 1;
+        } else if (previo && !no->dir->fator) {
+            // O fb. da subárvore se tornou zero, logo ela diminuiu
+            no->fator -= 1;
+        }
+
+        // Se houve desbalanceamento
+        if (no->fator < -1) {
+
+            // TODO: Buscar
+        }
     }
+    return no;
 };
 
 int avl_remover(avl_t **avl, int n);
