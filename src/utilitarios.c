@@ -13,6 +13,14 @@ void medir_fim(double *medicoes, int i) {
     medicoes[i] = (double)(clock() - medicoes[i]) / CLOCKS_POR_MEDIDA;
 }
 
+// Retorna a media do vetor de medições passado.
+double media(double* medicoes, int tam) {
+    double acc = 0;
+    for (int i = 0; i < tam; i++)
+        acc += medicoes[i];
+    return acc / tam;
+}
+
 // Retorna o desvio padrão do vetor de medições passado.
 double desvio_padrao(double media, double* medicoes, int tam) {
     double soma_quadrados = 0;

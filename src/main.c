@@ -12,27 +12,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "avl.h"
-#include "lse.h"
-#include "utilitarios.h"
-#include "vetor.h"
+extern void questao1(unsigned int seed);
+extern void questao2(unsigned int seed);
+extern void questao3(unsigned int seed);
+extern void questao4(unsigned int seed);
 
 int main(int argc, char **argv) {
     unsigned int seed = time(NULL);
-    srand(seed);
 
-    avl_t *avl = NULL;
-    avl_inserir(&avl, 3);
-    avl_inserir(&avl, 2);
-    avl_inserir(&avl, 1);
-    avl_inserir(&avl, 4);
-    avl_inserir(&avl, 5);
-    avl_inserir(&avl, 6);
-    avl_inserir(&avl, 7);
-    avl_inserir(&avl, 16);
-    avl_inserir(&avl, 15);
-    avl_inserir(&avl, 14);
-    // avl_inserir(&avl, 16);
-
-    printf("oii :3\n");
+    questao4(seed);
 }

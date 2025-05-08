@@ -24,17 +24,15 @@ avl_t *avl_criar(int val) {
     return avl;
 };
 
-int *avl_buscar(avl_t **avl, int n) {
-    if (!avl) return NULL;
-
-    avl_t *no = *avl;
+int *avl_buscar(avl_t *no, int n) {
+    if (!no) return NULL;
 
     if (no->val == n)
         return &no->val;
     else if (n < no->val)
-        return avl_buscar(&no->sub[ESQUERDA], n);
+        return avl_buscar(no->sub[ESQUERDA], n);
     else
-        return avl_buscar(&no->sub[DIREITA], n);
+        return avl_buscar(no->sub[DIREITA], n);
 };
 
 avl_t *interno_rot_dir(avl_t *A, avl_t *B) {
@@ -168,66 +166,20 @@ avl_t *interno_inserir(avl_t *no, int n) {
     return no;
 }
 
-void avl_inserir(avl_t **avl, int n) {
-    if (!avl) return;
-
+avl_t* avl_inserir(avl_t *avl, int n) {
     // Tratar inserção em árvore vazia
-    if (!*avl) (*avl) = avl_criar(n);
-    else *avl = interno_inserir(*avl, n);
-    return;
+    if (!avl) return avl_criar(n);
+    else return interno_inserir(avl, n);
 };
 
-avl_t *interno_remover(avl_t *no, int n) {
-    // Buscar valor a ser removido
-    if (n < no->val) {
-        if (!no->sub[ESQUERDA]) return no;
+int avl_altura(avl_t *avl) {
+    int i = 0;
 
-        // Detectar mudança na altura da subárvore
-        int previo = no->sub[ESQUERDA]->fator;
-        no->sub[ESQUERDA] = interno_remover(no->sub[ESQUERDA], n);
-    } else if (n > no->val) {
-        if (!no->sub[DIREITA]) return no;
-
-        // Detectar mudança na altura da subárvore
-        int previo = no->sub[DIREITA]->fator;
-        no->sub[DIREITA] = interno_remover(no->sub[DIREITA], n);
-    } else {
-        if (!no->sub[ESQUERDA]) {
-            avl_t *dir = no->sub[DIREITA];
-            
-            free(no);
-            return dir;
-        } else if (!no->sub[DIREITA]) {
-            avl_t *esq = no->sub[ESQUERDA];
-            free(no);
-            return esq;
-        }
-
-        // Encontrar menor nó da subárvore direita
-        avl_t* menor = no->sub[DIREITA];
-        while (menor->sub[ESQUERDA]) menor = menor->sub[ESQUERDA];
-
-        // Detectar mudança na altura da subárvore
-        int previo = no->sub[DIREITA]->fator;
-        no->sub[DIREITA] = interno_remover(no->sub[DIREITA], menor->val);
-
-        if (!no->sub[DIREITA]) {
-            // Remoção de folha
-            no->fator -= 1;
-        } else if (previo && !no->sub[DIREITA]->fator) {
-            // O fb. da subárvore se tornou zero, logo ela diminuiu
-            no->fator -= 1;
-        }
-
-        // Se houve desbalanceamento
-        if (no->fator < -1) {
-
-            // TODO: Buscar
-        }
+    // Percorrer a árvore pelo caminho mais desbalanceado
+    while (avl) {
+        avl = avl->sub[(avl->fator + 1) >> 1];
+        i++;
     }
-    return no;
-};
 
-int avl_remover(avl_t **avl, int n);
-
-int avl_altura(avl_t *avl);
+    return i;
+}
