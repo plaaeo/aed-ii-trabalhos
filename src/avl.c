@@ -183,3 +183,11 @@ int avl_altura(avl_t *avl) {
 
     return i;
 }
+
+void avl_liberar(avl_t *avl) {
+    if (!avl) return;
+
+    avl_liberar(avl->sub[ESQUERDA]);
+    avl_liberar(avl->sub[DIREITA]);
+    free(avl);
+}

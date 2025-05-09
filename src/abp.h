@@ -22,3 +22,6 @@ void abp_pos_ordem(abp_t* raiz);
 
 // calcula a altura da árvore
 int abp_altura(abp_t* raiz);
+
+// libera a árvore
+void abp_liberar(abp_t *raiz);

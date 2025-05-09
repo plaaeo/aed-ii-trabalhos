@@ -117,3 +117,11 @@ int abp_altura(abp_t* raiz) {
     int d = abp_altura(raiz->direita);
     return 1 + (e > d ? e : d);
 }
+
+// libera a árvore
+void abp_liberar(abp_t *raiz) {
+    if (!raiz) return;
+    abp_liberar(raiz->esquerda);
+    abp_liberar(raiz->direita);
+    free(raiz);
+}

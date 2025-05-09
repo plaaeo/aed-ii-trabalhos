@@ -6,7 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define TAM 2000000
+#define TAM 1000000
 
 int aleatorio() {
     return rand() % TAM;
@@ -24,12 +24,13 @@ void questao4(unsigned int seed) {
 
     printf("* Questao 4\n");
     for (int j = 0; j < 10; j++) {
-        // abp_liberar(abp); nao tem ainda :(
+        abp_liberar(abp);
         avl_liberar(avl);
         printf(". Executando iteração %d... ", j + 1);
         fflush(stdout);
 
         // Criação da árvore binária
+        abp = NULL;
         srand(seed);
         medir_inicio(r_abp, j);
         for (int i = 0; i < TAM; i++) {
@@ -42,6 +43,7 @@ void questao4(unsigned int seed) {
         fflush(stdout);
 
         // Criação da AVL
+        avl = NULL;
         srand(seed);
         medir_inicio(r_avl, j);
         for (int i = 0; i < TAM; i++) {
@@ -51,10 +53,14 @@ void questao4(unsigned int seed) {
         a_avl[j] = avl_altura(avl);
 
         printf("[AVL OK]\n");
+        fflush(stdout);
 
         // Definição da próxima seed aleatória
         seed = time(NULL);
     }
+
+    printf(". Executando buscas... ");
+    fflush(stdout);
 
     // Busca na árvore binária
     srand(seed);
@@ -64,6 +70,9 @@ void questao4(unsigned int seed) {
         medir_fim(b_abp, i);
     }
 
+    printf("[ABP OK] ");
+    fflush(stdout);
+
     // Busca na árvore AVL
     srand(seed);
     for (int i = 0; i < 30; i++) {
@@ -72,8 +81,11 @@ void questao4(unsigned int seed) {
         medir_fim(b_avl, i);
     }
 
+    printf("[AVL OK]\n");
+    fflush(stdout);
+
     // Imprimir tabelas com os dados
-    printf(". Tabela de tempos de criação\n");
+    printf("# Tabela de tempos de criação\n");
     printf("| Criação | ABP           | AVL           | Alt. ABP | Alt. AVL |\n");
     printf("|--------:|:-------------:|:-------------:|:---------|:---------|\n");
     for (int j = 0; j < 10; j++) {
@@ -85,14 +97,14 @@ void questao4(unsigned int seed) {
     double d_abp = desvio_padrao(m_abp, r_abp, 10);
     double d_avl = desvio_padrao(m_avl, r_avl, 10);
 
-    printf("| Media   | %13.4f | %13.4f |    --    |    --    | \n", m_abp, m_avl);
+    printf("| Media   | %13.2f | %13.2f |    --    |    --    | \n", m_abp, m_avl);
     printf("| Desvio  | %13.4f | %13.4f |    --    |    --    | \n", d_abp, d_avl);
 
-    printf(". Tabela de tempos de busca\n");
-    printf("| Busca   | ABP           | AVL           |\n");
-    printf("|--------:|:-------------:|:-------------:|\n");
-    for (int j = 0; j < 10; j++) {
-        printf("| It. %2d  | %13.2f | %13.2f |\n", j + 1, b_abp[j], b_avl[j]);
+    printf("# Tabela de tempos de busca\n");
+    printf("| Busca   | ABP      | AVL      |\n");
+    printf("|--------:|:--------:|:--------:|\n");
+    for (int j = 0; j < 30; j++) {
+        printf("| It. %2d  | %8.2f | %8.2f |\n", j + 1, b_abp[j], b_avl[j]);
     }
 
     double mb_abp = media(b_abp, 30);
@@ -100,6 +112,6 @@ void questao4(unsigned int seed) {
     double db_abp = desvio_padrao(mb_abp, b_abp, 30);
     double db_avl = desvio_padrao(mb_avl, b_avl, 30);
 
-    printf("| Media   | %13.4f | %13.4f |\n", mb_abp, mb_avl);
-    printf("| Desvio  | %13.4f | %13.4f |\n", db_abp, db_avl);
+    printf("| Media   | %8.4f | %8.4f |\n", mb_abp, mb_avl);
+    printf("| Desvio  | %8.4f | %8.4f |\n", db_abp, db_avl);
 };
