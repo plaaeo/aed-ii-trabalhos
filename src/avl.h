@@ -19,5 +19,3 @@ void avl_liberar(avl_t* avl);
 
 // Retorna a altura da árvore AVL.
 int avl_altura(avl_t* avl);
-
-void avl_em_ordem(avl_t *avl);
