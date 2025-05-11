@@ -1,40 +1,37 @@
-int main () { 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "vetor.h"
+#include "abp.h"
+
+int main() {
     srand(time(NULL));
-    No* raiz = NULL;
-    int inseridos = 0;
-    int valores [20] = {0}; 
-    
-    while (inseridos < 20) {
-        int novo = rand () % 100;
-        int repetido = 0;
-        for (int i= 0; i < inseridos; i++) {
-            if (valores[i] == novo) {
-                repetidos = 1;
-                break
-            }
-        }
-        if(!repetido){
-            valores[inseridos++] = novo;
-            raiz = inseridos(raiz, novo);
-        }
+
+    int tam = 20;
+    vetor_t vet = vetor_criar(tam);
+    vetor_gerar_aleatorio(vet, tam);
+
+    printf("Vetor gerado:\n");
+    vetor_imprimir(vet, tam, 0, tam);
+
+    abp_t *abp = abp_criar();
+
+    for (int i = 0; i < tam; i++) {
+        abp_inserir(abp, vet[i]);
     }
-    printf("Valores inseridos:\n");
-    for (int i = 0; i <20; i++) {
-        printf("%d ", valores[i]);
-    }
-    printf("\n\n");
-    
-    printf("Pré-fixado: ");
-    pre_ordem(raiz);
-    printf("\n");
-    
-    printf("Central: "); 
-    em_ordem(raiz);
-    printf("\n");
-    
-    printf("Pós-fixado: ");
-    pos_ordem(raiz);
-    printf("\n");
-    
+
+    printf("\nPré-fixado: ");
+    abp_imprimir_pre_ordem(abp);
+
+    printf("Em ordem: ");
+    abp_imprimir_em_ordem(abp);
+
+    printf("Pós-ordem: ");
+    abp_imprimir_pos_ordem(abp);
+
+    vetor_liberar(vet);
+    abp_liberar(abp);
+
     return 0;
-}    
+}
