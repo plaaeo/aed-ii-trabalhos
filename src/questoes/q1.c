@@ -3,6 +3,7 @@
 #include <time.h>
 #include "abp.h"
 #include "vetor.h"
+#include "vetor.c"
 
 int main() {
     srand(time(NULL));
