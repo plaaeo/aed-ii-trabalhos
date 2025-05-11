@@ -1,30 +1,40 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "vetor.h"
 #include "abp.h"
 
 int main() {
-    int tam = 20;
+    int tam = 10;  // Tamanho do vetor de exemplo
+
+    // Criar vetor
     vetor_t vet = vetor_criar(tam);
-    vetor_gerar_aleatorio(vet, tam);
-
-    printf("Vetor gerado:\n");
-    vetor_imprimir(vet, tam, 0, tam - 1);
-
-    abp_t *abp = abp_criar();
+    
+    // Preencher o vetor com valores (apenas exemplo)
     for (int i = 0; i < tam; i++) {
-        abp_inserir(abp, vet[i]);
+        vet[i] = i + 1;  // Valores de 1 a 10
     }
 
-    printf("\nPré-ordem:\n");
+    // Criar a árvore binária de pesquisa (ABP)
+    abp_t *abp = abp_criar();
+
+    // Inserir elementos na árvore
+    for (int i = 0; i < tam; i++) {
+        abp_inserir(abp, vet[i]);  // Supondo que abp_inserir insira elementos na árvore
+    }
+
+    // Imprimir a árvore em diferentes ordens
+    printf("Árvore em pré-ordem:\n");
     abp_imprimir_pre_ordem(abp);
 
-    printf("\nEm ordem:\n");
+    printf("\nÁrvore em ordem:\n");
     abp_imprimir_em_ordem(abp);
 
-    printf("\nPós-ordem:\n");
+    printf("\nÁrvore em pós-ordem:\n");
     abp_imprimir_pos_ordem(abp);
 
-    vetor_liberar(vet);
+    // Liberar recursos
     abp_liberar(abp);
+    vetor_liberar(vet);
+
     return 0;
 }
