@@ -24,10 +24,10 @@ int main() {
     printf("\nPré-fixado: ");
     abp_imprimir_pre_ordem(abp);
 
-    printf("Em ordem: ");
+    printf("Central: ");
     abp_imprimir_em_ordem(abp);
 
-    printf("Pós-ordem: ");
+    printf("Pós-fixado: ");
     abp_imprimir_pos_ordem(abp);
 
     vetor_liberar(vet);
