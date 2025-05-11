@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include "vetor.h"
 #include "abp.h"
+#include "vetor.h"
 
 int main() {
     srand(time(NULL));
