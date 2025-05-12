@@ -26,7 +26,7 @@ void questao4(unsigned int seed) {
     for (int j = 0; j < 10; j++) {
         abp_liberar(abp);
         avl_liberar(avl);
-        printf(". Executando iteração %d... ", j + 1);
+        printf(". Executando iteração %d (seed = %d)... ", j + 1, seed);
         fflush(stdout);
 
         // Criação da árvore binária
@@ -56,10 +56,13 @@ void questao4(unsigned int seed) {
         fflush(stdout);
 
         // Definição da próxima seed aleatória
-        seed = time(NULL);
+        // É feita uma combinação do tempo atual com o tempo de execução do código
+        // em microssegundos, para casos em que a criação das duas árvores demore
+        // menos de 1 segundo (para não reutilizar a mesma seed)
+        seed = time(NULL) + (clock() / CLOCKS_POR_MEDIDA);
     }
 
-    printf(". Executando buscas... ");
+    printf(". Executando buscas (seed = %d)... ", seed);
     fflush(stdout);
 
     // Busca na árvore binária
@@ -81,7 +84,7 @@ void questao4(unsigned int seed) {
         medir_fim(b_avl, i);
     }
 
-    printf("[AVL OK]\n");
+    printf("[AVL OK]\n\n");
     fflush(stdout);
 
     // Imprimir tabelas com os dados
@@ -97,8 +100,8 @@ void questao4(unsigned int seed) {
     double d_abp = desvio_padrao(m_abp, r_abp, 10);
     double d_avl = desvio_padrao(m_avl, r_avl, 10);
 
-    printf("| Media   | %13.2f | %13.2f |    --    |    --    | \n", m_abp, m_avl);
-    printf("| Desvio  | %13.4f | %13.4f |    --    |    --    | \n", d_abp, d_avl);
+    printf("| Media   | %13.2f | %13.2f |    --    |    --    |\n", m_abp, m_avl);
+    printf("| Desvio  | %13.4f | %13.4f |    --    |    --    |\n\n", d_abp, d_avl);
 
     printf("# Tabela de tempos de busca\n");
     printf("| Busca   | ABP      | AVL      |\n");
@@ -113,5 +116,5 @@ void questao4(unsigned int seed) {
     double db_avl = desvio_padrao(mb_avl, b_avl, 30);
 
     printf("| Media   | %8.4f | %8.4f |\n", mb_abp, mb_avl);
-    printf("| Desvio  | %8.4f | %8.4f |\n", db_abp, db_avl);
+    printf("| Desvio  | %8.4f | %8.4f |\n\n", db_abp, db_avl);
 };
