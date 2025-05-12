@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "vetor.h"
 #include "abp.h"
 
 int questao1() {
     int tam = 20;  // Tamanho do vetor de exemplo
-
-    // Criar vetor
     int vet[tam];
+
+    srand(time(NULL));
     
     // Preencher o vetor com valores (apenas exemplo)
     for (int i = 0; i < tam; i++) {
-        vet[i] = i + 1;  // Valores de 1 a 10
+        vet[i] = rand() %100 + 1;
     }
 
     // Criar a árvore binária de pesquisa (ABP)
