@@ -12,13 +12,15 @@
 #include <stdlib.h>
 #include <time.h>
 
-extern void questao1(unsigned int seed);
+extern void questao1();
 extern void questao2(unsigned int seed);
 extern void questao3(unsigned int seed);
 extern void questao4(unsigned int seed);
 
 int main(int argc, char **argv) {
     unsigned int seed = time(NULL);
+    srand(seed);
 
+    questao1();
     questao4(seed);
 }
