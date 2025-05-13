@@ -34,7 +34,7 @@ void questao2(unsigned int seed) {
 
             pct_ordenar_id(N, pacotes);
             for(int i = 0; i < 20; i++){
-                fprintf(q2csv, "%d,%s\n", pacotes[i].id, pacotes[i].dado);
+                fprintf(q2csv, "%d,%c\n", pacotes[i].id, pacotes[i].dado);
             }
             fclose(q2csv);
         }
