@@ -81,28 +81,30 @@ abp_pct_t* pct_abp_remover(abp_pct_t* raiz, Pacote pacote) {
 
 //ordena parcialmente os pacotes pelo id
 Pacote pct_ordenar_parcial_id(int tam, Pacote pacotes[tam]){
-    int i, j, aux;
-    for(i=0; i<(tam/2) - 1; i++){
-        for(j=1; j<tam/2; j++){
-            if(pacotes[j].id < pacotes[i].id){
-                aux = pacotes[i].id;
-                pacotes[i].id = pacotes[j].id;
-                pacotes[j].id = aux;
-            }
-        }
+  int i, j;
+  Pacote aux;
+  for(i=0; i<(tam/2) - 1; i++){
+    for(j=1; j<tam/2; j++){
+      if(pacotes[j].id < pacotes[i].id){
+          aux = pacotes[i];
+          pacotes[i] = pacotes[j];
+          pacotes[j] = aux;
+      }
     }
+  }
 }
 
 //ordena todos os pacotes pelo id
 Pacote pct_ordenar_id(int tam, Pacote pacotes[tam]){
-    int i, j, aux;
-    for(i=0; i<tam-1; i++){
-        for(j=1; j<tam; j++){
-            if(pacotes[j].id < pacotes[i].id){
-                aux = pacotes[i].id;
-                pacotes[i].id = pacotes[j].id;
-                pacotes[j].id = aux;
-            }
-        }
-    }
+  int i, j;
+  Pacote aux;
+  for(i=0; i<tam-1; i++){
+      for(j=1; j<tam; j++){
+          if(pacotes[j].id < pacotes[i].id){
+              aux = pacotes[i];
+              pacotes[i] = pacotes[j];
+              pacotes[j] = aux;
+          }
+      }
+  }
 }
