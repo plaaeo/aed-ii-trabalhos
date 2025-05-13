@@ -84,7 +84,7 @@ Pacote pct_ordenar_parcial_id(int tam, Pacote pacotes[tam]){
   int i, j;
   Pacote aux;
   for(i=0; i<(tam/2) - 1; i++){
-    for(j=1; j<tam/2; j++){
+    for(j=i+1; j<tam/2; j++){
       if(pacotes[j].id < pacotes[i].id){
           aux = pacotes[i];
           pacotes[i] = pacotes[j];
@@ -99,7 +99,7 @@ Pacote pct_ordenar_id(int tam, Pacote pacotes[tam]){
   int i, j;
   Pacote aux;
   for(i=0; i<tam-1; i++){
-      for(j=1; j<tam; j++){
+      for(j=i+1; j<tam; j++){
           if(pacotes[j].id < pacotes[i].id){
               aux = pacotes[i];
               pacotes[i] = pacotes[j];
