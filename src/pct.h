@@ -1,6 +1,11 @@
 #pragma once
 
-typedef struct Pacotes Pacote;
+//definição de Pacote
+typedef struct Pacotes{
+    int id;
+    char dado;
+}Pacote;
+
 typedef struct abp_pct_t abp_pct_t;
 
 //cria um no
