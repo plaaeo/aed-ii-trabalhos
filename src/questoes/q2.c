@@ -1,3 +1,6 @@
+#include "../Pacote"
+#include "../abp_pct_t"
+
 void questao2(unsigned int seed) {
   Pacote pacotes[N];
     abp_pct_t* raiz;
