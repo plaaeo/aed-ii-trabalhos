@@ -3,8 +3,6 @@
 
 #include "pct.h"
 
-#define N 20
-
 //definição do nó na árvore
 struct abp_pct_t {
   Pacote pacote;
