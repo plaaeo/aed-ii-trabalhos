@@ -5,12 +5,6 @@
 
 #define N 20
 
-//definição de pacotes
-struct Pacotes{
-    int id;
-    char dado;
-}Pacote;
-
 //definição do nó na árvore
 struct abp_pct_t {
   Pacote pacote;
