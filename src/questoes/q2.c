@@ -13,7 +13,12 @@ void questao2(unsigned int seed) {
         pacotes[i].id = rand() % 10000;       
         srand(pacotes[i].id);
         pacotes[i].dado = (rand() % 26) + 97;
+    }
 
+    //ordena parcialmente os pacotes
+    pct_ordenar_parcial_id(N, pacotes);
+  
+    for(int i=0; i<N; i++){
         //inserir o pacote criado
         pct_abp_inserir(raiz, pacotes[i]);
     }
@@ -27,7 +32,7 @@ void questao2(unsigned int seed) {
             // Imprimir dados em formato csv
             fprintf(q2csv, "ID,Dado\n");
 
-            pct_ordenar_id(pacotes, N);
+            pct_ordenar_id(N, pacotes);
             for(int i = 0; i < 20; i++){
                 fprintf(q2csv, "%d,%s\n", pacotes[i].id, pacotes[i].dado);
             }
