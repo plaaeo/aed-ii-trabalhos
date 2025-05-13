@@ -22,17 +22,6 @@ void questao2() {
     //inserir o pacote criado
     raiz = pct_abp_inserir(raiz, pacotes[i]);
   }
-
-  for(int i = 0; i < 20; i++){
-    printf("%d,%c\n", pacotes[i].id, pacotes[i].dado);
-  }
-  printf("\n\n\n");
-    
-  pct_ordenar_id(N, pacotes);
-    
-  for(int i = 0; i < 20; i++){
-    printf("%d,%c\n", pacotes[i].id, pacotes[i].dado);
-  }
   
   //salvar dados em um arquivo
     FILE *q2csv = fopen("q2.csv", "w");
