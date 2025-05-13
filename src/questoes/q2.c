@@ -3,7 +3,7 @@
 
 #include "../pct.h"
 
-void questao2(unsigned int seed) {
+void questao2() {
   Pacote pacotes[N];
     abp_pct_t* raiz;
 
