@@ -22,5 +22,6 @@ int main(int argc, char **argv) {
     srand(seed);
 
     questao1();
+    questao2();
     questao4(seed);
 }
