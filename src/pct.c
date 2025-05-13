@@ -8,7 +8,7 @@ struct abp_pct_t {
   Pacote pacote;
   struct abp_pct_t* esquerda;
   struct abp_pct_t* direita;
-} abp_pct_t;
+};
 
 //cria um novo nó
 abp_pct_t* pct_criar_no(Pacote pacote) {
