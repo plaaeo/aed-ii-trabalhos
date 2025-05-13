@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "pct.h"
+
 #define N 20
 
 //definição de pacotes
@@ -16,7 +18,7 @@ struct abp_pct_t {
   struct abp_pct_t* direita;
 } abp_pct_t;
 
-/cria um novo nó
+//cria um novo nó
 abp_pct_t* pct_criar_no(Pacote pacote) {
     abp_pct_t* novo = (abp_pct_t*)malloc(sizeof(abp_pct_t));
     novo->pacote = pacote;
