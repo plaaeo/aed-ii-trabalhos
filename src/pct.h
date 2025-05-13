@@ -1,5 +1,7 @@
 #pragma once
 
+#define N 20
+
 //definição de Pacote
 typedef struct Pacotes{
     int id;
