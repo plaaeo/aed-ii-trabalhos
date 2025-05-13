@@ -5,7 +5,7 @@
 
 void questao2() {
   Pacote pacotes[N];
-    abp_pct_t* raiz;
+    abp_pct_t* raiz = NULL;
 
     for(int i=0; i<N; i++){
 
@@ -20,7 +20,7 @@ void questao2() {
   
     for(int i=0; i<N; i++){
         //inserir o pacote criado
-        pct_abp_inserir(raiz, pacotes[i]);
+        raiz = pct_abp_inserir(raiz, pacotes[i]);
     }
 
     
