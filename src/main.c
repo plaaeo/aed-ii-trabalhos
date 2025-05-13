@@ -13,7 +13,7 @@
 #include <time.h>
 
 extern void questao1();
-extern void questao2(unsigned int seed);
+extern void questao2();
 extern void questao3(unsigned int seed);
 extern void questao4(unsigned int seed);
 
