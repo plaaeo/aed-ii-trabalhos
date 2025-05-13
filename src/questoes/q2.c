@@ -1,5 +1,7 @@
-#include "../Pacote"
-#include "../abp_pct_t"
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../pct.h"
 
 void questao2(unsigned int seed) {
   Pacote pacotes[N];
