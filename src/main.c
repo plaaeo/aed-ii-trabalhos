@@ -23,5 +23,6 @@ int main(int argc, char **argv) {
 
     questao1();
     questao2();
+    questao3(seed);
     questao4(seed);
 }
