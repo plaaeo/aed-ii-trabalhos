@@ -74,14 +74,9 @@ avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
 
     // Rotacionar B com Aux à direita
     B = interno_rot_dir(B, aux);
-    // B->esq = aux->dir;
-    // aux->dir = B;
 
     // Rotacionar A com Aux à esquerda
     A = interno_rot_esq(A, aux);
-    // A->dir = aux->esq;
-    // aux->esq = A;
-
     return aux;
 }
 
@@ -90,14 +85,9 @@ avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
 
     // Rotacionar B com Aux à esquerda
     B = interno_rot_esq(B, aux);
-    // B->dir = aux->esq;
-    // aux->esq = B;
 
     // Rotacionar A com Aux à direita
     A = interno_rot_dir(A, aux);
-    // A->esq = aux->dir;
-    // aux->dir = A;
-
     return aux;
 }
 
@@ -154,12 +144,6 @@ avl_t *avl_inserir(avl_t *avl, int n) {
 };
 
 int avl_altura(avl_t *avl) {
-    if (avl == NULL) return 0;
-    int f = interno_fator(avl);
-    if (f < -1 || f > 1) printf("nao é avl!!!");
-    avl_altura(avl->esq);
-    printf("%d ", avl->altura);
-    avl_altura(avl->dir);
     return avl->altura;
 }
 

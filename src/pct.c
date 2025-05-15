@@ -28,3 +28,12 @@ abp_pct_t* abp_pct_inserir(abp_pct_t* raiz, pacote_t pacote) {
         raiz->direita = abp_pct_inserir(raiz->direita, pacote);
     return raiz;
 }
+
+// salva os pacotes, em ordem, no arquivo de saida
+void abp_pct_em_ordem(abp_pct_t* raiz, FILE* saida) {
+    if (!raiz) return;
+
+    abp_pct_em_ordem(raiz->esquerda, saida);
+    fprintf(saida, "| %10d | %c    |\n", raiz->pacote.id, raiz->pacote.dado);
+    abp_pct_em_ordem(raiz->direita, saida);
+}

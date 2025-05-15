@@ -4,23 +4,23 @@
 #include "../pct.h"
 
 #define N 20
+#define ORDENADOS 10
 
-// TODO: fazer lógica para repetir elementos
-// TODO: ajustes nas saídas
 void questao2() {
     pacote_t pacotes[N];
     abp_pct_t* raiz = NULL;
 
     // gerar pacotes
     for (int i = 0; i < N; i++) {
-        pacotes[i].id = rand() % 10000;
-        srand(pacotes[i].id);
-        pacotes[i].dado = (rand() % 26) + 97;
+        pacotes[i].id = rand() % 1000000;
+
+        // gerar dado a partir do ID (IDs iguais geram dados iguais)
+        pacotes[i].dado = (pacotes[i].id % 26) + 97;
     }
 
     // ordena parcialmente os pacotes
-    for (int i = 0; i < N / 2; i++) {
-        for (int j = i + 1; j < N / 2; j++) {
+    for (int i = 0; i < ORDENADOS; i++) {
+        for (int j = i + 1; j < ORDENADOS; j++) {
             if (pacotes[j].id < pacotes[i].id) {
                 pacote_t aux = pacotes[i];
                 pacotes[i] = pacotes[j];
@@ -34,17 +34,27 @@ void questao2() {
         raiz = abp_pct_inserir(raiz, pacotes[i]);
     }
 
-    // salvar dados em um arquivo
-    FILE* q2csv = fopen("q2.txt", "w");
-    if (q2csv) {
-        printf("  (escrevendo dados da questao 2 em 'q2.csv')\n");
-
-        // Imprimir dados em formato csv
-        fprintf(q2csv, "ID,Dado\n");
-
-        for (int i = 0; i < N; i++) {
-            fprintf(q2csv, "%d,%c\n", pacotes[i].id, pacotes[i].dado);
-        }
-        fclose(q2csv);
+    // imprimir dados parcialmente ordenados na tela
+    printf("\n# Pacotes parcialmente ordenados\n");
+    printf("| ID         | Dado |\n");
+    printf("|-----------:|:-----|\n");
+    for (int i = 0; i < N; i++) {
+        printf("| %10d | %c    |\n", pacotes[i].id, pacotes[i].dado);
     }
+
+    // salvar dados em um arquivo
+    FILE* q2txt = fopen("q2.txt", "w");
+    if (q2txt) {
+        printf(". Escrevendo resultado da questao 2 em 'q2.txt'\n");
+    } else {
+        printf("\n# Pacotes ordenados\n");
+        q2txt = stdout;
+    }
+
+    // imprimir dados ordenados em arquivo
+    fprintf(q2txt, "| ID         | Dado |\n");
+    fprintf(q2txt, "|-----------:|:-----|\n");
+    abp_pct_em_ordem(raiz, q2txt);
+
+    if (q2txt != stdout) fclose(q2txt);
 };
