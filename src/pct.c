@@ -37,3 +37,20 @@ void abp_pct_em_ordem(abp_pct_t* raiz, FILE* saida) {
     fprintf(saida, "| %10d | %c    |\n", raiz->pacote.id, raiz->pacote.dado);
     abp_pct_em_ordem(raiz->direita, saida);
 }
+
+// calcula a altura da árvore
+int abp_pct_altura(abp_pct_t* raiz) {
+    if (!raiz) return 0;
+
+    int e = abp_pct_altura(raiz->esquerda);
+    int d = abp_pct_altura(raiz->direita);
+    return 1 + (e > d ? e : d);
+}
+
+// libera a árvore de pacotes
+void abp_pct_liberar(abp_pct_t *raiz) {
+    if (!raiz) return;
+    abp_pct_liberar(raiz->esquerda);
+    abp_pct_liberar(raiz->direita);
+    free(raiz);
+}

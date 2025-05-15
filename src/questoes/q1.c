@@ -37,6 +37,7 @@ int questao1() {
 
     // Liberar recursos
     abp_liberar(abp);
+    free(vet);
 
     return 0;
 }

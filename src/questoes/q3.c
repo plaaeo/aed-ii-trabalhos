@@ -31,6 +31,11 @@ void questao3(unsigned int seed) {
 
     abp_t* arvore = NULL;
 
+    printf("  Pressione <ENTER> para gerar o vetor.\n");
+    do {
+        ch = getchar();
+    } while (ch != '\n' && ch != EOF);
+
     printf(". Gerando vetor ordenado...\n");
     vetor_gerar_ordenado(vetor, TAMANHO);
 
@@ -87,7 +92,7 @@ void questao3(unsigned int seed) {
         }
     }
 
-    printf("\n# Resultados das buscas\n");
+    printf("\n# Resultados das buscas (us)\n");
     printf("| Buscas   | ABP     | Vetor   |\n");
     printf("|---------:|:-------:|:-------:|\n");
     for (int i = 0; i < BUSCAS; i++) {

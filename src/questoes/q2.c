@@ -14,7 +14,7 @@ void questao2() {
 
     // gerar pacotes
     for (int i = 0; i < N; i++) {
-        pacotes[i].id = rand() % 10000;
+        pacotes[i].id = rand() % 100;
 
         // gerar dado a partir do ID (IDs iguais geram dados iguais)
         pacotes[i].dado = (pacotes[i].id % 26) + 97;
@@ -43,6 +43,7 @@ void questao2() {
     for (int i = 0; i < N; i++) {
         printf("| %10d | %c    |\n", pacotes[i].id, pacotes[i].dado);
     }
+    printf(". Altura da ABP: %d\n", abp_pct_altura(raiz));
 
     // salvar dados em um arquivo
     FILE* q2txt = fopen("q2.txt", "w");
@@ -59,4 +60,5 @@ void questao2() {
     abp_pct_em_ordem(raiz, q2txt);
 
     if (q2txt != stdout) fclose(q2txt);
+    abp_pct_liberar(raiz);
 };

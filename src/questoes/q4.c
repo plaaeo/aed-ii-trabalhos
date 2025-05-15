@@ -91,11 +91,11 @@ void questao4(unsigned int seed) {
     fflush(stdout);
 
     // Imprimir tabelas com os dados
-    printf("# Tabela de tempos de criação\n");
+    printf("# Tabela de tempos de criação (ms)\n");
     printf("| Criação | ABP           | AVL           | Alt. ABP | Alt. AVL |\n");
     printf("|--------:|:-------------:|:-------------:|:---------|:---------|\n");
     for (int j = 0; j < ARVORES; j++) {
-        printf("| It. %2d  | %13.2f | %13.2f | %8d | %8d |\n", j + 1, r_abp[j], r_avl[j], a_abp[j], a_avl[j]);
+        printf("| It. %2d  | %13.2f | %13.2f | %8d | %8d |\n", j + 1, r_abp[j] / 1000, r_avl[j] / 1000, a_abp[j], a_avl[j]);
     }
 
     double m_abp = media(r_abp, ARVORES);
@@ -103,10 +103,10 @@ void questao4(unsigned int seed) {
     double d_abp = desvio_padrao(m_abp, r_abp, ARVORES);
     double d_avl = desvio_padrao(m_avl, r_avl, ARVORES);
 
-    printf("| Media   | %13.2f | %13.2f |    --    |    --    |\n", m_abp, m_avl);
-    printf("| Desvio  | %13.4f | %13.4f |    --    |    --    |\n\n", d_abp, d_avl);
+    printf("| Media   | %13.2f | %13.2f |    --    |    --    |\n", m_abp / 1000, m_avl / 1000);
+    printf("| Desvio  | %13.4f | %13.4f |    --    |    --    |\n\n", d_abp / 1000, d_avl / 1000);
 
-    printf("# Tabela de tempos de busca\n");
+    printf("# Tabela de tempos de busca (us)\n");
     printf("| Busca   | ABP      | AVL      |\n");
     printf("|--------:|:--------:|:--------:|\n");
     for (int j = 0; j < BUSCAS; j++) {
@@ -120,4 +120,7 @@ void questao4(unsigned int seed) {
 
     printf("| Media   | %8.4f | %8.4f |\n", mb_abp, mb_avl);
     printf("| Desvio  | %8.4f | %8.4f |\n\n", db_abp, db_avl);
+
+    abp_liberar(abp);
+    avl_liberar(avl);
 };
