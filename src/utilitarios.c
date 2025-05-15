@@ -10,7 +10,7 @@ void medir_inicio(double *medicoes, int i) {
 
 // Finaliza a medição e armazena (t_fim - t_inicio) em `medicoes[i]`, em microsegundos.
 void medir_fim(double *medicoes, int i) {
-    medicoes[i] = (double)(clock() - medicoes[i]) / CLOCKS_POR_MEDIDA;
+    medicoes[i] = (double)(clock() - medicoes[i]) / (double) CLOCKS_POR_MEDIDA;
 }
 
 // Retorna a media do vetor de medições passado.

@@ -10,9 +10,11 @@ void questao2() {
     pacote_t pacotes[N];
     abp_pct_t* raiz = NULL;
 
+    printf("\n* Questao 2\n");
+
     // gerar pacotes
     for (int i = 0; i < N; i++) {
-        pacotes[i].id = rand() % 1000000;
+        pacotes[i].id = rand() % 10000;
 
         // gerar dado a partir do ID (IDs iguais geram dados iguais)
         pacotes[i].dado = (pacotes[i].id % 26) + 97;

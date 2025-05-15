@@ -17,7 +17,7 @@ extern void questao2();
 extern void questao3(unsigned int seed);
 extern void questao4(unsigned int seed);
 
-int main(int argc, char **argv) {
+int main() {
     unsigned int seed = time(NULL);
     srand(seed);
 
