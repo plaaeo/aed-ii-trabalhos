@@ -93,7 +93,6 @@ avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
 
 avl_t *interno_inserir(avl_t *no, int n) {
     if (!no) {
-        // printf("%d ", n);
         return avl_criar(n);
     }
 
