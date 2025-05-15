@@ -22,7 +22,7 @@ abp_t* criar_no(int valor) {
 // insere um valor na árvore
 abp_t* abp_inserir(abp_t* raiz, int valor) {
     if (raiz == NULL) return criar_no(valor);
-    if (valor < raiz->valor)
+    if (valor <= raiz->valor)
         raiz->esquerda = abp_inserir(raiz->esquerda, valor);
     else if (valor > raiz->valor)
         raiz->direita = abp_inserir(raiz->direita, valor);
