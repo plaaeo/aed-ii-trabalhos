@@ -1,6 +1,10 @@
 #pragma once
+#include "vetor.h"
 
 typedef struct abp_t abp_t;
+
+// cria uma abp usando um vetor ordenado
+abp_t* abp_criar_por_vetor(vetor_t vetor, int tam);
 
 // insere um valor na árvore
 abp_t* abp_inserir(abp_t* raiz, int valor);

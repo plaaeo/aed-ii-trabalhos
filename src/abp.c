@@ -1,13 +1,13 @@
+#include "abp.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "abp.h"
-
 // definição do nó da árvore
 struct abp_t {
-  int valor;
-  struct abp_t* esquerda;
-  struct abp_t* direita;
+    int valor;
+    struct abp_t* esquerda;
+    struct abp_t* direita;
 };
 
 // cria um novo nó
@@ -19,10 +19,27 @@ abp_t* criar_no(int valor) {
     return novo;
 }
 
+// cria uma abp usando um vetor ordenado
+abp_t* interno_criar_por_vetor(vetor_t vetor, int inicio, int fim) {
+    if (inicio > fim) return NULL;
+
+    int idx = inicio + (fim - inicio) / 2;
+
+    abp_t* no = criar_no(vetor[idx]);
+    no->esquerda = interno_criar_por_vetor(vetor, inicio, idx - 1);
+    no->direita = interno_criar_por_vetor(vetor, idx + 1, fim);
+    return no;
+}
+
+// cria uma abp usando um vetor ordenado
+abp_t* abp_criar_por_vetor(vetor_t vetor, int tam) {
+    return interno_criar_por_vetor(vetor, 0, tam);
+};
+
 // insere um valor na árvore
 abp_t* abp_inserir(abp_t* raiz, int valor) {
     if (raiz == NULL) return criar_no(valor);
-    if (valor <= raiz->valor)
+    if (valor < raiz->valor)
         raiz->esquerda = abp_inserir(raiz->esquerda, valor);
     else if (valor > raiz->valor)
         raiz->direita = abp_inserir(raiz->direita, valor);
@@ -60,12 +77,12 @@ abp_t* abp_remover(abp_t* raiz, int valor) {
         // No com dois filhos
         abp_t* temp = raiz->direita;
         if (temp->esquerda) {
-            abp_t *pai = NULL;
+            abp_t* pai = NULL;
 
             do {
                 pai = temp;
                 temp = temp->esquerda;
-            } while(temp->esquerda != NULL);
+            } while (temp->esquerda != NULL);
 
             // Remover diretamente da árvore
             pai->esquerda = NULL;
@@ -119,7 +136,7 @@ int abp_altura(abp_t* raiz) {
 }
 
 // libera a árvore
-void abp_liberar(abp_t *raiz) {
+void abp_liberar(abp_t* raiz) {
     if (!raiz) return;
     abp_liberar(raiz->esquerda);
     abp_liberar(raiz->direita);

@@ -11,20 +11,13 @@
 #define TAMANHO 1000000
 #define BUSCAS 30
 
-// Encaminha o vetor ordenado 'vet' em pré-ordem e insere na árvore 'abp'
-abp_t* caminhar_vetor(abp_t* abp, vetor_t vet, int tam) {
-    if (tam > 0) {
-        int idx = tam / 2;
-        abp = abp_inserir(abp, vet[idx]);
-        abp = caminhar_vetor(abp, vet, idx);
-        abp = caminhar_vetor(abp, &vet[1 + idx], tam - idx - 1);
-    }
-
-    return abp;
-}
+// Busca um elemento ausente na árvore/vetor a cada 5a busca
+#define PERIODO 5
 
 // TODO: pausas para verificar o gerenciador de tarefas
 void questao3(unsigned int seed) {
+    int ch;
+
     srand(seed);
     printf("\n* Questao 3\n");
 
@@ -40,23 +33,24 @@ void questao3(unsigned int seed) {
 
     printf(". Gerando vetor ordenado...\n");
     vetor_gerar_ordenado(vetor, TAMANHO);
-    printf("  Pressione <ENTER> para gerar a ABP.\n");
 
-    // Pausar até receber um enter
-    int ch;
-    do { ch = getchar(); } while (ch != '\n' && ch != EOF);
+    printf("  Pressione <ENTER> para gerar a ABP.\n");
+    do {
+        ch = getchar();
+    } while (ch != '\n' && ch != EOF);
 
     printf(". Construindo ABP...\n");
-    arvore = caminhar_vetor(arvore, vetor, TAMANHO);
-    printf("  Pressione <ENTER> para continuar a execucao.\n");
+    arvore = abp_criar_por_vetor(vetor, TAMANHO);
 
-    // Pausar até receber um enter
-    do { ch = getchar(); } while (ch != '\n' && ch != EOF);
+    printf("  Pressione <ENTER> para continuar a execucao.\n");
+    do {
+        ch = getchar();
+    } while (ch != '\n' && ch != EOF);
 
     // Preparar buscas garantindo que alguns valores existam e outros não
     int valores_busca[BUSCAS];
     for (int i = 0; i < BUSCAS; i++) {
-        if (i % 5 != 0) {
+        if (i % PERIODO != 0) {
             // Valores que existem no vetor
             valores_busca[i] = vetor[rand() % TAMANHO];
         } else {
