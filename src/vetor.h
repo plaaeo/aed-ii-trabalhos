@@ -5,7 +5,7 @@
 typedef int* vetor_t;
 
 /// Gera um vetor com valores aleatórios
-void vetor_gerar_aleatorio(vetor_t vet, int tam);
+void vetor_gerar_aleatorio(vetor_t vet, int max, int tam);
 
 /// Gera um vetor com valores ordenados aleatórios
 void vetor_gerar_ordenado(vetor_t vet, int tam);

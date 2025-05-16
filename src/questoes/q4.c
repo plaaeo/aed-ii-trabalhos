@@ -11,11 +11,7 @@
 #define BUSCAS 30
 #define ARVORES 10
 
-int aleatorio() {
-    return rand() % TAM;
-}
-
-void questao4(unsigned int seed) {
+void questao4() {
     abp_t* abp = NULL;
     avl_t* avl = NULL;
     int a_abp[ARVORES] = {};
@@ -24,55 +20,54 @@ void questao4(unsigned int seed) {
     double r_avl[ARVORES] = {};
     double b_abp[BUSCAS] = {};
     double b_avl[BUSCAS] = {};
+    vetor_t dados = malloc(sizeof(int) * TAM);
 
     printf("\n* Questao 4\n");
     for (int j = 0; j < ARVORES; j++) {
         abp_liberar(abp);
         avl_liberar(avl);
-        printf(". Executando iteração %d (seed = %d)... ", j + 1, seed);
+        printf(". Executando iteração %d... ", j + 1);
         fflush(stdout);
 
-        // Criação da árvore binária
         abp = NULL;
-        srand(seed);
+        avl = NULL;
+        vetor_gerar_aleatorio(dados, TAM, TAM);
+
+        // Criação da árvore binária
         medir_inicio(r_abp, j);
         for (int i = 0; i < TAM; i++) {
-            abp = abp_inserir(abp, aleatorio());
+            abp = abp_inserir(abp, dados[i]);
         }
         medir_fim(r_abp, j);
         a_abp[j] = abp_altura(abp);
 
+        // Fim da ABP
         printf("[ABP OK] ");
         fflush(stdout);
 
         // Criação da AVL
-        avl = NULL;
-        srand(seed);
         medir_inicio(r_avl, j);
         for (int i = 0; i < TAM; i++) {
-            avl = avl_inserir(avl, aleatorio());
+            avl = avl_inserir(avl, dados[i]);
         }
         medir_fim(r_avl, j);
         a_avl[j] = avl_altura(avl);
 
+        // Fim da AVL
         printf("[AVL OK]\n");
         fflush(stdout);
-
-        // Definição da próxima seed aleatória
-        // É feita uma combinação do tempo atual com o tempo de execução do código
-        // em microssegundos, para casos em que a criação das duas árvores demore
-        // menos de 1 segundo (para não reutilizar a mesma seed)
-        seed = time(NULL) + (clock() / CLOCKS_POR_MEDIDA);
     }
 
-    printf(". Executando buscas (seed = %d)... ", seed);
+    printf(". Executando buscas... ");
     fflush(stdout);
 
+    vetor_t buscas = malloc(sizeof(int) * BUSCAS);
+    vetor_gerar_aleatorio(buscas, TAM, BUSCAS);
+
     // Busca na árvore binária
-    srand(seed);
     for (int i = 0; i < BUSCAS; i++) {
         medir_inicio(b_abp, i);
-        abp_buscar(abp, aleatorio());
+        abp_buscar(abp, buscas[i]);
         medir_fim(b_abp, i);
     }
 
@@ -80,10 +75,9 @@ void questao4(unsigned int seed) {
     fflush(stdout);
 
     // Busca na árvore AVL
-    srand(seed);
     for (int i = 0; i < BUSCAS; i++) {
         medir_inicio(b_avl, i);
-        avl_buscar(avl, aleatorio());
+        avl_buscar(avl, buscas[i]);
         medir_fim(b_avl, i);
     }
 
@@ -123,4 +117,6 @@ void questao4(unsigned int seed) {
 
     abp_liberar(abp);
     avl_liberar(avl);
+    free(dados);
+    free(buscas);
 };

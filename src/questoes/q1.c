@@ -15,7 +15,7 @@ int questao1() {
     printf("* Questao 1\n");
 
     // Preencher o vetor com valores (apenas exemplo)
-    vetor_gerar_aleatorio(vet, TAM);
+    vetor_gerar_aleatorio(vet, TAM, TAM);
 
     // Criar a árvore binária de pesquisa (ABP)
     abp_t *abp = NULL;

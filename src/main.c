@@ -14,15 +14,15 @@
 
 extern void questao1();
 extern void questao2();
-extern void questao3(unsigned int seed);
-extern void questao4(unsigned int seed);
+extern void questao3();
+extern void questao4();
 
 int main() {
-    unsigned int seed = time(NULL);
-    srand(seed);
+    srand(time(NULL));
 
+    //
     questao1();
     questao2();
-    questao3(seed);
-    questao4(seed);
+    questao3();
+    questao4();
 }

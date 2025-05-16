@@ -6,15 +6,15 @@
 #include "vetor.h"
 
 // Gera um vetor com valores aleatórios
-void vetor_gerar_aleatorio(vetor_t vet, int tam) {
+void vetor_gerar_aleatorio(vetor_t vet, int max, int tam) {
     for (int i = 0; i < tam; i++) {
-        vet[i] = rand() % tam; // Valores aleatórios entre 0 e `tam - 1`
+        vet[i] = rand() % max; // Valores aleatórios entre 0 e `max`
     }
 }
 
 // Gera um vetor com valores aleatórios ordenados
 void vetor_gerar_ordenado(vetor_t vet, int tam) {
-    vetor_gerar_aleatorio(vet, tam);
+    vetor_gerar_aleatorio(vet, tam, tam);
     vetor_ordenar_merge(vet, 0, tam);
 }
 

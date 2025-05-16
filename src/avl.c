@@ -69,7 +69,7 @@ avl_t *interno_rot_esq(avl_t *A, avl_t *B) {
     return B;
 }
 
-avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
+avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
     avl_t *aux = B->esq;
 
     // Rotacionar B com Aux à direita
@@ -80,7 +80,7 @@ avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
     return aux;
 }
 
-avl_t *interno_rotd_esq(avl_t *A, avl_t *B) {
+avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
     avl_t *aux = B->dir;
 
     // Rotacionar B com Aux à esquerda
@@ -124,11 +124,11 @@ avl_t *interno_inserir(avl_t *no, int n) {
 
     // Caso em que houve inserção à direita da subárvore esquerda
     case 1:
-        return interno_rotd_esq(no, no->esq);
+        return interno_rotd_dir(no, no->esq);
 
     // Caso em que houve inserção à esquerda da subárvore direita
     case 2:
-        return interno_rotd_dir(no, no->dir);
+        return interno_rotd_esq(no, no->dir);
 
     // Caso em que houve inserção à direita da subárvore direita
     case 3:

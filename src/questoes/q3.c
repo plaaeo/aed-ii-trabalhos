@@ -14,11 +14,8 @@
 // Busca um elemento ausente na árvore/vetor a cada 5a busca
 #define PERIODO 5
 
-// TODO: pausas para verificar o gerenciador de tarefas
-void questao3(unsigned int seed) {
+void questao3() {
     int ch;
-
-    srand(seed);
     printf("\n* Questao 3\n");
 
     // Alocação com verificação
