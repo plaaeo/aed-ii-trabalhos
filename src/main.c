@@ -1,6 +1,6 @@
 /**
  * Algorítmos e Estruturas de Dados II - Turma CB01
- * Trabalho 2 - Árvores Binárias de Pesquisa
+ * Trabalho 3 - Indexação e Tabela Hash
  *
  * Aluno: Paulo Victor Fernandes de Melo
  * Aluno: João Luiz Rodrigues da Silva
@@ -12,17 +12,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-extern void questao1();
-extern void questao2();
-extern void questao3();
-extern void questao4();
-
 int main() {
     srand(time(NULL));
-
-    //
-    questao1();
-    questao2();
-    questao3();
-    questao4();
 }

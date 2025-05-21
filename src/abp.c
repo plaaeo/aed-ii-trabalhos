@@ -5,13 +5,13 @@
 
 // definição do nó da árvore
 struct abp_t {
-    int valor;
+    abp_valor_t valor;
     struct abp_t* esquerda;
     struct abp_t* direita;
 };
 
 // cria um novo nó
-abp_t* criar_no(int valor) {
+abp_t* criar_no(abp_valor_t valor) {
     abp_t* novo = (abp_t*)malloc(sizeof(abp_t));
     novo->valor = valor;
     novo->esquerda = NULL;
@@ -20,7 +20,7 @@ abp_t* criar_no(int valor) {
 }
 
 // cria uma abp usando um vetor ordenado
-abp_t* interno_criar_por_vetor(vetor_t vetor, int inicio, int fim) {
+abp_t* interno_criar_por_vetor(abp_valor_t *vetor, int inicio, int fim) {
     if (inicio > fim) return NULL;
 
     int idx = inicio + (fim - inicio) / 2;
@@ -32,37 +32,44 @@ abp_t* interno_criar_por_vetor(vetor_t vetor, int inicio, int fim) {
 }
 
 // cria uma abp usando um vetor ordenado
-abp_t* abp_criar_por_vetor(vetor_t vetor, int tam) {
+abp_t* abp_criar_por_vetor(abp_valor_t *vetor, int tam) {
     return interno_criar_por_vetor(vetor, 0, tam);
 };
 
 // insere um valor na árvore
-abp_t* abp_inserir(abp_t* raiz, int valor) {
+abp_t* abp_inserir(abp_t* raiz, abp_valor_t valor) {
     if (raiz == NULL) return criar_no(valor);
-    if (valor < raiz->valor)
+    
+    if (abp_chave(valor) < abp_chave(raiz->valor))
         raiz->esquerda = abp_inserir(raiz->esquerda, valor);
-    else if (valor > raiz->valor)
+    else if (abp_chave(valor) > abp_chave(raiz->valor))
         raiz->direita = abp_inserir(raiz->direita, valor);
     return raiz;
 }
 
 // busca um valor na árvore
-abp_t* abp_buscar(abp_t* raiz, int valor) {
-    if (raiz == NULL || raiz->valor == valor) return raiz;
-    if (valor < raiz->valor)
-        return abp_buscar(raiz->esquerda, valor);
+bool abp_buscar(abp_t* raiz, abp_chave_t chave, abp_valor_t *valor) {
+    if (raiz == NULL)
+        return false;
+    if (chave == abp_chave(raiz->valor)) {
+        if (valor)
+            *valor = raiz->valor;
+
+        return true;
+    } else if (chave < abp_chave(raiz->valor))
+        return abp_buscar(raiz->esquerda, chave, valor);
     else
-        return abp_buscar(raiz->direita, valor);
+        return abp_buscar(raiz->direita, chave, valor);
 }
 
 // remove um valor da arvore
-abp_t* abp_remover(abp_t* raiz, int valor) {
+abp_t* abp_remover(abp_t* raiz, abp_chave_t chave, abp_valor_t *valor) {
     if (raiz == NULL) return NULL;
 
-    if (valor < raiz->valor) {
-        raiz->esquerda = abp_remover(raiz->esquerda, valor);
-    } else if (valor > raiz->valor) {
-        raiz->direita = abp_remover(raiz->direita, valor);
+    if (chave < abp_chave(raiz->valor)) {
+        raiz->esquerda = abp_remover(raiz->esquerda, chave, valor);
+    } else if (chave > abp_chave(raiz->valor)) {
+        raiz->direita = abp_remover(raiz->direita, chave, valor);
     } else {
         // isso é pra caso tenha apenas um filho ou nenhum
         if (raiz->esquerda == NULL) {
@@ -74,6 +81,7 @@ abp_t* abp_remover(abp_t* raiz, int valor) {
             free(raiz);
             return temp;
         }
+
         // No com dois filhos
         abp_t* temp = raiz->direita;
         if (temp->esquerda) {
@@ -101,7 +109,8 @@ abp_t* abp_remover(abp_t* raiz, int valor) {
 
 void abp_pre_ordem(abp_t* raiz) {
     if (raiz != NULL) {
-        printf("%d ", raiz->valor);
+        abp_valor_imprime(raiz->valor);
+        printf(" ");
         abp_pre_ordem(raiz->esquerda);
         abp_pre_ordem(raiz->direita);
     }
@@ -112,7 +121,8 @@ void abp_pre_ordem(abp_t* raiz) {
 void abp_em_ordem(abp_t* raiz) {
     if (raiz != NULL) {
         abp_em_ordem(raiz->esquerda);
-        printf("%d ", raiz->valor);
+        abp_valor_imprime(raiz->valor);
+        printf(" ");
         abp_em_ordem(raiz->direita);
     }
 }
@@ -122,7 +132,8 @@ void abp_pos_ordem(abp_t* raiz) {
     if (raiz != NULL) {
         abp_pos_ordem(raiz->esquerda);
         abp_pos_ordem(raiz->direita);
-        printf("%d ", raiz->valor);
+        abp_valor_imprime(raiz->valor);
+        printf(" ");
     }
 }
 

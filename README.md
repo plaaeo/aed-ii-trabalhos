@@ -1,4 +1,5 @@
-# Trabalho 2 - Árvores Binárias de Pesquisa
+# Trabalho 3 - Indexação e Tabela Hash
+
 - **Aluno:** Paulo Victor Fernandes de Melo
 - **Aluno:** João Luiz Rodrigues da Silva
 - **Aluna:** Rebecca Aimée Lima de Lima

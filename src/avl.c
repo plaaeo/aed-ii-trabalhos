@@ -4,13 +4,13 @@
 #include <stdlib.h>
 
 struct avl_t {
-    int val;
-    int altura;
     avl_t *esq;
     avl_t *dir;
+    avl_valor_t val;
+    int altura;
 };
 
-avl_t *avl_criar(int val) {
+avl_t *avl_criar(avl_valor_t val) {
     avl_t *avl = malloc(sizeof(avl_t));
 
     if (avl) {
@@ -22,22 +22,26 @@ avl_t *avl_criar(int val) {
     return avl;
 };
 
-int *avl_buscar(avl_t *no, int n) {
-    if (!no) return NULL;
+bool avl_buscar(const avl_t *no, avl_chave_t n, avl_valor_t *valor) {
+    if (!no) return false;
 
-    if (no->val == n)
-        return &no->val;
-    else if (n < no->val)
-        return avl_buscar(no->esq, n);
+    if (avl_chave(no->val) == n) {
+        if (valor)
+            *valor = no->val;
+
+        return true;
+    }
+    else if (n < avl_chave(no->val))
+        return avl_buscar(no->esq, n, valor);
     else
-        return avl_buscar(no->dir, n);
+        return avl_buscar(no->dir, n, valor);
 };
 
-int interno_altura(avl_t *no) {
+int interno_altura(const avl_t *no) {
     return no ? no->altura : 0;
 }
 
-int interno_fator(avl_t *no) {
+int interno_fator(const avl_t *no) {
     return no ? interno_altura(no->dir) - interno_altura(no->esq) : 0;
 }
 
@@ -91,17 +95,17 @@ avl_t *interno_rotd_dir(avl_t *A, avl_t *B) {
     return aux;
 }
 
-avl_t *interno_inserir(avl_t *no, int n) {
+avl_t *interno_inserir(avl_t *no, avl_valor_t n) {
     if (!no) {
         return avl_criar(n);
     }
 
     // Ignora a inserção de elementos repetidos
-    if (n == no->val) return no;
+    if (avl_chave(n) == avl_chave(no->val)) return no;
 
     // Buscar local de inserção
     int fb_filho = 0;
-    if (n < no->val) {
+    if (avl_chave(n) < avl_chave(no->val)) {
         no->esq = interno_inserir(no->esq, n);
         fb_filho = interno_fator(no->esq);
     } else {
@@ -138,11 +142,11 @@ avl_t *interno_inserir(avl_t *no, int n) {
     return no;
 }
 
-avl_t *avl_inserir(avl_t *avl, int n) {
+avl_t *avl_inserir(avl_t *avl, avl_valor_t n) {
     return interno_inserir(avl, n);
 };
 
-int avl_altura(avl_t *avl) {
+int avl_altura(const avl_t *avl) {
     return avl->altura;
 }
 
