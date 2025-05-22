@@ -2,7 +2,8 @@
 #include <stdbool.h>
 
 /* --- Valores e chaves --- */
-#ifndef LSE_CUSTOM
+#ifndef LSE
+#define LSE(x) lse_##x
 
 /// Define o tipo armazenado na lista encadeada.
 typedef int lse_valor_t;
@@ -15,8 +16,19 @@ typedef int lse_chave_t;
 
 /// Imprime um objeto do tipo 'lse_valor_t'
 #define lse_valor_imprime(x) printf("%d", x)
-
 #endif
+
+/* --- Substituição de nomes --- */
+
+#define lse_t LSE(t)
+#define lse_criar LSE(criar)
+#define lse_liberar LSE(liberar)
+#define lse_inserir_inicio LSE(inserir_inicio)
+#define lse_inserir_fim LSE(inserir_fim)
+#define lse_imprimir LSE(imprimir)
+#define lse_busca_sequencial LSE(busca_sequencial)
+#define lse_acessar LSE(acessar)
+
 /* --- Definição da lista encadeada --- */
 
 typedef struct lse_t lse_t;
@@ -38,9 +50,25 @@ void lse_imprimir(const lse_t *lista, int inicio, int fim);
 /// Busca um item na lista encadeada sequencialmente.
 /// Caso o valor seja encontrado, o ponteiro '*valor' é atualizado.
 bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
-                           lse_valor_t *valor);
+                          lse_valor_t *valor);
 
 /// Acessa um item na lista encadeada dado um índice.
 /// Caso o indice exista, o ponteiro `valor` é atualizado e a função retorna
 /// `true`.
 bool lse_acessar(const lse_t *lista, int indice, lse_valor_t *valor);
+
+/* --- Des-substituição de nomes --- */
+
+#ifndef LSE_C
+#undef LSE
+#undef lse_chave
+#undef lse_valor_imprime
+#undef lse_t
+#undef lse_criar
+#undef lse_liberar
+#undef lse_inserir_inicio
+#undef lse_inserir_fim
+#undef lse_imprimir
+#undef lse_busca_sequencial
+#undef lse_acessar
+#endif

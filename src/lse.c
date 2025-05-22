@@ -1,3 +1,4 @@
+#define LSE_C
 #include "lse.h"
 
 #include <malloc.h>
@@ -44,6 +45,7 @@ lse_t *lse_inserir_fim(lse_t *lista, lse_valor_t valor) {
     return no;
 };
 
+/// Libera toda a lista encadeada.
 void lse_liberar(lse_t *lista) {
     while (lista) {
         lse_t *no = lista;
@@ -52,6 +54,7 @@ void lse_liberar(lse_t *lista) {
     }
 };
 
+/// Imprime os elementos selecionados da lista encadeada.
 void lse_imprimir(const lse_t *lista, int inicio, int fim) {
     int idx = 0;
 
@@ -77,8 +80,9 @@ void lse_imprimir(const lse_t *lista, int inicio, int fim) {
     printf(" ]\n");
 };
 
+/// Busca um valor na lista encadeada por chave.
 bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
-                           lse_valor_t *valor) {
+                          lse_valor_t *valor) {
     while (lista) {
         // Retornar quando o primeiro valor for encontrado.
         if (lse_chave(lista->valor) == chave) {
@@ -93,6 +97,7 @@ bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
     return false;
 };
 
+/// Acessa a lista encadeada por índice.
 bool lse_acessar(const lse_t *lista, int indice, lse_valor_t *valor) {
     int idx = 0;
     while (lista) {

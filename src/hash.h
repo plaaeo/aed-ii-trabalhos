@@ -16,4 +16,4 @@ typedef int hash_chave_t;
 #define hash_valor_imprime(x) printf("%d", x)
 
 #endif
-/* --- Definição da hash --- */
+/* --- Definição da tabela hash --- */
