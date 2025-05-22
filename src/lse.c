@@ -1,23 +1,17 @@
-#include <malloc.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "lse.h"
 
-typedef struct lse_no_t {
-    lse_valor_t valor;
-    lse_no_t *prox;
-} lse_no_t;
+#include <malloc.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct lse_t {
-    lse_no_t *cabeca;
-    lse_no_t *cauda;
-    int tamanho;
+    lse_valor_t valor;
+    lse_t *prox;
 };
 
 /// Cria um nó da lista encadeada.
-lse_no_t *lse_no_criar(lse_valor_t valor) {
-    lse_no_t *no = malloc(sizeof(lse_no_t));
+lse_t *lse_criar(lse_valor_t valor) {
+    lse_t *no = malloc(sizeof(lse_t));
 
     if (no) {
         no->valor = valor;
@@ -28,77 +22,46 @@ lse_no_t *lse_no_criar(lse_valor_t valor) {
 };
 
 /// Insere um ítem no início da lista encadeada.
-bool lse_inserir_inicio(lse_t *lista, lse_valor_t valor) {
-    lse_no_t *no = lse_no_criar(valor);
+lse_t *lse_inserir_inicio(lse_t *lista, lse_valor_t valor) {
+    lse_t *no = lse_criar(valor);
 
-    if (!no)
-        return false;
-
-    if (!lista->cauda) {
-        lista->cauda = (lista->cabeca = no);
-    } else {
-        no->prox = lista->cabeca;
-        lista->cabeca = no;
-        lista->tamanho++;
+    if (no) {
+        no->prox = lista;
     }
 
-    return true;
+    return no;
 };
 
 /// Insere um ítem no fim da lista encadeada.
-bool lse_inserir_final(lse_t *lista, lse_valor_t valor) {
-    lse_no_t *no = lse_no_criar(valor);
+lse_t *lse_inserir_fim(lse_t *lista, lse_valor_t valor) {
+    lse_t *no = lse_criar(valor);
 
-    if (!no)
-        return false;
+    if (!lista) return no;
 
-    if (!lista->cauda) {
-        lista->cabeca = (lista->cauda = no);
-    } else {
-        lista->cauda->prox = no;
-        lista->cauda = no;
-        lista->tamanho++;
-    }
+    while (lista->prox) lista = lista->prox;
 
-    return true;
-};
-
-/// Cria uma lista encadeada vazia.
-lse_t *lse_criar() {
-    lse_t *lse = malloc(sizeof(lse_t));
-
-    if (lse) {
-        lse->cabeca = NULL;
-        lse->cauda = NULL;
-        lse->tamanho = 0;
-    }
-
-    return lse;
+    lista->prox = no;
+    return no;
 };
 
 void lse_liberar(lse_t *lista) {
-    while (lista->cabeca) {
-        lse_no_t *no = lista->cabeca;
-        lista->cabeca = lista->cabeca->prox;
-
+    while (lista) {
+        lse_t *no = lista;
+        lista = lista->prox;
         free(no);
     }
-
-    free(lista);
 };
 
 void lse_imprimir(const lse_t *lista, int inicio, int fim) {
     int idx = 0;
-    lse_no_t *no = lista->cabeca;
 
     printf("[ ");
 
-    if (inicio != 0)
-        printf("..., ");
+    if (inicio != 0) printf("..., ");
 
-    while (no) {
-        if (idx >= inicio && idx < fim) {
-            lse_valor_imprime(no->valor);
+    while (lista && idx < fim) {
+        if (idx >= inicio) {
+            lse_valor_imprime(lista->valor);
 
             // Printar vírgula caso ainda hajam mais elementos para imprimir
             if ((idx + 1) < fim) {
@@ -107,28 +70,24 @@ void lse_imprimir(const lse_t *lista, int inicio, int fim) {
         }
 
         idx++;
-        no = no->prox;
+        lista = lista->prox;
     }
 
-    if (fim != lista->tamanho)
-        printf(", ...");
-
+    if (lista) printf(", ...");
     printf(" ]\n");
 };
 
-bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave, lse_valor_t *valor) {
-    lse_no_t *no = lista->cabeca;
-
-    while (no) {
+bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
+                           lse_valor_t *valor) {
+    while (lista) {
         // Retornar quando o primeiro valor for encontrado.
-        if (lse_chave(no->valor) == chave) {
-            if (valor)
-                *valor = no->valor;
-            
+        if (lse_chave(lista->valor) == chave) {
+            if (valor) *valor = lista->valor;
+
             return true;
         }
 
-        no = no->prox;
+        lista = lista->prox;
     }
 
     return false;
@@ -136,17 +95,15 @@ bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave, lse_valor_t *va
 
 bool lse_acessar(const lse_t *lista, int indice, lse_valor_t *valor) {
     int idx = 0;
-    lse_no_t *no = lista->cabeca;
-
-    while (no) {
+    while (lista) {
         // Retornar quando o valor no índice dado for encontrado.
         if (idx == indice) {
-            *valor = no->valor;
+            *valor = lista->valor;
             return true;
         }
 
         idx++;
-        no = no->prox;
+        lista = lista->prox;
     }
 
     return false;

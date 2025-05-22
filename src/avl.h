@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 /* --- Valores e chaves --- */
+#ifndef AVL_CUSTOM
 
 /// Define o tipo armazenado na árvore.
 typedef int avl_valor_t;
@@ -12,6 +13,7 @@ typedef int avl_chave_t;
 /// Retorna um 'avl_chave_t' usado para comparar objetos do tipo 'avl_valor_t'
 #define avl_chave(x) x
 
+#endif
 /* --- Definição da AVL --- */
 
 typedef struct avl_t avl_t;
@@ -23,9 +25,9 @@ typedef struct avl_t avl_t;
 avl_t* avl_inserir(avl_t* avl, avl_valor_t n);
 
 /// Busca 'n' em uma árvore AVL.
-/// Retorna true se o dado for encontrado, e 
+/// Retorna true se o dado for encontrado, e
 /// armazena o resultado da busca em '*valor'
-bool avl_buscar(const avl_t* avl, avl_chave_t n, avl_valor_t *valor);
+bool avl_buscar(const avl_t* avl, avl_chave_t n, avl_valor_t* valor);
 
 /// Libera a árvore AVL e todos seus nós
 /// recursivamente.

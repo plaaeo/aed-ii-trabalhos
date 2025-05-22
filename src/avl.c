@@ -25,13 +25,11 @@ avl_t *avl_criar(avl_valor_t val) {
 bool avl_buscar(const avl_t *no, avl_chave_t n, avl_valor_t *valor) {
     if (!no) return false;
 
-    if (avl_chave(no->val) == n) {
-        if (valor)
-            *valor = no->val;
+    if (n == avl_chave(no->val)) {
+        if (valor) *valor = no->val;
 
         return true;
-    }
-    else if (n < avl_chave(no->val))
+    } else if (n < avl_chave(no->val))
         return avl_buscar(no->esq, n, valor);
     else
         return avl_buscar(no->dir, n, valor);
@@ -122,21 +120,21 @@ avl_t *interno_inserir(avl_t *no, avl_valor_t n) {
 
     int cond = (fb + 2) + (fb_filho + 1);
     switch (cond / 2) {
-    // Caso em que houve inserção à esquerda da subárvore esquerda
-    case 0:
-        return interno_rot_dir(no, no->esq);
+        // Caso em que houve inserção à esquerda da subárvore esquerda
+        case 0:
+            return interno_rot_dir(no, no->esq);
 
-    // Caso em que houve inserção à direita da subárvore esquerda
-    case 1:
-        return interno_rotd_dir(no, no->esq);
+        // Caso em que houve inserção à direita da subárvore esquerda
+        case 1:
+            return interno_rotd_dir(no, no->esq);
 
-    // Caso em que houve inserção à esquerda da subárvore direita
-    case 2:
-        return interno_rotd_esq(no, no->dir);
+        // Caso em que houve inserção à esquerda da subárvore direita
+        case 2:
+            return interno_rotd_esq(no, no->dir);
 
-    // Caso em que houve inserção à direita da subárvore direita
-    case 3:
-        return interno_rot_esq(no, no->dir);
+        // Caso em que houve inserção à direita da subárvore direita
+        case 3:
+            return interno_rot_esq(no, no->dir);
     }
 
     return no;
