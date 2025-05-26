@@ -25,3 +25,26 @@ Ao executar o código do trabalho, o programa irá gerar alguns arquivos com a e
 # Como buildar
 
 Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execute o comando `make`. Isso executará todos os comandos do `gcc` necessários para buildar os executáveis do trabalho, que estarão na pasta `out`.
+
+# Atividades
+
+## Qualquer um
+- [ ] Criação do arquivo
+
+## Todos
+- [ ] Inserção nos tipos de dados
+
+## Rebeca
+- [ ] Função de busca múltipla na árvore binária
+- [ ] Busca na árvore binária por atributo não-chave (>, <, >=, <=)
+
+## João
+- [ ] Busca por atributo chave na árvore binária
+
+## Bea
+- [ ] Busca sequencial direto no arquivo por atributo chave
+- [ ] Busca sequencial direto no arquivo por atributo não-chave
+
+## Paulo
+- [ ] Implementar a tabela hash
+- [ ] Busca por atributo chave na tabela hash
