@@ -30,21 +30,27 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
 
 ## Qualquer um
 - [ ] Criação do arquivo
+- [ ] Geração dos casos de teste para atributos chave
+- [ ] Geração dos casos de teste para atributos não-chave
 
 ## Todos
-- [ ] Inserção nos tipos de dados
+- [ ] Inserção nas estruturas de dados (árvores e tabela hash)
 
-## Rebeca
+## Rebecca
 - [ ] Função de busca múltipla na árvore binária
 - [ ] Busca na árvore binária por atributo não-chave (>, <, >=, <=)
+- [ ] Imprimir tabelas com tempos
 
 ## João
 - [ ] Busca por atributo chave na árvore binária
+- [ ] Imprimir tabelas com tempos
 
-## Bea
+## Arthur Rayman Transformers Bumblebee Tubarão Optimus Prime da Silva Junior
 - [ ] Busca sequencial direto no arquivo por atributo chave
-- [ ] Busca sequencial direto no arquivo por atributo não-chave
+- [ ] Busca sequencial direto no arquivo por atributo não-chave (>, <, >=, <=)
+- [ ] Imprimir tabelas com tempos
 
 ## Paulo
 - [ ] Implementar a tabela hash
 - [ ] Busca por atributo chave na tabela hash
+- [ ] Imprimir tabelas com tempos
