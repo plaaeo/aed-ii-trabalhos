@@ -29,7 +29,7 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
 # Atividades
 
 ## Qualquer um
-- [ ] Criação do arquivo
+- [x] Criação do arquivo
 - [ ] Geração dos casos de teste para atributos chave
 - [ ] Geração dos casos de teste para atributos não-chave
 
@@ -51,6 +51,6 @@ Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execut
 - [ ] Imprimir tabelas com tempos
 
 ## Paulo
-- [ ] Implementar a tabela hash
+- [x] Implementar a tabela hash
 - [ ] Busca por atributo chave na tabela hash
 - [ ] Imprimir tabelas com tempos
