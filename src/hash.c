@@ -1,6 +1,7 @@
 #include "hash.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 // Uma lista encadeada simples usada para tratar colisões
 // na tabela hash.
@@ -68,7 +69,6 @@ bool hash_inserir(hash_t *hash, hash_valor_t valor) {
 
     return colisao;
 }
-
 // Busca um elemento na tabela hash por chave.
 // Caso o elemento exista na tabela, a função retorna 'true'
 // e atualiza o ponteiro 'hash_valor_t'.
@@ -76,7 +76,6 @@ bool hash_buscar(hash_t *hash, hash_chave_t chave, hash_valor_t *valor) {
     if (!hash) return false;
     
     int dist = hash_funcao(hash, chave);
-    
     // Realizar busca na lista pela chave específica
     hash_valor_t *res = bucket_buscar(hash->tabela[dist], chave);
     

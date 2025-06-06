@@ -15,15 +15,7 @@
 
 #include <hash.h>
 
-typedef struct aluno_t {
-    int matricula;
-    char nome[100];
-    char email[100];
-    char cidade[30];
-    int ano_ingresso;
-    char curso[6];
-    float coeficiente;
-} aluno_t;
+extern void q3(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 
 // Gera um aluno com dados quase aleatórios
 aluno_t gerar_aluno() {
@@ -58,10 +50,14 @@ aluno_t gerar_aluno() {
 
 int main() {
     // Número de alunos aleatórios para gerar
-    size_t ALUNOS = 100;
+    size_t ALUNOS = 100000;
+
+    // Número de elementos de busca
+    size_t BUSCAS = 30;
+
     srand(time(NULL));
 
-    FILE *saida = fopen("alunos.db", "w");
+    FILE *saida = fopen("alunos.db", "rw");
 
     // Tratar falha de abertura do arquivo
     if (!saida) {
@@ -70,35 +66,78 @@ int main() {
         return -1;
     }
 
+    // Indices
+    hash_t *indice_hash = hash_criar(1000000);
+
+    // Chaves de busca
+    int buscas_matricula[BUSCAS];
+    float buscas_coeficiente[BUSCAS];
+
     // Gerar alunos aleatórios
+    size_t j = 0;
     for (size_t i = 0; i < ALUNOS; i++) {
         aluno_t aluno = gerar_aluno();
 
         // Imprimir dados (podemos remover dps)
-        printf("---\n");
-        printf("matricula = %d\n", aluno.matricula);
-        printf("nome = %s\n", aluno.nome);
-        printf("email = %s\n", aluno.email);
-        printf("cidade = %s\n", aluno.cidade);
-        printf("ano_ingresso = %d\n", aluno.ano_ingresso);
-        printf("curso = %s\n", aluno.curso);
-        printf("coeficiente = %f\n", aluno.coeficiente);
+        // printf("---\n");
+        // printf("matricula = %d\n", aluno.matricula);
+        // printf("nome = %s\n", aluno.nome);
+        // printf("email = %s\n", aluno.email);
+        // printf("cidade = %s\n", aluno.cidade);
+        // printf("ano_ingresso = %d\n", aluno.ano_ingresso);
+        // printf("curso = %s\n", aluno.curso);
+        // printf("coeficiente = %f\n", aluno.coeficiente);
 
         // Inserir alunos no arquivo
-        // long int pos_aluno = ftell(saida);
+        long int pos_aluno = ftell(saida);
         fwrite(&aluno, sizeof(aluno_t), 1, saida);
 
+        // Registro com a matrícula como chave
+        registro_t registro_matricula = {
+            .matricula_ou_cr = aluno.matricula,
+            .posicao = pos_aluno
+        };
+
+        // Registro com o coeficiente como chave
+        registro_t registro_cr = {
+            .matricula_ou_cr = aluno.coeficiente,
+            .posicao = pos_aluno
+        };
+
+        // Preencher vetores de busca
+        if (i % (ALUNOS / BUSCAS) == 0) {
+            // Gerar um valor possívelmente ausente as vezes
+            if (rand() % 4 == 0)
+                aluno = gerar_aluno();
+            
+            buscas_coeficiente[j] = aluno.coeficiente;
+            buscas_matricula[j] = aluno.matricula;
+            j++;
+        }
+
         // !!! A fazer !!!
-        // Inserir cada aluno nos índices (árvore e hash).
-        //
-        // Lembrando que não é pra inserir o aluno inteiro (ou seja, a struct aluno_t) nos índices,
-        // mas uma struct menor que contenha a posição do aluno no arquivo
-        //
-        // Na sala, alguem comentou que o professor quer que armazene no índice APENAS a posição do aluno no arquivo,
-        // para que haja um acesso no arquivo para cada comparação das árvores binárias.
-        // Faz sentido, pq senão a busca sequencial fica numa desvantagem gigantesca, mas isso significa que
-        // teria q fazer um ajustezão na árvore binária, ent recomendo tirar essa dúvida :3
+        // Inserir cada aluno nos índices (árvores).
+        // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
+        hash_inserir(indice_hash, registro_matricula);
     }
 
+    // Desordenar elementos de busca (para a busca sequencial, talvez desnecessário)
+    for (size_t i = 0; i < BUSCAS; i++) {
+        int chave = rand() % BUSCAS;
+        
+        // Desordenar matrículas
+        int a = buscas_matricula[i];
+        buscas_matricula[i] = buscas_matricula[chave];
+        buscas_matricula[chave] = a;
+
+        // Desordenar coeficientes
+        float b = buscas_coeficiente[i];
+        buscas_coeficiente[i] = buscas_coeficiente[chave];
+        buscas_coeficiente[chave] = b;
+    }
+
+    q3(saida, indice_hash, buscas_matricula, BUSCAS);
+
+    hash_liberar(indice_hash);
     fclose(saida);
 }

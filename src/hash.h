@@ -1,20 +1,22 @@
 #pragma once
 #include <stdbool.h>
 
+#include "registro.h"
+
 /* --- Valores e chaves --- */
 #ifndef HASH_CUSTOM
 
 /// Define o tipo armazenado na tabela.
-typedef int hash_valor_t;
+typedef registro_t hash_valor_t;
 
 /// Define o tipo da chave usada para busca por itens na tabela.
 typedef int hash_chave_t;
 
 /// Retorna um 'hash_chave_t' usado para comparar objetos do tipo 'hash_valor_t'
-#define hash_chave(x) x
+#define hash_chave(x) ((hash_chave_t)((x).matricula_ou_cr))
 
 /// Imprime um objeto do tipo 'hash_valor_t'
-#define hash_valor_imprime(x) printf("%d", x)
+#define hash_valor_imprime(x) printf("registro {\n  'matricula_ou_cr': %lf,\n  'posicao': %ld\n};", (x).matricula_ou_cr, (x).posicao)
 
 #endif
 /* --- Definição da hash --- */
