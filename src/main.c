@@ -12,10 +12,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
 
 #include <hash.h>
 
-extern void q3(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
+extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 
 // Gera um aluno com dados quase aleatórios
 aluno_t gerar_aluno() {
@@ -57,17 +58,17 @@ int main() {
 
     srand(time(NULL));
 
-    FILE *saida = fopen("alunos.db", "rw");
+    FILE *saida = fopen("alunos.db", "w+");
 
     // Tratar falha de abertura do arquivo
     if (!saida) {
-        int e = ferror(saida);
-        printf("Não foi possível abrir o arquivo de saída: %s\n", strerror(e));
+        printf("Não foi possível abrir o arquivo de saída: %s\n", strerror(errno));
         return -1;
     }
 
     // Indices
     hash_t *indice_hash = hash_criar(1000000);
+    int colisoes_hash = 0;
 
     // Chaves de busca
     int buscas_matricula[BUSCAS];
@@ -118,7 +119,7 @@ int main() {
         // !!! A fazer !!!
         // Inserir cada aluno nos índices (árvores).
         // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
-        hash_inserir(indice_hash, registro_matricula);
+        colisoes_hash += hash_inserir(indice_hash, registro_matricula);
     }
 
     // Desordenar elementos de busca (para a busca sequencial, talvez desnecessário)
@@ -136,7 +137,9 @@ int main() {
         buscas_coeficiente[chave] = b;
     }
 
-    q3(saida, indice_hash, buscas_matricula, BUSCAS);
+    // Q2. Tabela hash
+    q2(saida, indice_hash, buscas_matricula, BUSCAS);
+    printf(". Colisões: %d\n", colisoes_hash);
 
     hash_liberar(indice_hash);
     fclose(saida);
