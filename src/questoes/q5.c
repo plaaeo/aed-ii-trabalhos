@@ -22,6 +22,7 @@ static bool satisfaz_condicao(float coeficiente, float valor, char operacao) {
 
 // Função para busca sequencial por coeficiente com saída em tabela
 void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao) {
+    printf("\n* Questão 5\n");
     if (arquivo == NULL || buscas == NULL) {
         fprintf(stderr, "Erro: parâmetros inválidos\n");
         return;
@@ -32,8 +33,8 @@ void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao) {
     aluno_t aluno;
 
     // Cabeçalho da tabela
-    printf("\n  | Busca  | Tempo de busca (us) | Tempo de consulta (us) | Encontrado |\n");
-    printf("  |-------:|:-------------------:|:----------------------:|:----------:|\n");
+    printf("  | Busca  | Tempo de busca (µs) | Encontrado |\n");
+    printf("  |-------:|:-------------------:|:----------:|\n");
 
     for (size_t i = 0; i < n_buscas; i++) {
         encontrados[i] = 0;
@@ -52,8 +53,8 @@ void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao) {
 
         // Linha da tabela para esta busca
         const char* status = (encontrados[i] > 0) ? "Sim" : "Nao";
-        printf("  | Id. %02lu | %19.2lf | %22.2lf | %10s |\n", 
-               i + 1, tempo_busca[i], tempo_busca[i], status);
+        printf("  | Id. %02lu | %19.2lf | %10s |\n", 
+               i + 1, tempo_busca[i], status);
     }
 
     // Estatísticas finais
@@ -61,13 +62,13 @@ void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao) {
     double desvio = desvio_padrao(media_tempo, tempo_busca, n_buscas);
     
     printf("\nEstatísticas da busca sequencial por coeficiente (%c):\n", operacao);
-    printf("Média de tempo: %.2f µs\n", media_tempo);
-    printf("Desvio padrão: %.2f µs\n", desvio);
+    printf("  Média de tempo: %.2f µs\n", media_tempo);
+    printf("  Desvio padrão: %.2f µs\n", desvio);
     
     int total_encontrados = 0;
     for (size_t i = 0; i < n_buscas; i++) {
         total_encontrados += encontrados[i];
     }
-    printf("Total de registros encontrados: %d\n", total_encontrados);
-    printf("Média de registros por busca: %.1f\n", (float)total_encontrados/n_buscas);
+    printf("  Total de registros encontrados: %d\n", total_encontrados);
+    printf("  Média de registros por busca: %.1f\n", (float)total_encontrados/n_buscas);
 }

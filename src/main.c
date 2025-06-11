@@ -17,6 +17,8 @@
 #include <hash.h>
 
 extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
+extern void q3(FILE *arquivo, int buscas[], size_t n_buscas);
+extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao);
 
 // Gera um aluno com dados quase aleatórios
 aluno_t gerar_aluno() {
@@ -51,7 +53,7 @@ aluno_t gerar_aluno() {
 
 int main() {
     // Número de alunos aleatórios para gerar
-    size_t ALUNOS = 100000;
+    size_t ALUNOS = 1000000;
 
     // Número de elementos de busca
     size_t BUSCAS = 30;
@@ -67,7 +69,7 @@ int main() {
     }
 
     // Indices
-    hash_t *indice_hash = hash_criar(1000000);
+    hash_t *indice_hash = hash_criar(ALUNOS / 2);
     int colisoes_hash = 0;
 
     // Chaves de busca
@@ -139,7 +141,14 @@ int main() {
 
     // Q2. Tabela hash
     q2(saida, indice_hash, buscas_matricula, BUSCAS);
-    printf(". Colisões: %d\n", colisoes_hash);
+    printf("  Colisões: %d\n", colisoes_hash);
+
+    // Q3. Busca sequencial por igualdade
+    q3(saida, buscas_matricula, BUSCAS);
+    
+    // Q5. Busca sequencial por comparação
+    q5(saida, buscas_coeficiente, BUSCAS, '>');
+
 
     hash_liberar(indice_hash);
     fclose(saida);
