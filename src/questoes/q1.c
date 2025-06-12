@@ -1,25 +1,56 @@
 /*
  * q1.c
- * Busca usando a árvore binária de pesquisa para o atributo chave;
+ * Busca por atributo chave (matrícula) usando Árvore Binária de Pesquisa (ABP)
+ * Saída formatada + estatísticas
  */
+
 #include <stdio.h>
 #include <stdbool.h>
-#include "abp.h"
-#include "registro.h"
-#include "utilitarios.h"
+#include "../registro.h"
+#include "../utilitarios.h"
+#include "../abp.h"
 
-/// Busca um aluno pela matrícula usando a árvore binária de pesquisa.
-/// Retorna `true` se encontrado e imprime o aluno. Caso contrário, retorna `false`.
-bool buscar_por_matricula_abp(abp_t* indice, int matricula, FILE* arquivo_dados, aluno_t* resultado) {
-    registro_t reg;
-    bool encontrado = abp_buscar(indice, matricula, &reg);
+// Função de busca por matrícula usando árvore binária de pesquisa
+void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
+    if (!indice || !arquivo || !buscas) {
+        fprintf(stderr, "Erro: argumentos inválidos para busca na ABP.\n");
+        return;
+    }
 
-    if (!encontrado) return false;
+    double tempos[n_buscas];
+    bool resultados[n_buscas];
+    aluno_t aluno;
 
-    // Posiciona o cursor no arquivo e lê o aluno
-    fseek(arquivo_dados, reg.posicao, SEEK_SET);
-    fread(resultado, sizeof(aluno_t), 1, arquivo_dados);
+    printf("\n===== Resultados da busca na Árvore Binária (ABP) =====\n");
+    printf("%-8s | %-18s | %-10s\n", "Busca", "Tempo (microsseg)", "Encontrado");
+    printf("------------------------------------------------------\n");
 
-    return true;
+    for (size_t i = 0; i < n_buscas; i++) {
+        resultados[i] = false;
+        medir_inicio(tempos, i);
+
+        registro_t registro;
+        if (abp_buscar(indice, buscas[i], &registro)) {
+            resultados[i] = true;
+            fseek(arquivo, registro.posicao, SEEK_SET);
+            fread(&aluno, sizeof(aluno_t), 1, arquivo);
+        }
+
+        medir_fim(tempos, i);
+
+        printf("ID-%02lu   | %17.2lf | %10s\n", i + 1, tempos[i], resultados[i] ? "SIM" : "NAO");
+    }
+
+    printf("------------------------------------------------------\n");
+
+    double media_tempo = media(tempos, n_buscas);
+    double desvio = desvio_padrao(media_tempo, tempos, n_buscas);
+
+    int encontrados = 0;
+    for (size_t i = 0; i < n_buscas; i++)
+        if (resultados[i]) encontrados++;
+
+    printf("Resumo:\n");
+    printf(" → Matrículas encontradas: %d de %lu\n", encontrados, n_buscas);
+    printf(" → Média de tempo: %.2f µs | Desvio padrão: %.2f µs\n", media_tempo, desvio);
 }
-
