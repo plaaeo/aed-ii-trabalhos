@@ -21,9 +21,9 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
     bool resultados[n_buscas];
     aluno_t aluno;
 
-    printf("\n===== Resultados da busca na Árvore Binária (ABP) =====\n");
-    printf("%-8s | %-18s | %-10s\n", "Busca", "Tempo (microsseg)", "Encontrado");
-    printf("------------------------------------------------------\n");
+    printf("\n* Questão 1 - Busca por igualdade na Árvore Binária de Pesquisa (ABP)\n");
+    printf("  | Busca  | Tempo de busca (µs) | Encontrado |\n");
+    printf("  |-------:|:-------------------:|:----------:|\n");
 
     for (size_t i = 0; i < n_buscas; i++) {
         resultados[i] = false;
@@ -38,10 +38,9 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
 
         medir_fim(tempos, i);
 
-        printf("ID-%02lu   | %17.2lf | %10s\n", i + 1, tempos[i], resultados[i] ? "SIM" : "NAO");
+        printf("  | Id. %02lu | %19.2lf | %10s |\n", 
+               i + 1, tempos[i], (resultados[i] > 0) ? "Sim" : "Nao");
     }
-
-    printf("------------------------------------------------------\n");
 
     double media_tempo = media(tempos, n_buscas);
     double desvio = desvio_padrao(media_tempo, tempos, n_buscas);
@@ -50,7 +49,8 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
     for (size_t i = 0; i < n_buscas; i++)
         if (resultados[i]) encontrados++;
 
-    printf("Resumo:\n");
+    printf("\nEstatísticas da busca na ABP por matrícula:\n");
     printf(" → Matrículas encontradas: %d de %lu\n", encontrados, n_buscas);
-    printf(" → Média de tempo: %.2f µs | Desvio padrão: %.2f µs\n", media_tempo, desvio);
+    printf(" → Média de tempo: %.2f µs\n", media_tempo);
+    printf(" → Desvio padrão: %.2f µs\n", desvio);
 }

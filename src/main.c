@@ -14,8 +14,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include <hash.h>
+#include "hash.h"
+#include "abp.h"
 
+extern void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas);
 extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 extern void q3(FILE *arquivo, int buscas[], size_t n_buscas);
 extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao);
@@ -69,6 +71,7 @@ int main() {
     }
 
     // Indices
+    abp_t *indice_abp_mat = NULL;
     hash_t *indice_hash = hash_criar(ALUNOS / 2);
     int colisoes_hash = 0;
 
@@ -122,6 +125,7 @@ int main() {
         // Inserir cada aluno nos índices (árvores).
         // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
         colisoes_hash += hash_inserir(indice_hash, registro_matricula);
+        indice_abp_mat = abp_inserir(indice_abp_mat, registro_matricula);
     }
 
     // Desordenar elementos de busca (para a busca sequencial, talvez desnecessário)
@@ -138,6 +142,9 @@ int main() {
         buscas_coeficiente[i] = buscas_coeficiente[chave];
         buscas_coeficiente[chave] = b;
     }
+
+    // Q1. Busca na ABP por igualdade
+    q1(indice_abp_mat, saida, buscas_matricula, BUSCAS);
 
     // Q2. Tabela hash
     q2(saida, indice_hash, buscas_matricula, BUSCAS);

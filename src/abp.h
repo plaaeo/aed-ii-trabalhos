@@ -1,20 +1,22 @@
 #pragma once
 #include <stdbool.h>
 
+#include "registro.h"
+
 /* --- Valores e chaves --- */
 #ifndef ABP_CUSTOM
 
 /// Define o tipo armazenado na árvore.
-typedef int abp_valor_t;
+typedef registro_t abp_valor_t;
 
 /// Define o tipo da chave usada para busca por itens na árvore.
 typedef int abp_chave_t;
 
 /// Retorna um 'abp_chave_t' usado para comparar objetos do tipo 'abp_valor_t'
-#define abp_chave(x) x
+#define abp_chave(x) ((abp_chave_t)((x).matricula_ou_cr))
 
 /// Imprime um objeto do tipo 'abp_valor_t'
-#define abp_valor_imprime(x) printf("%d", x)
+#define abp_valor_imprime(x) printf("%d", (x).matricula_ou_cr)
 
 #endif
 /* --- Definição da ABP --- */

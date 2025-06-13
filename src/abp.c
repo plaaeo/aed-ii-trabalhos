@@ -36,6 +36,7 @@ abp_t* abp_criar_por_vetor(abp_valor_t* vetor, int tam) {
     return interno_criar_por_vetor(vetor, 0, tam);
 };
 
+
 // insere um valor na árvore
 abp_t* abp_inserir(abp_t* raiz, abp_valor_t valor) {
     if (raiz == NULL) return criar_no(valor);

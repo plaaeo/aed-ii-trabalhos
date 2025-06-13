@@ -11,7 +11,6 @@
 
 // Função para busca sequencial pela matrícula no arquivo
 void q3(FILE *arquivo, int buscas[], size_t n_buscas) {
-    printf("\n* Questão 3\n");
     if (arquivo == NULL || buscas == NULL) {
         fprintf(stderr, "Erro: parâmetros inválidos\n");
         return;
@@ -22,6 +21,7 @@ void q3(FILE *arquivo, int buscas[], size_t n_buscas) {
     aluno_t aluno;
 
     // Cabeçalho da tabela
+    printf("\n* Questão 3 - Busca sequencial por igualdade\n");
     printf("  | Busca  | Tempo de busca (µs) | Encontrado |\n");
     printf("  |-------:|:-------------------:|:----------:|\n");
 
@@ -52,12 +52,12 @@ void q3(FILE *arquivo, int buscas[], size_t n_buscas) {
     double desvio = desvio_padrao(media_tempo, tempo_busca, n_buscas);
     
     printf("\nEstatísticas da busca sequencial por matrícula:\n");
-    printf("  Média de tempo: %.2f µs\n", media_tempo);
-    printf("  Desvio padrão: %.2f µs\n", desvio);
+    printf(" → Média de tempo: %.2f µs\n", media_tempo);
+    printf(" → Desvio padrão: %.2f µs\n", desvio);
     
     int total_encontrados = 0;
     for (size_t i = 0; i < n_buscas; i++) {
         if (encontrado[i]) total_encontrados++;
     }
-    printf("  Total de matrículas encontradas: %d de %lu\n", total_encontrados, n_buscas);
+    printf(" → Total de matrículas encontradas: %d de %lu\n", total_encontrados, n_buscas);
 }
