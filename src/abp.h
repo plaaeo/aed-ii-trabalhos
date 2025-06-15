@@ -10,13 +10,13 @@
 typedef registro_t abp_valor_t;
 
 /// Define o tipo da chave usada para busca por itens na árvore.
-typedef int abp_chave_t;
+typedef double abp_chave_t;
 
 /// Retorna um 'abp_chave_t' usado para comparar objetos do tipo 'abp_valor_t'
 #define abp_chave(x) ((abp_chave_t)((x).matricula_ou_cr))
 
 /// Imprime um objeto do tipo 'abp_valor_t'
-#define abp_valor_imprime(x) printf("%d", (x).matricula_ou_cr)
+#define abp_valor_imprime(x) printf("%lf", (x).matricula_ou_cr)
 
 #endif
 /* --- Definição da ABP --- */

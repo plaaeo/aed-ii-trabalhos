@@ -17,17 +17,23 @@
 #include "hash.h"
 #include "abp.h"
 
+// Número de alunos aleatórios para gerar
+#define ALUNOS 1000000
+
+// Número de elementos de busca
+#define BUSCAS 30
+
 extern void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas);
 extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 extern void q3(FILE *arquivo, int buscas[], size_t n_buscas);
-extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, char operacao);
+extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]);
 
 // Gera um aluno com dados quase aleatórios
-aluno_t gerar_aluno() {
+aluno_t gerar_aluno(int matricula) {
     aluno_t aluno = {};
 
     // Gerar dados numéricos
-    aluno.matricula = 10000000 + (rand() % 99999999);
+    aluno.matricula = matricula;
     aluno.ano_ingresso = 1909 + (rand() % 118);
     aluno.coeficiente = (float)(rand() % 10001) / 1000.0f;
 
@@ -54,12 +60,6 @@ aluno_t gerar_aluno() {
 }
 
 int main() {
-    // Número de alunos aleatórios para gerar
-    size_t ALUNOS = 1000000;
-
-    // Número de elementos de busca
-    size_t BUSCAS = 30;
-
     srand(time(NULL));
 
     FILE *saida = fopen("alunos.db", "w+");
@@ -70,6 +70,25 @@ int main() {
         return -1;
     }
 
+    // Gerar matrículas únicas aleatórias
+    printf("Gerando matrículas aleatórias...\n");
+    int *matriculas = malloc(sizeof(int) * ALUNOS);
+    for (int i = 0; i < ALUNOS; i++) {
+        int prev = i == 0 ? 10000000 : matriculas[i - 1];
+        matriculas[i] = prev + 1 + (rand() % 30);
+    }
+
+    int matricula_max = matriculas[ALUNOS - 1];
+
+    // Embaralhar matrículas aleatoriamente
+    printf("Embaralhando matrículas...\n");
+    for (int i = 0; i < ALUNOS; i++) {
+        int j = rand() % ALUNOS;
+        int outro = matriculas[j];
+        matriculas[j] = matriculas[i];
+        matriculas[i] = outro;
+    }
+
     // Indices
     abp_t *indice_abp_mat = NULL;
     hash_t *indice_hash = hash_criar(ALUNOS / 2);
@@ -78,11 +97,12 @@ int main() {
     // Chaves de busca
     int buscas_matricula[BUSCAS];
     float buscas_coeficiente[BUSCAS];
+    int operacoes[BUSCAS];
 
     // Gerar alunos aleatórios
-    size_t j = 0;
+    printf("Gerando alunos aleatórios...\n");
     for (size_t i = 0; i < ALUNOS; i++) {
-        aluno_t aluno = gerar_aluno();
+        aluno_t aluno = gerar_aluno(matriculas[i]);
 
         // Imprimir dados (podemos remover dps)
         // printf("---\n");
@@ -110,17 +130,6 @@ int main() {
             .posicao = pos_aluno
         };
 
-        // Preencher vetores de busca
-        if (i % (ALUNOS / BUSCAS) == 0) {
-            // Gerar um valor possívelmente ausente as vezes
-            if (rand() % 4 == 0)
-                aluno = gerar_aluno();
-            
-            buscas_coeficiente[j] = aluno.coeficiente;
-            buscas_matricula[j] = aluno.matricula;
-            j++;
-        }
-
         // !!! A fazer !!!
         // Inserir cada aluno nos índices (árvores).
         // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
@@ -128,33 +137,36 @@ int main() {
         indice_abp_mat = abp_inserir(indice_abp_mat, registro_matricula);
     }
 
-    // Desordenar elementos de busca (para a busca sequencial, talvez desnecessário)
+    // Gerar elementos de busca
+    printf("Gerando elementos de busca...\n");
     for (size_t i = 0; i < BUSCAS; i++) {
         int chave = rand() % BUSCAS;
-        
-        // Desordenar matrículas
-        int a = buscas_matricula[i];
-        buscas_matricula[i] = buscas_matricula[chave];
-        buscas_matricula[chave] = a;
 
-        // Desordenar coeficientes
-        float b = buscas_coeficiente[i];
-        buscas_coeficiente[i] = buscas_coeficiente[chave];
-        buscas_coeficiente[chave] = b;
+        // 25% de chance de gerar uma matrícula completamente aleatória
+        if (rand() % 4) {
+            buscas_matricula[i] = matriculas[rand() % ALUNOS];
+        } else {
+            buscas_matricula[i] = 10000001 + (rand() % (matricula_max - 10000001));
+        }
+
+        buscas_coeficiente[i] = (float)(rand() % 10001) / 1000.0f;
+        operacoes[i] = rand() % 4;
     }
+
+    rewind(saida);
 
     // Q1. Busca na ABP por igualdade
     q1(indice_abp_mat, saida, buscas_matricula, BUSCAS);
 
     // Q2. Tabela hash
     q2(saida, indice_hash, buscas_matricula, BUSCAS);
-    printf("  Colisões: %d\n", colisoes_hash);
+    printf(" → Colisões: %d\n", colisoes_hash);
 
     // Q3. Busca sequencial por igualdade
     q3(saida, buscas_matricula, BUSCAS);
-    
+
     // Q5. Busca sequencial por comparação
-    q5(saida, buscas_coeficiente, BUSCAS, '>');
+    q5(saida, buscas_coeficiente, BUSCAS, operacoes);
 
 
     hash_liberar(indice_hash);

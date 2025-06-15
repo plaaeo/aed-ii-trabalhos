@@ -12,7 +12,7 @@
 
 void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
     int r_encontrado[n_buscas];
-    int n_encontrados;
+    int n_encontrados = 0;
     double r_tempo_busca[n_buscas];
     double r_tempo_consulta[n_buscas];
 
@@ -28,11 +28,11 @@ void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
         if (r_encontrado[i]) {
             aluno_t aluno;
             medir_inicio(r_tempo_consulta, i);
-            
+
             // Definir posição do cursor para leitura
             fseek(arq, reg.posicao, SEEK_SET);
             fread(&aluno, sizeof(aluno), 1, arq);
-            
+
             medir_fim(r_tempo_consulta, i);
         } else {
             r_tempo_consulta[i] = NAN;
@@ -41,14 +41,14 @@ void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
 
     // Imprimir resultados
     printf("\n* Questão 2 - Busca por igualdade na tabela hash\n");
-    printf("  | Busca  | Tempo de busca (µs) | Tempo de consulta (µs) | Encontrado |\n");
-    printf("  |-------:|:-------------------:|:----------------------:|:----------:|\n");
+    printf("  | Busca  | Tempo de busca (µs) | Tempo de consulta (µs) | Encontrado | Matrícula |\n");
+    printf("  |-------:|:-------------------:|:----------------------:|:----------:|:----------|\n");
     for (size_t i = 0; i < n_buscas; i++) {
         const char* encontrado = "Nao";
         if (r_encontrado[i])
             encontrado = "Sim";
-        
-        printf("  | Id. %02lu | %19.2lf | %22.2lf | %10s |\n", i + 1, r_tempo_busca[i], r_tempo_consulta[i], encontrado);
+
+        printf("  | Id. %02lu | %19.2lf | %22.2lf | %10s | %9d |\n", i + 1, r_tempo_busca[i], r_tempo_consulta[i], encontrado, buscas[i]);
     }
 
     // Cálculo das estatísticas
@@ -56,7 +56,7 @@ void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
     double desvio_busca = desvio_padrao(media_busca, r_tempo_busca, n_buscas);
     double media_consulta = media(r_tempo_consulta, n_buscas);
     double desvio_consulta = desvio_padrao(media_consulta, r_tempo_consulta, n_buscas);
-    
+
     printf("\nEstatísticas da busca na hash por matrícula:\n");
     printf(" → Média de tempo de busca: %.2f µs\n", media_busca);
     printf(" → Desvio padrão da busca: %.2f µs\n", desvio_busca);

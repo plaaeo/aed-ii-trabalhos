@@ -1,63 +1,64 @@
 /**
  * lse.h
- * 
+ *
  * Define uma lista simplesmente encadeada, ou seja, uma lista
  * encadeada onde cada nó tem um ponteiro para o próximo.
- * 
+ *
  * Como criar uma lista vazia?
  * ```
  *  lse_t *lista = NULL;
  * ```
- * 
+ *
  * Como inserir na frente da lista?
  * ```
  *  int valor_i = 9;
  *  lista = lse_inserir_inicio(lista, valor_i);
  * ```
- * 
+ *
  * Como inserir no fim da lista?
  * ```
  *  int valor_f = 2;
  *  lista = lse_inserir_fim(lista, valor_f);
  * ```
- * 
+ *
  * Como buscar na lista?
  * ```
  *  int valor_buscado = -1;
- * 
+ *
  *  bool resultado = lse_busca_sequencial(lista, valor_i, &valor_buscado);
  *  // resultado agora é 'true' e valor_buscado é 9
- * 
+ *
  *  resultado = lse_busca_sequencial(lista, valor_f, &valor_buscado);
  *  // resultado agora é 'true' e valor_buscado é 2
- * 
+ *
  *  resultado = lse_busca_sequencial(lista, -5, &valor_buscado);
  *  // resultado agora é 'false' e valor_buscado não mudou
  * ```
- * 
+ *
  * Como liberar (free) a lista?
  * ```
  *  lista_liberar(lista);
  * ```
- * 
+ *
  */
 #pragma once
 #include <stdbool.h>
+#include "registro.h"
 
 /* --- Valores e chaves --- */
 #ifndef LSE_CUSTOM
 
 /// Define o tipo armazenado na lista encadeada.
-typedef int lse_valor_t;
+typedef registro_t lse_valor_t;
 
 /// Define o tipo da chave usada para busca por itens na lista encadeada.
-typedef int lse_chave_t;
+typedef double lse_chave_t;
 
 /// Retorna um 'lse_chave_t' usado para comparar objetos do tipo 'lse_valor_t'
-#define lse_chave(x) x
+#define lse_chave(x) ((lse_chave_t)((x).matricula_ou_cr))
 
 /// Imprime um objeto do tipo 'lse_valor_t'
-#define lse_valor_imprime(x) printf("%d", x)
+#define lse_valor_imprime(x) printf("%lf", (x).matricula_ou_cr)
 
 #endif
 /* --- Definição da lista encadeada --- */
