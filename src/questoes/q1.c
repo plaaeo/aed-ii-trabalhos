@@ -1,16 +1,16 @@
 /*
  * q1.c
+ *
  * Busca por atributo chave (matrícula) usando Árvore Binária de Pesquisa (ABP)
- * Saída formatada + estatísticas
  */
 
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../abp.h"
-#include "../registro.h"
-#include "../utilitarios.h"
+#include "abp.h"
+#include "registro.h"
+#include "utilitarios.h"
 
 // Função de busca por matrícula usando árvore binária de pesquisa
 void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
@@ -35,7 +35,12 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
             // Medir tempo de consulta
             medir_inicio(tempos_consulta, i);
             fseek(arquivo, registro.posicao, SEEK_SET);
-            fread(&aluno, sizeof(aluno_t), 1, arquivo);
+
+            // Verificar retorno de `fread` (aviso do gcc)
+            if (fread(&aluno, sizeof(aluno_t), 1, arquivo) == 0) {
+                printf("Registro do índice não pertence ao arquivo! (%lf)\n", registro.matricula_ou_cr);
+            }
+
             medir_fim(tempos_consulta, i);
         } else {
             tempos_consulta[i] = NAN;

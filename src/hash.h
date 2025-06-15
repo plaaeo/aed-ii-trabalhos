@@ -1,3 +1,8 @@
+/**
+ * hash.h
+ *
+ * Define a estrutura de uma tabela hash e as operações para utilizá-la.
+ */
 #pragma once
 #include <stdbool.h>
 
@@ -16,7 +21,7 @@ typedef int hash_chave_t;
 #define hash_chave(x) ((hash_chave_t)((x).matricula_ou_cr))
 
 /// Imprime um objeto do tipo 'hash_valor_t'
-#define hash_valor_imprime(x) printf("registro {\n  'matricula_ou_cr': %lf,\n  'posicao': %ld\n};", (x).matricula_ou_cr, (x).posicao)
+#define hash_valor_imprime(x) printf("%lf", (x).matricula_ou_cr)
 
 #endif
 /* --- Definição da hash --- */

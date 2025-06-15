@@ -3,43 +3,6 @@
  *
  * Define uma lista simplesmente encadeada, ou seja, uma lista
  * encadeada onde cada nó tem um ponteiro para o próximo.
- *
- * Como criar uma lista vazia?
- * ```
- *  lse_t *lista = NULL;
- * ```
- *
- * Como inserir na frente da lista?
- * ```
- *  int valor_i = 9;
- *  lista = lse_inserir_inicio(lista, valor_i);
- * ```
- *
- * Como inserir no fim da lista?
- * ```
- *  int valor_f = 2;
- *  lista = lse_inserir_fim(lista, valor_f);
- * ```
- *
- * Como buscar na lista?
- * ```
- *  int valor_buscado = -1;
- *
- *  bool resultado = lse_busca_sequencial(lista, valor_i, &valor_buscado);
- *  // resultado agora é 'true' e valor_buscado é 9
- *
- *  resultado = lse_busca_sequencial(lista, valor_f, &valor_buscado);
- *  // resultado agora é 'true' e valor_buscado é 2
- *
- *  resultado = lse_busca_sequencial(lista, -5, &valor_buscado);
- *  // resultado agora é 'false' e valor_buscado não mudou
- * ```
- *
- * Como liberar (free) a lista?
- * ```
- *  lista_liberar(lista);
- * ```
- *
  */
 #pragma once
 #include <stdbool.h>

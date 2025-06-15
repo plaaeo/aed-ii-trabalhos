@@ -1,5 +1,6 @@
 /*
  * q3.c
+ *
  * Busca sequencial no arquivo para o atributo chave (matrícula)
  * com saída formatada em tabela
  */
@@ -7,8 +8,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../registro.h"
-#include "../utilitarios.h"
+#include "registro.h"
+#include "utilitarios.h"
 
 // Função para busca sequencial pela matrícula no arquivo
 void q3(FILE* arquivo, int buscas[], size_t n_buscas) {

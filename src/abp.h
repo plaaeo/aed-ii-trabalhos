@@ -1,3 +1,8 @@
+/**
+ * abp.h
+ *
+ * Define a estrutura e as operações de uma Árvore Binária de Pesquisa (ABP).
+ */
 #pragma once
 #include <stdbool.h>
 

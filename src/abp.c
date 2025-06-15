@@ -41,7 +41,7 @@ abp_t* abp_criar_por_vetor(abp_valor_t* vetor, int tam) {
 abp_t* abp_inserir(abp_t* raiz, abp_valor_t valor) {
     if (raiz == NULL) return criar_no(valor);
 
-    if (abp_chave(valor) < abp_chave(raiz->valor))
+    if (abp_chave(valor) <= abp_chave(raiz->valor))
         raiz->esquerda = abp_inserir(raiz->esquerda, valor);
     else if (abp_chave(valor) > abp_chave(raiz->valor))
         raiz->direita = abp_inserir(raiz->direita, valor);
@@ -53,7 +53,6 @@ bool abp_buscar(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor) {
     if (raiz == NULL) return false;
     if (chave == abp_chave(raiz->valor)) {
         if (valor) *valor = raiz->valor;
-
         return true;
     } else if (chave < abp_chave(raiz->valor))
         return abp_buscar(raiz->esquerda, chave, valor);

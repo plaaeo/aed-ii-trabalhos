@@ -1,3 +1,10 @@
+/**
+ * registro.h
+ *
+ * Define as estruturas de dados utilizadas para armazenar dados de alunos
+ * no índice e no arquivo.
+ * O `aluno_t` é armazenado no arquivo, enquanto o `registro_t` fica no índice.
+ */
 #pragma once
 
 // O aluno completo armazenado no arquivo.
@@ -19,5 +26,5 @@ typedef struct registro_t {
     double matricula_ou_cr;
 
     // Posição do aluno completo no arquivo.
-    long int posicao;    
+    long int posicao;
 } registro_t;

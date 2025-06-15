@@ -1,11 +1,13 @@
 /*
  * q2.c
+ *
  * Busca usando hashing para o atributo chave;
  */
 
 #include <stddef.h>
 #include <stdio.h>
 #include <math.h>
+
 #include "hash.h"
 #include "registro.h"
 #include "utilitarios.h"
@@ -31,7 +33,11 @@ void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
 
             // Definir posição do cursor para leitura
             fseek(arq, reg.posicao, SEEK_SET);
-            fread(&aluno, sizeof(aluno), 1, arq);
+
+            // Verificar retorno de `fread` (aviso do gcc)
+            if (fread(&aluno, sizeof(aluno_t), 1, arq) == 0) {
+                printf("Registro do índice não pertence ao arquivo! (%lf)\n", reg.matricula_ou_cr);
+            }
 
             medir_fim(r_tempo_consulta, i);
         } else {

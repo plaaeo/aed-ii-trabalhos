@@ -34,7 +34,7 @@ aluno_t gerar_aluno(int matricula) {
 
     // Gerar dados numéricos
     aluno.matricula = matricula;
-    aluno.ano_ingresso = 1909 + (rand() % 118);
+    aluno.ano_ingresso = 1909 + (rand() % 117);
     aluno.coeficiente = (float)(rand() % 10001) / 1000.0f;
 
     // Inserir alguns espaços no nome do aluno
@@ -91,7 +91,7 @@ int main() {
 
     // Indices
     abp_t *indice_abp_mat = NULL;
-    hash_t *indice_hash = hash_criar(ALUNOS / 2);
+    hash_t *indice_hash = hash_criar(1000003);
     int colisoes_hash = 0;
 
     // Chaves de busca

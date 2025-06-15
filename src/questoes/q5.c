@@ -1,13 +1,14 @@
 /*
  * q5.c
+ *
  * Busca sequencial no arquivo para consultas do tipo >, <, >=, <= em coeficiente
  * com saída formatada em tabela
  */
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "../registro.h"
-#include "../utilitarios.h"
+#include "registro.h"
+#include "utilitarios.h"
 
 // Função auxiliar para verificar se um aluno satisfaz a condição
 static bool satisfaz_condicao(float coeficiente, float valor, int operacao) {
