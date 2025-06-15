@@ -168,7 +168,8 @@ int main() {
     // Q5. Busca sequencial por comparação
     q5(saida, buscas_coeficiente, BUSCAS, operacoes);
 
-
     hash_liberar(indice_hash);
+    abp_liberar(indice_abp_mat);
+    free(matriculas);
     fclose(saida);
 }
