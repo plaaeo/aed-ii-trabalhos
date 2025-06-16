@@ -26,6 +26,7 @@
 extern void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas);
 extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 extern void q3(FILE *arquivo, int buscas[], size_t n_buscas);
+extern void q4(abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, FILE* arq);
 extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]);
 
 // Gera um aluno com dados quase aleatórios
@@ -91,6 +92,7 @@ int main() {
 
     // Indices
     abp_t *indice_abp_mat = NULL;
+    abp_t *indice_abp_cr = NULL;
     hash_t *indice_hash = hash_criar(1000003);
     int colisoes_hash = 0;
 
@@ -135,6 +137,7 @@ int main() {
         // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
         colisoes_hash += hash_inserir(indice_hash, registro_matricula);
         indice_abp_mat = abp_inserir(indice_abp_mat, registro_matricula);
+        indice_abp_cr = abp_inserir(indice_abp_cr, registro_cr);
     }
 
     // Gerar elementos de busca
@@ -164,6 +167,9 @@ int main() {
 
     // Q3. Busca sequencial por igualdade
     q3(saida, buscas_matricula, BUSCAS);
+
+    // Q4. Busca na árvore binária por comparação
+    q4(indice_abp_cr, buscas_coeficiente, operacoes, BUSCAS, saida);
 
     // Q5. Busca sequencial por comparação
     q5(saida, buscas_coeficiente, BUSCAS, operacoes);

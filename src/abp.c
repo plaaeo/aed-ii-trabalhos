@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "lse.c"
 
 // definição do nó da árvore
 struct abp_t {
@@ -58,6 +59,39 @@ bool abp_buscar(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor) {
         return abp_buscar(raiz->esquerda, chave, valor);
     else
         return abp_buscar(raiz->direita, chave, valor);
+}
+
+// compara um valor com os coeficientes dos alunos e retorna lista com os registros que satisfazem a comparação
+// 0 | > 
+// 1 | < 
+// 2 | >= 
+// 3 | <=
+lse_t* abp_comparar(abp_t* raiz, double valor, int comparacao, lse_t* lista){ 
+    
+    if (raiz != NULL) {
+        lista = abp_comparar(raiz->esquerda, valor, comparacao, lista);
+        if(comparacao == 0){
+            if(raiz->valor.matricula_ou_cr > valor){
+               lista = lse_inserir_inicio(lista, raiz->valor);
+            }
+        }if else(comparacao == 1){
+            if(raiz->valor.matricula_ou_cr < valor){
+               lista = lse_inserir_inicio(lista, raiz->valor);
+            }
+        }if else(comparacao == 2){
+            if(raiz->valor.matricula_ou_cr >= valor){
+               lista = lse_inserir_inicio(lista, raiz->valor);
+            }
+        }if else(comparacao == 3){
+            if(raiz->valor.matricula_ou_cr <= valor){
+               lista = lse_inserir_inicio(lista, raiz->valor);
+            }
+        }else{ 
+            return NULL; 
+        }
+        lista = abp_comparar(raiz->direita, valor, comparacao, lista);
+    }
+    return lista;
 }
 
 // remove um valor da arvore

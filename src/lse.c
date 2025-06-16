@@ -93,18 +93,10 @@ bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
     return false;
 };
 
-bool lse_acessar(const lse_t *lista, int indice, lse_valor_t *valor) {
-    int idx = 0;
-    while (lista) {
-        // Retornar quando o valor no índice dado for encontrado.
-        if (idx == indice) {
-            *valor = lista->valor;
-            return true;
-        }
+lse_t* acessar_prox(lse_t* lista){
+    return lista->prox;
+}
 
-        idx++;
-        lista = lista->prox;
-    }
-
-    return false;
-};
+lse_valor_t lse_cabeca(lse_t *lista) {
+    return lista->valor;
+}

@@ -47,6 +47,9 @@ void lse_imprimir(const lse_t *lista, int inicio, int fim);
 bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
                            lse_valor_t *valor);
 
+/// Recebe uma lista e retorna o proximo
+lse_t* acessar_prox(lse_t* lista);
+
 /// Acessa um item na lista encadeada dado um índice.
 /// Caso o indice exista, o ponteiro `valor` é atualizado e a função retorna
 /// `true`.
