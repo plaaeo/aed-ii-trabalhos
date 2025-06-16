@@ -9,6 +9,7 @@
 #include "../registro.h"
 #include "../utilitarios.h"
 #include "../abp.h"
+#include "../lse.h"
 
 //encontra os alunos que satisfazem a comparação
 
@@ -31,7 +32,7 @@ void q4(abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, FILE* ar
         while(lista != NULL){
             aluno_t aluno;
             registro_t registro = lse_cabeca(lista);
-            fseek(arquivo, registro.posicao, SEEK_SET);
+            fseek(arq, registro.posicao, SEEK_SET);
 
             // Verificar retorno de `fread` (aviso do gcc)
             if (fread(&aluno, sizeof(aluno_t), 1, arq) == 0) {
@@ -52,7 +53,7 @@ void q4(abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, FILE* ar
             default: operacao = "?";
         }
         printf("  | Id. %02lu | %19.2lf | %22.2lf | %s%-5.02lf     |\n",
-               i + 1, tempos_busca[i], tempos_consulta[i], operacao, buscas[i]);
+               i + 1, tempos_busca[i], tempos_consulta[i], operacao, valor[i]);
     }
     double media_busca = media(tempos_busca, n_buscas);
     double desvio_busca = desvio_padrao(media_busca, tempos_busca, n_buscas);

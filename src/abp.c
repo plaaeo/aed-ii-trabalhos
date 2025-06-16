@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "lse.c"
+#include "lse.h"
 
 // definição do nó da árvore
 struct abp_t {
@@ -74,15 +74,15 @@ lse_t* abp_comparar(abp_t* raiz, double valor, int comparacao, lse_t* lista){
             if(raiz->valor.matricula_ou_cr > valor){
                lista = lse_inserir_inicio(lista, raiz->valor);
             }
-        }if else(comparacao == 1){
+        }else if(comparacao == 1){
             if(raiz->valor.matricula_ou_cr < valor){
                lista = lse_inserir_inicio(lista, raiz->valor);
             }
-        }if else(comparacao == 2){
+        }else if(comparacao == 2){
             if(raiz->valor.matricula_ou_cr >= valor){
                lista = lse_inserir_inicio(lista, raiz->valor);
             }
-        }if else(comparacao == 3){
+        }else if(comparacao == 3){
             if(raiz->valor.matricula_ou_cr <= valor){
                lista = lse_inserir_inicio(lista, raiz->valor);
             }

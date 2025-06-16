@@ -50,7 +50,5 @@ bool lse_busca_sequencial(const lse_t *lista, lse_chave_t chave,
 /// Recebe uma lista e retorna o proximo
 lse_t* acessar_prox(lse_t* lista);
 
-/// Acessa um item na lista encadeada dado um índice.
-/// Caso o indice exista, o ponteiro `valor` é atualizado e a função retorna
-/// `true`.
-bool lse_acessar(const lse_t *lista, int indice, lse_valor_t *valor);
+/// Retorna valor da cabeca
+lse_valor_t lse_cabeca(lse_t *lista);
