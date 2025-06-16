@@ -24,7 +24,7 @@ void q4(abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, FILE* ar
         lse_t* lista = NULL;
         // Medir tempo de busca
         medir_inicio(tempos_busca, i);
-        lista = abp_comparar(raiz, valor, comparacao, lista);
+        lista = abp_comparar(raiz, valor[i], comparacao[i], lista);
         medir_fim(tempos_busca, i);
 
         // Medir tempo de consulta
