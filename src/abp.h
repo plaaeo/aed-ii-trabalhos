@@ -7,6 +7,7 @@
 #include <stdbool.h>
 
 #include "registro.h"
+#include "lse.h"
 
 /* --- Valores e chaves --- */
 #ifndef ABP_CUSTOM
@@ -40,7 +41,7 @@ abp_t* abp_inserir(abp_t* raiz, abp_valor_t valor);
 bool abp_buscar(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor);
 
 // compara um valor com os coeficientes dos alunos e retorna lista com os registros que satisfazem a comparação
-abp_t* abp_comparar(abp_t* raiz, double valor, int comparacao, lse_t* lista);
+lse_t* abp_comparar(abp_t* raiz, double valor, int comparacao, lse_t* lista);
 
 /// Remove um elemento da ABP. Retorna a nova raíz da árvore binária.
 abp_t* abp_remover(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor);
