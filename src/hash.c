@@ -19,13 +19,21 @@ bucket_t *bucket_inserir(bucket_t *raiz, hash_valor_t dado) {
 }
 
 // Busca a chave na lista e retorna o elemento.
-hash_valor_t *bucket_buscar(bucket_t *raiz, hash_chave_t chave) {
+int bucket_buscar(bucket_t *raiz, hash_chave_t chave, hash_valor_t *dest) {
+    int count = 0;
+
     while (raiz) {
-        if (hash_chave(raiz->dado) == chave)
-            return &raiz->dado;
+        count++;
+
+        if (hash_chave(raiz->dado) == chave) {
+            *dest = raiz->dado;
+            return count;
+        }
+
         raiz = raiz->prox;
     }
-    return NULL;
+
+    return 0;
 }
 
 // Libera todos os nós da lista.
@@ -61,35 +69,31 @@ bool hash_inserir(hash_t *hash, hash_valor_t valor) {
     if (!hash) return false;
 
     int dist = hash_funcao(hash, hash_chave(valor));
-    
+
     // Detecta colisão caso a lista não esteja vazia.
     bool colisao = hash->tabela[dist] != NULL;
-    
+
     hash->tabela[dist] = bucket_inserir(hash->tabela[dist], valor);
 
     return colisao;
 }
-// Busca um elemento na tabela hash por chave.
-// Caso o elemento exista na tabela, a função retorna 'true'
-// e atualiza o ponteiro 'hash_valor_t'.
-bool hash_buscar(hash_t *hash, hash_chave_t chave, hash_valor_t *valor) {
-    if (!hash) return false;
-    
-    int dist = hash_funcao(hash, chave);
-    // Realizar busca na lista pela chave específica
-    hash_valor_t *res = bucket_buscar(hash->tabela[dist], chave);
-    
-    if (!res)
-        return false;
 
-    *valor = *res;
-    return true;
+// Busca um elemento na tabela hash por chave.
+// Caso o elemento exista na tabela, a função retorna a quantidade de comparações
+// necessárias para encontrar o valor pedido e atualiza o ponteiro 'hash_valor_t'.
+int hash_buscar(hash_t *hash, hash_chave_t chave, hash_valor_t *valor) {
+    if (!hash) return false;
+
+    int dist = hash_funcao(hash, chave);
+
+    // Realizar busca na lista pela chave específica
+    return bucket_buscar(hash->tabela[dist], chave, valor);
 }
 
 // Libera a tabela hash e seus elementos.
 void hash_liberar(hash_t *hash) {
     if (!hash) return;
-    
+
     for (int i = 0; i < hash->tamanho; i++)
         bucket_liberar(hash->tabela[i]);
 

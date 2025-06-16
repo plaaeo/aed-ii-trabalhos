@@ -13,7 +13,7 @@
 #include "utilitarios.h"
 
 // Função de busca por matrícula usando árvore binária de pesquisa
-void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
+void q1(FILE* arquivo, abp_t* indice, int buscas[], size_t n_buscas) {
     double tempos_busca[n_buscas];
     double tempos_consulta[n_buscas];
     bool resultados[n_buscas];
@@ -46,7 +46,7 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
             tempos_consulta[i] = NAN;
         }
 
-        printf("  | Id. %02lu | %19.2lf | %22.2lf | %10s | %9d |\n", i + 1,
+        printf("  | It. %02lu | %19.2lf | %22.2lf | %10s | %9d |\n", i + 1,
                tempos_busca[i], tempos_consulta[i],
                (resultados[i] > 0) ? "Sim" : "Nao", buscas[i]);
     }
@@ -54,8 +54,7 @@ void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas) {
     double media_busca = media(tempos_busca, n_buscas);
     double desvio_busca = desvio_padrao(media_busca, tempos_busca, n_buscas);
     double media_consulta = media(tempos_consulta, n_buscas);
-    double desvio_consulta =
-        desvio_padrao(media_consulta, tempos_busca, n_buscas);
+    double desvio_consulta = desvio_padrao(media_consulta, tempos_busca, n_buscas);
 
     int encontrados = 0;
     for (size_t i = 0; i < n_buscas; i++)

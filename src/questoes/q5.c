@@ -22,13 +22,13 @@ static bool satisfaz_condicao(float coeficiente, float valor, int operacao) {
 }
 
 // Função para busca sequencial por coeficiente com saída em tabela
-void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]) {
+void q5(FILE *arquivo, double buscas[], int operacoes[], size_t n_buscas) {
     double tempo_busca[n_buscas];
     int encontrados[n_buscas];
     aluno_t aluno;
 
     // Cabeçalho da tabela
-    printf("\n* Questão 5 - Busca sequencial por comparação\n");
+    printf("\n* Questão 5 - Busca sequencial por desigualdade\n");
     printf("  | Busca  | Tempo de busca (µs) | Encontrados | Comparação |\n");
     printf("  |-------:|:-------------------:|:-----------:|:-----------|\n");
 
@@ -58,7 +58,7 @@ void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]) {
             default: operacao = "?";
         }
 
-        printf("  | Id. %02lu | %19.2lf | %11d | %s%-5.02lf     |\n",
+        printf("  | It. %02lu | %19.2lf | %11d | %s%-5.02lf     |\n",
                i + 1, tempo_busca[i], encontrados[i], operacao, buscas[i]);
     }
 
@@ -66,7 +66,7 @@ void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]) {
     double media_tempo = media(tempo_busca, n_buscas);
     double desvio = desvio_padrao(media_tempo, tempo_busca, n_buscas);
 
-    printf("\nEstatísticas da busca sequencial por coeficiente:\n");
+    printf("\nEstatísticas da busca sequencial por desigualdade:\n");
     printf(" → Média de tempo: %.2f µs\n", media_tempo);
     printf(" → Desvio padrão: %.2f µs\n", desvio);
 

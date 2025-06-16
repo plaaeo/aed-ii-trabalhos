@@ -23,11 +23,11 @@
 // Número de elementos de busca
 #define BUSCAS 30
 
-extern void q1(abp_t* indice, FILE* arquivo, int buscas[], size_t n_buscas);
+extern void q1(FILE* arq, abp_t* indice, int buscas[], size_t n_buscas);
 extern void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas);
 extern void q3(FILE *arquivo, int buscas[], size_t n_buscas);
-extern void q4(abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, FILE* arq);
-extern void q5(FILE *arquivo, float buscas[], size_t n_buscas, int operacoes[]);
+extern void q4(FILE* arq, abp_t* raiz, double valor[], int comparacao[], size_t n_buscas, size_t n_alunos);
+extern void q5(FILE *arquivo, double buscas[], int operacoes[], size_t n_buscas);
 
 // Gera um aluno com dados quase aleatórios
 aluno_t gerar_aluno(int matricula) {
@@ -93,28 +93,18 @@ int main() {
     // Indices
     abp_t *indice_abp_mat = NULL;
     abp_t *indice_abp_cr = NULL;
-    hash_t *indice_hash = hash_criar(1000003);
+    hash_t *indice_hash = hash_criar(ALUNOS / 2);
     int colisoes_hash = 0;
 
     // Chaves de busca
     int buscas_matricula[BUSCAS];
-    float buscas_coeficiente[BUSCAS];
+    double buscas_coeficiente[BUSCAS];
     int operacoes[BUSCAS];
 
     // Gerar alunos aleatórios
     printf("Gerando alunos aleatórios...\n");
     for (size_t i = 0; i < ALUNOS; i++) {
         aluno_t aluno = gerar_aluno(matriculas[i]);
-
-        // Imprimir dados (podemos remover dps)
-        // printf("---\n");
-        // printf("matricula = %d\n", aluno.matricula);
-        // printf("nome = %s\n", aluno.nome);
-        // printf("email = %s\n", aluno.email);
-        // printf("cidade = %s\n", aluno.cidade);
-        // printf("ano_ingresso = %d\n", aluno.ano_ingresso);
-        // printf("curso = %s\n", aluno.curso);
-        // printf("coeficiente = %f\n", aluno.coeficiente);
 
         // Inserir alunos no arquivo
         long int pos_aluno = ftell(saida);
@@ -132,9 +122,7 @@ int main() {
             .posicao = pos_aluno
         };
 
-        // !!! A fazer !!!
-        // Inserir cada aluno nos índices (árvores).
-        // Lembrando que é pra inserir um dos registros nas árvores, e não o 'struct aluno_t' completo.
+        // Inserir cada aluno em cada índice
         colisoes_hash += hash_inserir(indice_hash, registro_matricula);
         indice_abp_mat = abp_inserir(indice_abp_mat, registro_matricula);
         indice_abp_cr = abp_inserir(indice_abp_cr, registro_cr);
@@ -159,7 +147,7 @@ int main() {
     rewind(saida);
 
     // Q1. Busca na ABP por igualdade
-    q1(indice_abp_mat, saida, buscas_matricula, BUSCAS);
+    q1(saida, indice_abp_mat, buscas_matricula, BUSCAS);
 
     // Q2. Tabela hash
     q2(saida, indice_hash, buscas_matricula, BUSCAS);
@@ -169,11 +157,12 @@ int main() {
     q3(saida, buscas_matricula, BUSCAS);
 
     // Q4. Busca na árvore binária por comparação
-    q4(indice_abp_cr, buscas_coeficiente, operacoes, BUSCAS, saida);
+    q4(saida, indice_abp_cr, buscas_coeficiente, operacoes, BUSCAS, ALUNOS);
 
     // Q5. Busca sequencial por comparação
-    q5(saida, buscas_coeficiente, BUSCAS, operacoes);
+    q5(saida, buscas_coeficiente, operacoes, BUSCAS);
 
+    // Liberar recursos
     hash_liberar(indice_hash);
     abp_liberar(indice_abp_mat);
     free(matriculas);

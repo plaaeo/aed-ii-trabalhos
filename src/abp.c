@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "lse.h"
 
 // definição do nó da árvore
 struct abp_t {
@@ -19,24 +18,6 @@ abp_t* criar_no(abp_valor_t valor) {
     novo->direita = NULL;
     return novo;
 }
-
-// cria uma abp usando um vetor ordenado
-abp_t* interno_criar_por_vetor(abp_valor_t* vetor, int inicio, int fim) {
-    if (inicio > fim) return NULL;
-
-    int idx = inicio + (fim - inicio) / 2;
-
-    abp_t* no = criar_no(vetor[idx]);
-    no->esquerda = interno_criar_por_vetor(vetor, inicio, idx - 1);
-    no->direita = interno_criar_por_vetor(vetor, idx + 1, fim);
-    return no;
-}
-
-// cria uma abp usando um vetor ordenado
-abp_t* abp_criar_por_vetor(abp_valor_t* vetor, int tam) {
-    return interno_criar_por_vetor(vetor, 0, tam);
-};
-
 
 // insere um valor na árvore
 abp_t* abp_inserir(abp_t* raiz, abp_valor_t valor) {
@@ -61,37 +42,54 @@ bool abp_buscar(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor) {
         return abp_buscar(raiz->direita, chave, valor);
 }
 
-// compara um valor com os coeficientes dos alunos e retorna lista com os registros que satisfazem a comparação
-// 0 | > 
-// 1 | < 
-// 2 | >= 
-// 3 | <=
-lse_t* abp_comparar(abp_t* raiz, double valor, int comparacao, lse_t* lista){ 
-    
-    if (raiz != NULL) {
-        lista = abp_comparar(raiz->esquerda, valor, comparacao, lista);
-        if(comparacao == 0){
-            if(raiz->valor.matricula_ou_cr > valor){
-               lista = lse_inserir_inicio(lista, raiz->valor);
-            }
-        }else if(comparacao == 1){
-            if(raiz->valor.matricula_ou_cr < valor){
-               lista = lse_inserir_inicio(lista, raiz->valor);
-            }
-        }else if(comparacao == 2){
-            if(raiz->valor.matricula_ou_cr >= valor){
-               lista = lse_inserir_inicio(lista, raiz->valor);
-            }
-        }else if(comparacao == 3){
-            if(raiz->valor.matricula_ou_cr <= valor){
-               lista = lse_inserir_inicio(lista, raiz->valor);
-            }
-        }else{ 
-            return NULL; 
+// Preenche um vetor com todos os valores da árvore que satisfazem a dada comparação com o dado valor.
+size_t abp_comparar(abp_t* raiz, double valor, int comparacao, abp_valor_t* vet, size_t tam){
+    if (raiz == NULL || tam == 0) return 0;
+
+    bool esq, dir, mid;
+
+    // Elimina a busca nas subárvores caso nenhum dos elementos nesta subárvore
+    // satisfaça a comparação.
+    switch (comparacao) {
+        case 0: {
+            esq = mid = raiz->valor.matricula_ou_cr > valor;
+            dir = 1;
+            break;
         }
-        lista = abp_comparar(raiz->direita, valor, comparacao, lista);
+
+        case 1: {
+            dir = mid = raiz->valor.matricula_ou_cr < valor;
+            esq = 1;
+            break;
+        }
+
+        case 2: {
+            mid = raiz->valor.matricula_ou_cr >= valor;
+            esq = dir = 1;
+            break;
+        }
+
+        case 3: {
+            dir = mid = raiz->valor.matricula_ou_cr <= valor;
+            esq = 1;
+            break;
+        }
+
+        default: return 0;
     }
-    return lista;
+
+    // Adicionar elemento no vetor caso a comparação tenha sucesso
+    size_t add = 0;
+    if (mid) {
+        vet[add] = raiz->valor;
+        add++;
+    }
+
+    // Recursivamente preencher vetor
+    if (esq) add += abp_comparar(raiz->esquerda, valor, comparacao, &vet[add], tam - add);
+    if (dir) add += abp_comparar(raiz->direita, valor, comparacao, &vet[add], tam - add);
+
+    return add;
 }
 
 // remove um valor da arvore
@@ -135,47 +133,6 @@ abp_t* abp_remover(abp_t* raiz, abp_chave_t chave, abp_valor_t* valor) {
         free(temp);
     }
     return raiz;
-}
-
-// Pré fixado
-
-void abp_pre_ordem(abp_t* raiz) {
-    if (raiz != NULL) {
-        abp_valor_imprime(raiz->valor);
-        printf(" ");
-        abp_pre_ordem(raiz->esquerda);
-        abp_pre_ordem(raiz->direita);
-    }
-}
-
-// fixado
-
-void abp_em_ordem(abp_t* raiz) {
-    if (raiz != NULL) {
-        abp_em_ordem(raiz->esquerda);
-        abp_valor_imprime(raiz->valor);
-        printf(" ");
-        abp_em_ordem(raiz->direita);
-    }
-}
-
-// pos fixado
-void abp_pos_ordem(abp_t* raiz) {
-    if (raiz != NULL) {
-        abp_pos_ordem(raiz->esquerda);
-        abp_pos_ordem(raiz->direita);
-        abp_valor_imprime(raiz->valor);
-        printf(" ");
-    }
-}
-
-// calcula a altura da árvore
-int abp_altura(abp_t* raiz) {
-    if (!raiz) return 0;
-
-    int e = abp_altura(raiz->esquerda);
-    int d = abp_altura(raiz->direita);
-    return 1 + (e > d ? e : d);
 }
 
 // libera a árvore

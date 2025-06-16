@@ -40,7 +40,7 @@ void q3(FILE* arquivo, int buscas[], size_t n_buscas) {
 
         // Linha da tabela para esta busca
         const char* status = encontrado[i] ? "Sim" : "Nao";
-        printf("  | Id. %02lu | %19.2lf | %10s | %9d |\n", i + 1,
+        printf("  | It. %02lu | %19.2lf | %10s | %9d |\n", i + 1,
                tempo_busca[i], status, buscas[i]);
     }
 

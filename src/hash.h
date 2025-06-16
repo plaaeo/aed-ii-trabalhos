@@ -36,9 +36,9 @@ hash_t *hash_criar(int tam);
 bool hash_inserir(hash_t *hash, hash_valor_t valor);
 
 // Busca um elemento na tabela hash por chave.
-// Caso o elemento exista na tabela, a função retorna 'true'
-// e atualiza o ponteiro 'hash_valor_t'.
-bool hash_buscar(hash_t *hash, hash_chave_t chave, hash_valor_t *valor);
+// Caso o elemento exista na tabela, a função retorna a quantidade de comparações
+// necessárias para encontrar o valor pedido e atualiza o ponteiro 'hash_valor_t'.
+int hash_buscar(hash_t *hash, hash_chave_t chave, hash_valor_t *valor);
 
 // Libera a tabela hash e seus elementos.
 void hash_liberar(hash_t *hash);

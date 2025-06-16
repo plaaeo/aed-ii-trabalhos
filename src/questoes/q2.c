@@ -47,14 +47,14 @@ void q2(FILE* arq, hash_t *indice, int buscas[], size_t n_buscas) {
 
     // Imprimir resultados
     printf("\n* Questão 2 - Busca por igualdade na tabela hash\n");
-    printf("  | Busca  | Tempo de busca (µs) | Tempo de consulta (µs) | Encontrado | Matrícula |\n");
-    printf("  |-------:|:-------------------:|:----------------------:|:----------:|:----------|\n");
+    printf("  | Busca  | Tempo de busca (µs) | Tempo de consulta (µs) | Encontrado | Matrícula | Comparações |\n");
+    printf("  |-------:|:-------------------:|:----------------------:|:----------:|:----------|:------------|\n");
     for (size_t i = 0; i < n_buscas; i++) {
         const char* encontrado = "Nao";
         if (r_encontrado[i])
             encontrado = "Sim";
 
-        printf("  | Id. %02lu | %19.2lf | %22.2lf | %10s | %9d |\n", i + 1, r_tempo_busca[i], r_tempo_consulta[i], encontrado, buscas[i]);
+        printf("  | It. %02lu | %19.2lf | %22.2lf | %10s | %9d | %11d |\n", i + 1, r_tempo_busca[i], r_tempo_consulta[i], encontrado, buscas[i], r_encontrado[i]);
     }
 
     // Cálculo das estatísticas
