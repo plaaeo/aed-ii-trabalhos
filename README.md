@@ -1,4 +1,4 @@
-# Trabalho 3 - Indexação e Tabela Hash
+# Trabalho 4 - Grafos
 
 - **Aluno:** Paulo Victor Fernandes de Melo
 - **Aluno:** João Luiz Rodrigues da Silva
@@ -11,6 +11,7 @@ O diretório do projeto segue a seguinte estrutura.
 
 ```
 out/                Pasta de saída dos executáveis gerados pelo GCC.
+include/            Pasta contendo os cabeçalhos do código.
 src/                Pasta contendo o código do trabalho.
 doc/                Pasta contendo o documento final, com as tabelas e gráficos.
 .gitignore          Lista de arquivos removidos do envio para o GitHub.
@@ -24,33 +25,18 @@ Ao executar o código do trabalho, o programa irá gerar alguns arquivos com a e
 
 # Como buildar
 
-Ao baixar o projeto no computador, abra um terminal na pasta do projeto e execute o comando `make`. Isso executará todos os comandos do `gcc` necessários para buildar os executáveis do trabalho, que estarão na pasta `out`.
+Ao baixar o projeto num computador com sistema operacional **Linux**, abra um terminal na pasta do projeto e execute o comando `make`. Isso executará todos os comandos do `gcc` necessários para buildar os executáveis do trabalho, que estarão na pasta `out`. O executável final do trabalho terá o nome `trab4`, e pode ser executado diretamente usando `./trab4`
 
-# Atividades
+```
+$ make
+$ cd out
+$ ./trab4
+```
 
-## Qualquer um
-- [x] Criação do arquivo
-- [ ] Geração dos casos de teste para atributos chave
-- [ ] Geração dos casos de teste para atributos não-chave
+ou
 
-## Todos
-- [ ] Inserção nas estruturas de dados (árvores e tabela hash)
+```
+$ make run
+```
 
-## Rebecca
-- [ ] Função de busca múltipla na árvore binária
-- [ ] Busca na árvore binária por atributo não-chave (>, <, >=, <=)
-- [ ] Imprimir tabelas com tempos
-
-## João
-- [ ] Busca por atributo chave na árvore binária
-- [ ] Imprimir tabelas com tempos
-
-## Arthur Rayman Transformers Bumblebee Tubarão Optimus Prime da Silva Junior
-- [ ] Busca sequencial direto no arquivo por atributo chave
-- [ ] Busca sequencial direto no arquivo por atributo não-chave (>, <, >=, <=)
-- [ ] Imprimir tabelas com tempos
-
-## Paulo
-- [x] Implementar a tabela hash
-- [ ] Busca por atributo chave na tabela hash
-- [ ] Imprimir tabelas com tempos
+para executar o código diretamente após compilá-lo.
