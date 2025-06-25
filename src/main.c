@@ -3,6 +3,16 @@
 
 #include "grafo.h"
 
+/// Gera um grafo garantidamente conexo com o tamanho e grau de
+/// conectividade pedido.
+grafo_t *criar_grafo_conexo(size_t tamanho, float grau) {
+    grafo_t *grafo = grafo_criar(tamanho);
+
+    
+
+    return grafo;
+}
+
 int main() {
     srand(time(NULL));
 

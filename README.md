@@ -40,3 +40,11 @@ $ make run
 ```
 
 para executar o código diretamente após compilá-lo.
+
+# Tarefas
+
+- [x] Implementar um grafo;
+- [ ] Implementar busca em largura;
+- [ ] Implementar busca em profundidade;
+- [ ] Modificar busca em profundidade para detecção de ciclos;
+- [ ] Modificar busca em profundidade para gerar todas as sequências de nós;

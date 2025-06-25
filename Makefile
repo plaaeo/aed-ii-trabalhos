@@ -2,15 +2,24 @@ INCDIR := include
 SRCDIR := src
 OUTDIR := out
 TARGET := $(OUTDIR)/trab4
-CFLAGS := -Wall -Wextra -Werror -lm -std=c99 -I$(INCDIR)
 
+# Compilador
+CC 	   = gcc
+CFLAGS = -Wall -Wextra -Werror -lm -std=c99 -I$(INCDIR)
+
+# Arquivos
 SRCS   := $(shell find $(SRCDIR) -name "*.c")
 OBJS   := $(patsubst $(SRCDIR)/%.c,$(OUTDIR)/%.o,$(SRCS))
 
-build: $(TARGET)
+# Builda tudo
+all: $(TARGET)
+
+# Limpa os arquivos de build
+clean:
+	rm -rf $(OUTDIR)
 
 # Builda e executa o código, repassando os argumentos
-run: build
+run: all
 	cd $(OUTDIR)
 	./$(TARGET)
 
