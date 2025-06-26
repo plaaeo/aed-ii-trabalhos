@@ -15,7 +15,7 @@ fila_t *fila_criar(size_t capacidade) {
         return NULL;
 
     fila_t *fila = malloc(sizeof(fila_t));
-    
+
     fila->vec = malloc(sizeof(fila_valor_t) * capacidade);
     fila->tam = fila->idx = 0;
     fila->cap = capacidade;
@@ -35,20 +35,19 @@ void fila_liberar(fila_t *fila) {
 bool fila_inserir(fila_t* fila, fila_valor_t valor) {
     if (fila->tam == fila->cap)
         return false;
-    
+
     size_t i = fila->idx + fila->tam++;
     fila->vec[i % fila->cap] = valor;
     return true;
 };
 
 /// Remove o elemento atualmente na frente da fila.
-fila_valor_t fila_remover(fila_t* fila) {
-    if (fila->tam == 0) {
-        // o que eu faço.....
-    }
-    
-    fila_valor_t item = fila->vec[fila->idx];
+bool fila_remover(fila_t* fila, fila_valor_t *resultado) {
+    if (fila->tam == 0)
+        return false;
+
+    *resultado = fila->vec[fila->idx];
     fila->idx = (fila->idx + 1) % fila->cap;
     fila->tam--;
-    return item;
+    return true;
 };

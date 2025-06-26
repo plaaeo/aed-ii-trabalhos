@@ -1,13 +1,16 @@
 #pragma once
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdint.h>
 
 /// TAD para um grafo não direcionado de tamanho constante.
 typedef struct grafo_t grafo_t;
 
 /// Cria um grafo vazio com o tamanho determinado.
 grafo_t *grafo_criar(size_t tam);
+
+/// Gera um grafo garantidamente conexo com o tamanho e grau de
+/// conectividade pedido.
+grafo_t *grafo_criar_conexo(size_t tam, float grau);
 
 /// Libera a memória alocada para o grafo dado.
 void grafo_free(grafo_t *grafo);

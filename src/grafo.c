@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 
 #include "grafo.h"
 
@@ -24,6 +25,16 @@ grafo_t *grafo_criar(size_t tam) {
     return grafo;
 }
 
+/// Gera um grafo garantidamente conexo com o tamanho e grau de
+/// conectividade pedido.
+grafo_t *grafo_criar_conexo(size_t tam, float grau) {
+    grafo_t *grafo = grafo_criar(tam);
+
+    (void)grau;
+
+    return grafo;
+}
+
 /// Libera a memória alocada para o grafo dado.
 void grafo_free(grafo_t *grafo) {
     if (!grafo)
@@ -37,7 +48,7 @@ void grafo_free(grafo_t *grafo) {
 void grafo_definir_aresta(grafo_t *grafo, size_t a, size_t b, bool valor) {
     if (a >= grafo->tam || b >= grafo->tam)
         return;
-    
+
     grafo->adj[indice(grafo, a, b)] = valor;
     grafo->adj[indice(grafo, b, a)] = valor;
 }
@@ -46,7 +57,7 @@ void grafo_definir_aresta(grafo_t *grafo, size_t a, size_t b, bool valor) {
 bool grafo_tem_aresta(const grafo_t *grafo, size_t a, size_t b) {
     if (a >= grafo->tam || b >= grafo->tam)
         return false;
-    
+
     return grafo->adj[indice(grafo, a, b)];
 }
 
@@ -72,15 +83,15 @@ void grafo_imprimir_no(const grafo_t *grafo, size_t a) {
         return;
 
     printf("%02lu -> [ ", a);
-    
+
     for (size_t b = 0; b < grafo->tam; b++) {
         bool adj = grafo->adj[indice(grafo, a, b)];
-        
+
         // Imprime o nó adjacente ao 'a'
         if (adj)
             printf("%02lu ", b);
     }
-    
+
     printf("]\n");
 }
 

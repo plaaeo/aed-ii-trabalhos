@@ -2,19 +2,48 @@
 #include <stdio.h>
 
 #include "grafo.h"
+#include "fila.h"
 
-/// Gera um grafo garantidamente conexo com o tamanho e grau de
-/// conectividade pedido.
-grafo_t *criar_grafo_conexo(size_t tamanho, float grau) {
-    grafo_t *grafo = grafo_criar(tamanho);
+/// Teste de criação de grafo conexo (remover na entrega)
+void teste_grafo() {
+}
 
-    
+/// Teste do funcionamento da fila (remover na entrega)
+void teste_fila() {
+    size_t item;
+    fila_t *fila = fila_criar(8);
 
-    return grafo;
+    printf("testando funcionamento da fila\n");
+
+    for (size_t j = 0; j < 10; j++) {
+        // Inserir 8 elementos
+        for (size_t i = 0; i < 8; i++) {
+            bool res = fila_inserir(fila, i + 1);
+            printf("-> inserindo %lu (%s)\n", i + 1, res ? "ok" : "cheio");
+        }
+
+        // Remover uma quantidade cada vez menor de elementos (de 10 a 2)
+        for (size_t i = 10; j < i; i--) {
+            bool res = fila_remover(fila, &item);
+            printf("-> removendo item %lu ", 11 - i);
+
+            if (res) printf("(ok, %lu)\n", item);
+            else     printf("(vazio)\n");
+        }
+    }
+
+    // Remover todos os itens da fila até esvaziar
+    while (fila_remover(fila, &item)) {
+        printf("-> removendo sobras (%lu)\n", item);
+    }
+
+    printf("-> fim do teste\n");
 }
 
 int main() {
     srand(time(NULL));
+
+    teste_fila();
 
     grafo_t *grafo = grafo_criar(16);
     size_t tamanho = grafo_tamanho(grafo);
