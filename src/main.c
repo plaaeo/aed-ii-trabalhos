@@ -45,20 +45,11 @@ int main() {
 
     teste_fila();
 
-    grafo_t *grafo = grafo_criar(16);
-    size_t tamanho = grafo_tamanho(grafo);
+    grafo_t *grafo = grafo_criar_conexo(10, 0.60);
 
-    // Definir um grafo aleatório com 50% de chance de conexão
-    int chance_conexao = 50;
-    for (size_t a = 0; a < tamanho; a++) {
-        for (size_t b = 0; b < tamanho; b ++) {
-            if ((rand() % 100) < chance_conexao) {
-                // Definir aresta única
-                grafo_definir_aresta(grafo, a, b, true);
-            }
-        }
-    }
+    for (size_t i = 0; i < grafo_tamanho(grafo); i++)
+        printf("%lu\n", i);
 
-    for (size_t i = 0; i < tamanho; i++)
+    for (size_t i = 0; i < grafo_tamanho(grafo); i++)
         grafo_imprimir_no(grafo, i);
 }

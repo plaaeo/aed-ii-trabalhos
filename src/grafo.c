@@ -30,7 +30,63 @@ grafo_t *grafo_criar(size_t tam) {
 grafo_t *grafo_criar_conexo(size_t tam, float grau) {
     grafo_t *grafo = grafo_criar(tam);
 
-    (void)grau;
+    size_t arestas = 0;
+
+    // - Garantir que o grafo é conexo -
+    {
+        // Vetor de conexões a serem feitas no grafo.
+        // Cada nó em 'conexoes[i]' se conecta ao nó 'conexoes[i + 1]'
+        size_t conexoes[tam];
+    
+        // Gerar vetor de conexões básico, sem repetições
+        for (size_t i = 0; i < tam; i++)
+            conexoes[i] = (i + 1) % tam;
+    
+        // Embaralhar vetor
+        for (size_t i = 0; i < tam; i++) {
+            size_t j = rand() % tam;
+            size_t a = conexoes[i];
+            conexoes[i] = conexoes[j];
+            conexoes[j] = a;
+        }
+    
+        // Conectar todos os nós
+        for (size_t i = 1; i < tam; i++) {
+            // Poderiamos sempre selecionar um nó anterior aleatório,
+            // mas o grafo ficaria aleatório demais, e se sempre selecionarmos
+            // o nó anterior para conexão, o grafo viraria uma linha.
+            if (rand() % 3) {
+                grafo_definir_aresta(grafo, conexoes[i], conexoes[rand() % i], true);
+            } else {
+                grafo_definir_aresta(grafo, conexoes[i], conexoes[i - 1], true);
+            }
+        }
+    
+        arestas = grafo->tam - 1;
+    }
+
+    // Quantidade de arestas que se deve gerar
+    size_t alvo = grau * (tam - 1) * tam / 2;
+    for (; arestas < alvo; arestas++) {
+
+        // Gerar um par novo até que não seja definido e não seja da diagonal
+        size_t i, j;
+        do {
+            i = rand() % tam;
+            j = rand() % tam;
+        } while (i == j || grafo->adj[indice(grafo, i, j)]);
+
+        // Definir uma aresta aleatória
+        grafo_definir_aresta(grafo, i, j, true);
+    }
+
+    for (size_t i = 0; i < tam; i++) {
+        for (size_t j = 0; j < tam; j++) {
+            printf("%1hhu ", grafo->adj[indice(grafo, i, j)]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 
     return grafo;
 }
@@ -82,17 +138,13 @@ void grafo_imprimir_no(const grafo_t *grafo, size_t a) {
     if (a >= grafo->tam)
         return;
 
-    printf("%02lu -> [ ", a);
-
     for (size_t b = 0; b < grafo->tam; b++) {
         bool adj = grafo->adj[indice(grafo, a, b)];
 
-        // Imprime o nó adjacente ao 'a'
+        // Imprime o par 'a' e 'b'
         if (adj)
-            printf("%02lu ", b);
+            printf("%lu %lu\n", a, b);
     }
-
-    printf("]\n");
 }
 
 /// Retorna a quantidade de nós no grafo.
