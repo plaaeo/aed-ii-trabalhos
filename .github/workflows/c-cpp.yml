@@ -18,4 +18,4 @@ jobs:
       run: make
     
     - name: verificar executável
-      run: bash -c "[[ -x out/trab2.o ]]"
+      run: bash -c "[[ -x out/trab4.o ]]"
