@@ -20,6 +20,7 @@ size_t indice(const grafo_t *grafo, size_t a, size_t b) {
     size_t dim = grafo->tam * grafo->tam;
     size_t i = (a * grafo->tam) + b;
 
+    // Medida de debug, apenas para garantir o uso correto de `grafo->adj`
     assert(i < dim);
 
     return i;
@@ -81,7 +82,7 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
         do {
             i = rand() % tam;
             j = rand() % tam;
-        } while (i == j || grafo->adj[indice(grafo, i, j)]);
+        } while (i == j || grafo_tem_aresta(grafo, i, j));
 
         // Definir uma aresta aleatória
         grafo_definir_aresta(grafo, i, j, true);
@@ -146,26 +147,30 @@ void grafo_bfs(const grafo_t *grafo, size_t a, size_t *dist) {
     fila_liberar(fila);
 };
 
-void dfs(const grafo_t *grafo, size_t a, size_t *visita, size_t ordem) {
-    visita[a] = ordem;
+size_t *dfs(const grafo_t *grafo, size_t a, size_t *visita, size_t *ordem,
+            size_t distancia) {
+    *ordem = a;
+    visita[a] = distancia;
 
-    for (size_t vizinho = 0; vizinho < grafo_tamanho(grafo); vizinho++) {
-        if (grafo_tem_aresta(grafo, a, vizinho) &&
-            visita[vizinho] == SIZE_MAX) {
-            dfs(grafo, vizinho, visita, ordem + 1);
+    for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
+        bool adj = grafo_tem_aresta(grafo, a, vizinho);
+        if (adj && visita[vizinho] == SIZE_MAX) {
+            ordem = dfs(grafo, vizinho, visita, ordem + 1, distancia + 1);
         }
     }
+
+    return ordem;
 }
 
 /// Executa busca por profundindade, ou 'depth-first search', a partir de um nó
 /// 'a'.
-void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist) {
+void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem) {
     // Inicializa todos os nós como não visitados
     for (size_t i = 0; i < grafo->tam; i++) {
         dist[i] = SIZE_MAX;
     }
 
-    return dfs(grafo, a, dist, 0);
+    dfs(grafo, a, dist, ordem, 0);
 };
 
 /// Imprime todos os nós adjacentes ao nó dado.
@@ -178,7 +183,7 @@ void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida) {
     }
 
     for (size_t b = 0; b < grafo->tam; b++) {
-        bool adj = grafo->adj[indice(grafo, a, b)];
+        bool adj = grafo_tem_aresta(grafo, a, b);
 
         // Imprime o par 'a' e 'b'
         if (adj) fprintf(saida, "%lu %lu\n", a, b);
@@ -195,7 +200,8 @@ void grafo_imprimir_matriz(const grafo_t *grafo, FILE *saida) {
 
     for (size_t i = 0; i < grafo->tam; i++) {
         for (size_t j = 0; j < grafo->tam; j++) {
-            fprintf(saida, "%1hhu ", grafo->adj[indice(grafo, i, j)]);
+            bool adj = grafo_tem_aresta(grafo, i, j);
+            fprintf(saida, "%1hhu ", adj);
         }
 
         fprintf(saida, "\n");
@@ -213,7 +219,7 @@ void grafo_imprimir_arestas(const grafo_t *grafo, FILE *saida) {
     // Similar ao `grafo_imprimir_no`, porém sem redundâncias.
     for (size_t a = 0; a < grafo->tam; a++) {
         for (size_t b = a; b < grafo->tam; b++) {
-            bool adj = grafo->adj[indice(grafo, a, b)];
+            bool adj = grafo_tem_aresta(grafo, a, b);
 
             // Imprime o par 'a' e 'b'
             if (adj) {

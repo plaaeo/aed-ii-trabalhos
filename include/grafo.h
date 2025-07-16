@@ -25,12 +25,18 @@ bool grafo_tem_aresta(const grafo_t *grafo, size_t a, size_t b);
 /// Executa busca por largura, ou 'breadth-first search', a partir de um nó 'a'.
 /// O resultado é armazenado no vetor passado no argumento 'dist', que deve ter
 /// o mesmo tamanho que o numero de nós do grafo.
+/// 'dist' contem, para cada posição `i`, a distância do nó `i` até a origem
+/// selecionada.
 void grafo_bfs(const grafo_t *grafo, size_t a, size_t *dist);
 
 /// Executa busca por profundidade, ou 'depth-first search', a partir de um nó
-/// 'a'. O resultado é armazenado no vetor passado no argumento 'dist', que deve
-/// ter o mesmo tamanho que o numero de nós do grafo.
-void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist);
+/// 'a'. O resultado é armazenado no vetors passados nos argumentos 'dist' e
+/// 'ordem', que devem ter o mesmo tamanho que o numero de nós do grafo.
+///
+/// 'dist' contem, para cada posição `i`, a distância do nó `i` até a origem
+/// selecionada;
+/// 'ordem' contém a ordem de visita dos nós.
+void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem);
 
 /// Imprime no arquivo dado todos os nós adjacentes ao nó dado.
 /// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.

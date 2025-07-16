@@ -23,7 +23,7 @@ void questao2(const grafo_t *grafo, size_t origem) {
     size_t *arvore = calloc(tam * tam, sizeof(size_t));
 
     // Vetor onde cada posição `i` equivale ao tamanho do nível `i` da árvore.
-    uint8_t tamanhos[tam];
+    size_t tamanhos[tam];
     for (size_t i = 0; i < tam; i++) {
         tamanhos[i] = 0;
     }

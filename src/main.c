@@ -50,8 +50,8 @@ int main() {
     // Todos os possíveis graus de conectividade dos grafos
     float graus[] = {0.0, 0.25, 0.50, 0.75, 1.00};
     size_t n_graus = sizeof(graus) / sizeof(float);
+
     for (size_t g = 0; g < n_graus; g++) {
-        printf("%f\n", graus[g]);
         grafo_t *grafo = grafo_criar_conexo(20, graus[g]);
         grafo_imprimir_arestas(grafo, NULL);
 
