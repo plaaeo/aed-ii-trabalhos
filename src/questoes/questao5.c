@@ -1,27 +1,19 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include "grafo.h"
 #include "ciclo.h"
 
-int q5() {
-    int n = 4;
+int main() {
+    grafo_t *g = grafo_criar(4);
+    grafo_definir_aresta(g, 0, 1, true);
+    grafo_definir_aresta(g, 1, 2, true);
+    grafo_definir_aresta(g, 2, 0, true); // forma ciclo 0-1-2-0
 
-    // Criando grafo com ciclo: 0-1-2-0
-    int **grafo = malloc(n * sizeof(int *));
-    for (int i = 0; i < n; i++) {
-        grafo[i] = calloc(n, sizeof(int));
+    if (grafo_tem_ciclo(g)) {
+        printf("Grafo possui ciclo\n");
+    } else {
+        printf("Grafo NÃO possui ciclo\n");
     }
 
-    grafo[0][1] = grafo[1][0] = 1;
-    grafo[1][2] = grafo[2][1] = 1;
-    grafo[2][0] = grafo[0][2] = 1;
-
-    printf("O grafo possui ciclo? %s\n", possuiCiclo(grafo, n) ? "Sim" : "Não");
-
-    // Liberação da memória
-    for (int i = 0; i < n; i++) {
-        free(grafo[i]);
-    }
-    free(grafo);
-
+    grafo_free(g);
     return 0;
 }
