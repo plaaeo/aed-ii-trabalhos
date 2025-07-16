@@ -38,6 +38,9 @@ void grafo_bfs(const grafo_t *grafo, size_t a, size_t *dist);
 /// 'ordem' contém a ordem de visita dos nós.
 void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem);
 
+/// Retorna verdadeiro se o grafo contiver um ciclo de tamanho >= 3.
+bool grafo_tem_ciclo(const grafo_t *grafo);
+
 /// Imprime no arquivo dado todos os nós adjacentes ao nó dado.
 /// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.
 void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida);

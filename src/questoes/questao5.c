@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "grafo.h"
-#include "ciclo.h"
 
 int q5() {
     grafo_t *g = grafo_criar(4);

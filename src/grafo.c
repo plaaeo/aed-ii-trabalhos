@@ -45,7 +45,7 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
     {
         // Vetor de conexões a serem feitas no grafo.
         // Cada nó em 'conexoes[i]' se conecta ao nó 'conexoes[i + 1]'
-        size_t conexoes[tam];
+        size_t *conexoes = malloc(tam * sizeof(size_t));
 
         // Gerar vetor de conexões básico, sem repetições
         for (size_t i = 0; i < tam; i++) conexoes[i] = (i + 1) % tam;
@@ -72,7 +72,11 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
         }
 
         arestas = grafo->tam - 1;
+        free(conexoes);
     }
+
+    // Máximo possível de arestas
+    size_t max_arestas = (tam - 1) * tam / 2;
 
     // Quantidade de arestas que se deve gerar
     size_t alvo = grau * (tam - 1) * tam / 2;
@@ -87,6 +91,8 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
         // Definir uma aresta aleatória
         grafo_definir_aresta(grafo, i, j, true);
     }
+
+    (void)max_arestas;
 
     return grafo;
 }
@@ -153,8 +159,7 @@ size_t *dfs(const grafo_t *grafo, size_t a, size_t *visita, size_t *ordem,
     visita[a] = distancia;
 
     for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
-        bool adj = grafo_tem_aresta(grafo, a, vizinho);
-        if (adj && visita[vizinho] == SIZE_MAX) {
+        if (visita[vizinho] == SIZE_MAX && grafo_tem_aresta(grafo, a, vizinho)) {
             ordem = dfs(grafo, vizinho, visita, ordem + 1, distancia + 1);
         }
     }
@@ -172,6 +177,44 @@ void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem) {
 
     dfs(grafo, a, dist, ordem, 0);
 };
+
+/// Função auxiliar de DFS para detecção de ciclos
+bool dfs_ciclo(const grafo_t *grafo, size_t atual, size_t pai, bool *visitado) {
+    visitado[atual] = true;
+
+    for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
+        if (grafo_tem_aresta(grafo, atual, vizinho)) {
+            if (!visitado[vizinho]) {
+                if (dfs_ciclo(grafo, vizinho, atual, visitado)) {
+                    return true;
+                }
+            } else if (vizinho != pai) {
+                return true; // Encontrou um ciclo (tamanho ≥ 3)
+            }
+        }
+    }
+
+    return false;
+}
+
+/// Retorna verdadeiro se o grafo contiver um ciclo de tamanho >= 3.
+bool grafo_tem_ciclo(const grafo_t *grafo) {
+    size_t n = grafo_tamanho(grafo);
+    bool *visitado = calloc(n, sizeof(bool));
+    if (!visitado) return false;
+
+    for (size_t i = 0; i < n; i++) {
+        if (!visitado[i]) {
+            if (dfs_ciclo(grafo, i, (size_t)-1, visitado)) {
+                free(visitado);
+                return true;
+            }
+        }
+    }
+
+    free(visitado);
+    return false;
+}
 
 /// Imprime todos os nós adjacentes ao nó dado.
 void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida) {
