@@ -1,3 +1,5 @@
+.PHONY: all clean run outdir
+
 INCDIR := include
 SRCDIR := src
 OUTDIR := out
@@ -29,6 +31,7 @@ outdir:
 
 # Regras para compilar cada arquivo .c
 $(OUTDIR)/%.o: $(SRCDIR)/%.c
+	mkdir -p $(shell dirname "$@")
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Regra para compilar o trabalho final

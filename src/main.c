@@ -1,12 +1,11 @@
-#include <time.h>
 #include <stdio.h>
+#include <time.h>
 
-#include "grafo.h"
 #include "fila.h"
+#include "grafo.h"
 
 /// Teste de criação de grafo conexo (remover na entrega)
-void teste_grafo() {
-}
+void teste_grafo() {}
 
 /// Teste do funcionamento da fila (remover na entrega)
 void teste_fila() {
@@ -27,8 +26,10 @@ void teste_fila() {
             bool res = fila_remover(fila, &item);
             printf("-> removendo item %lu ", 11 - i);
 
-            if (res) printf("(ok, %lu)\n", item);
-            else     printf("(vazio)\n");
+            if (res)
+                printf("(ok, %lu)\n", item);
+            else
+                printf("(vazio)\n");
         }
     }
 
@@ -40,6 +41,9 @@ void teste_fila() {
     printf("-> fim do teste\n");
 }
 
+extern void questao2(const grafo_t *grafo);
+extern void questao3(const grafo_t *grafo);
+
 int main() {
     srand(time(NULL));
 
@@ -48,8 +52,11 @@ int main() {
     grafo_t *grafo = grafo_criar_conexo(10, 0.60);
 
     for (size_t i = 0; i < grafo_tamanho(grafo); i++)
-        printf("%lu\n", i);
-
-    for (size_t i = 0; i < grafo_tamanho(grafo); i++)
         grafo_imprimir_no(grafo, i);
+
+    questao2(grafo);
+    questao3(grafo);
+
+    // for (size_t i = 0; i < grafo_tamanho(grafo); i++)
+    //     printf("%lu\n", i);
 }

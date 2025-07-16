@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 /// Um TAD para uma fila de elementos 'fila_valor_t' de capacidade fixa.
 typedef struct fila_t fila_t;
@@ -15,10 +15,10 @@ fila_t *fila_criar(size_t capacidade);
 /// Libera a fila.
 void fila_liberar(fila_t *fila);
 
-/// Insere um elemento no final da fila. Retorna 'false'
+/// Insere um dado elemento no final da fila. Retorna 'false'
 /// se a fila estiver cheia e o elemento não for inserido.
-bool fila_inserir(fila_t* fila, fila_valor_t valor);
+bool fila_inserir(fila_t *fila, fila_valor_t valor);
 
 /// Remove o elemento atualmente na frente da fila e armazena-o
 /// em '*resultado'. Retorna 'false' se a fila estiver vazia.
-bool fila_remover(fila_t* fila, fila_valor_t *resultado);
+bool fila_remover(fila_t *fila, fila_valor_t *resultado);
