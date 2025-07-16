@@ -1,23 +1,26 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "grafo.h"
 
 /**
  * Implementação da Questão 2 - Busca em Largura (BFS)
  * Usando apenas as funções públicas das interfaces
+ * Retorna o tempo de execução do algorítmo em `clock_t`s.
  */
-void questao2(const grafo_t *grafo, size_t origem) {
-    if (!grafo) return;
-
+clock_t questao2(const grafo_t *grafo, size_t origem) {
     size_t tam = grafo_tamanho(grafo);
 
-    printf("\n=== QUESTÃO 2 - BUSCA EM LARGURA (BFS) ===\n");
+    printf("\n=== QUESTÃO 2 - Busca em largura (BFS) ===\n");
 
     // Realizar busca em largura
     size_t dist[tam];
+
+    clock_t tempo = clock();
     grafo_bfs(grafo, origem, dist);
+    tempo = clock() - tempo;
 
     // Matriz onde cada linha equivale a um nível da árvore
     size_t *arvore = calloc(tam * tam, sizeof(size_t));
@@ -54,4 +57,5 @@ void questao2(const grafo_t *grafo, size_t origem) {
     }
 
     free(arvore);
+    return tempo;
 }

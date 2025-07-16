@@ -41,26 +41,79 @@ void teste_fila() {
     printf("-> fim do teste\n");
 }
 
-extern void questao2(const grafo_t *grafo, size_t origem);
-extern void questao3(const grafo_t *grafo, size_t origem);
+extern clock_t questao2(const grafo_t *grafo, size_t origem);
+extern clock_t questao3(const grafo_t *grafo, size_t origem);
+
+/// Imprime a tabela de tempos para cada grafo em um dos algoritmos usados.
+void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
+                     size_t n_tamanhos, size_t n_graus) {
+    // Imprimir cabeçalho da tabela
+    printf("| Conectividade |");
+    for (size_t t = 0; t < n_tamanhos; t++) {
+        printf(" Tamanho %4lu |", tamanhos[t]);
+    }
+
+    printf("\n|--------------:|");
+    for (size_t t = 0; t < n_tamanhos; t++) {
+        printf(":-------------|");
+    }
+
+    // Imprimir linhas da tabela
+    for (size_t g = 0; g < n_graus; g++) {
+        printf("\n|       %6.2f%% |", graus[g] * 100);
+        for (size_t t = 0; t < n_tamanhos; t++) {
+            size_t idx = (t * n_graus) + g;
+            printf(" %12.4lf |", (double)(tempos[idx]) / 1000.0);
+        }
+    }
+
+    printf("\n");
+}
 
 int main() {
     srand(time(NULL));
 
+    // Todos os possíveis tamanhos para os grafos
+    size_t tamanhos[] = {512, 1024, 2048, 4096};
+
     // Todos os possíveis graus de conectividade dos grafos
-    float graus[] = {0.0, 0.25, 0.50, 0.75, 1.00};
-    size_t n_graus = sizeof(graus) / sizeof(float);
+    float graus[] = {0.25, 0.50, 0.75, 1.00};
 
-    for (size_t g = 0; g < n_graus; g++) {
-        grafo_t *grafo = grafo_criar_conexo(20, graus[g]);
-        grafo_imprimir_arestas(grafo, NULL);
+    // Hack para definir n_tamanhos e n_graus como 'constantes'
+    enum {
+        n_tamanhos = sizeof(tamanhos) / sizeof(size_t),
+        n_graus = sizeof(graus) / sizeof(float)
+    };
 
-        questao2(grafo, 0);
-        questao3(grafo, 0);
+    // Durações de execução para cada grafo
+    clock_t tempos_bfs[n_tamanhos * n_graus] = {};
+    clock_t tempos_dfs[n_tamanhos * n_graus] = {};
 
-        grafo_free(grafo);
+    for (size_t t = 0; t < n_tamanhos; t++) {
+        for (size_t g = 0; g < n_graus; g++) {
+            size_t idx = (t * n_graus) + g;
+
+            grafo_t *grafo = grafo_criar_conexo(tamanhos[t], graus[g]);
+
+            // Imprimir grafo para verificação posterior
+            printf(
+                "--- Grafo de tamanho %lu com %.02f%% de conectividade ---\n",
+                tamanhos[t], graus[g] * 100);
+
+            size_t origem = rand() % tamanhos[t];
+
+            // Executar e medir questões
+            tempos_bfs[idx] = questao2(grafo, origem);
+            tempos_dfs[idx] = questao3(grafo, origem);
+
+            // Limpar memória
+            grafo_free(grafo);
+            printf("\n");
+        }
     }
 
-    // for (size_t i = 0; i < grafo_tamanho(grafo); i++)
-    //     printf("%lu\n", i);
+    printf("--- Tempos BFS ---\n");
+    imprimir_tabela(tamanhos, graus, tempos_bfs, n_tamanhos, n_graus);
+    printf("\n--- Tempos DFS ---\n");
+    imprimir_tabela(tamanhos, graus, tempos_dfs, n_tamanhos, n_graus);
 }
