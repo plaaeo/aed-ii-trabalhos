@@ -41,21 +41,25 @@ void teste_fila() {
     printf("-> fim do teste\n");
 }
 
-extern void questao2(const grafo_t *grafo);
-extern void questao3(const grafo_t *grafo);
+extern void questao2(const grafo_t *grafo, size_t origem);
+extern void questao3(const grafo_t *grafo, size_t origem);
 
 int main() {
     srand(time(NULL));
 
-    teste_fila();
+    // Todos os possíveis graus de conectividade dos grafos
+    float graus[] = {0.0, 0.25, 0.50, 0.75, 1.00};
+    size_t n_graus = sizeof(graus) / sizeof(float);
+    for (size_t g = 0; g < n_graus; g++) {
+        printf("%f\n", graus[g]);
+        grafo_t *grafo = grafo_criar_conexo(20, graus[g]);
+        grafo_imprimir_arestas(grafo, NULL);
 
-    grafo_t *grafo = grafo_criar_conexo(10, 0.60);
+        questao2(grafo, 0);
+        questao3(grafo, 0);
 
-    for (size_t i = 0; i < grafo_tamanho(grafo); i++)
-        grafo_imprimir_no(grafo, i);
-
-    questao2(grafo);
-    questao3(grafo);
+        grafo_free(grafo);
+    }
 
     // for (size_t i = 0; i < grafo_tamanho(grafo); i++)
     //     printf("%lu\n", i);

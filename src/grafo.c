@@ -1,5 +1,6 @@
 #include "grafo.h"
 
+#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -16,13 +17,18 @@ struct grafo_t {
 
 /// Calcula o índice da aresta a->b na matriz de adjacência do grafo.
 size_t indice(const grafo_t *grafo, size_t a, size_t b) {
-    return a * grafo->tam + b;
+    size_t dim = grafo->tam * grafo->tam;
+    size_t i = (a * grafo->tam) + b;
+
+    assert(i < dim);
+
+    return i;
 }
 
 /// Cria um grafo vazio com o tamanho determinado.
 grafo_t *grafo_criar(size_t tam) {
     grafo_t *grafo = (grafo_t *)malloc(sizeof(grafo_t));
-    grafo->adj = malloc(tam * tam * sizeof(uint8_t));
+    grafo->adj = calloc(tam * tam, sizeof(uint8_t));
     grafo->tam = tam;
     return grafo;
 }
@@ -81,14 +87,6 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
         grafo_definir_aresta(grafo, i, j, true);
     }
 
-    for (size_t i = 0; i < tam; i++) {
-        for (size_t j = 0; j < tam; j++) {
-            printf("%1hhu ", grafo->adj[indice(grafo, i, j)]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
     return grafo;
 }
 
@@ -104,8 +102,8 @@ void grafo_free(grafo_t *grafo) {
 void grafo_definir_aresta(grafo_t *grafo, size_t a, size_t b, bool valor) {
     if (a >= grafo->tam || b >= grafo->tam) return;
 
-    grafo->adj[indice(grafo, a, b)] = valor;
-    grafo->adj[indice(grafo, b, a)] = valor;
+    grafo->adj[indice(grafo, a, b)] = valor ? 1 : 0;
+    grafo->adj[indice(grafo, b, a)] = valor ? 1 : 0;
 }
 
 /// Verifica se há aresta entre os nós a e b no grafo.
@@ -171,16 +169,59 @@ void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist) {
 };
 
 /// Imprime todos os nós adjacentes ao nó dado.
-void grafo_imprimir_no(const grafo_t *grafo, size_t a) {
+void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida) {
     if (a >= grafo->tam) return;
+
+    // Garantir saída padrão caso saída seja NULL
+    if (saida == NULL) {
+        saida = stdout;
+    }
 
     for (size_t b = 0; b < grafo->tam; b++) {
         bool adj = grafo->adj[indice(grafo, a, b)];
 
         // Imprime o par 'a' e 'b'
-        if (adj) printf("%lu %lu\n", a, b);
+        if (adj) fprintf(saida, "%lu %lu\n", a, b);
     }
 }
+
+/// Imprime a matriz de adjacência do grafo, usado para verificar
+/// visualmente a conectividade do grafo.
+void grafo_imprimir_matriz(const grafo_t *grafo, FILE *saida) {
+    // Garantir saída padrão caso saída seja NULL
+    if (saida == NULL) {
+        saida = stdout;
+    }
+
+    for (size_t i = 0; i < grafo->tam; i++) {
+        for (size_t j = 0; j < grafo->tam; j++) {
+            fprintf(saida, "%1hhu ", grafo->adj[indice(grafo, i, j)]);
+        }
+
+        fprintf(saida, "\n");
+    }
+};
+
+/// Imprime todas as arestas do grafo, usado para renderizar o grafo em
+/// qualquer programa visualisador externo.
+void grafo_imprimir_arestas(const grafo_t *grafo, FILE *saida) {
+    // Garantir saída padrão caso saída seja NULL
+    if (saida == NULL) {
+        saida = stdout;
+    }
+
+    // Similar ao `grafo_imprimir_no`, porém sem redundâncias.
+    for (size_t a = 0; a < grafo->tam; a++) {
+        for (size_t b = a; b < grafo->tam; b++) {
+            bool adj = grafo->adj[indice(grafo, a, b)];
+
+            // Imprime o par 'a' e 'b'
+            if (adj) {
+                fprintf(saida, "%lu %lu\n", a, b);
+            }
+        }
+    }
+};
 
 /// Retorna a quantidade de nós no grafo.
 size_t grafo_tamanho(const grafo_t *grafo) {

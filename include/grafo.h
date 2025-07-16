@@ -1,5 +1,6 @@
 #pragma once
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /// TAD para um grafo não direcionado de tamanho constante.
@@ -26,13 +27,24 @@ bool grafo_tem_aresta(const grafo_t *grafo, size_t a, size_t b);
 /// o mesmo tamanho que o numero de nós do grafo.
 void grafo_bfs(const grafo_t *grafo, size_t a, size_t *dist);
 
-/// Executa busca por profundidade, ou 'depth-first search', a partir de um nó 'a'.
-/// O resultado é armazenado no vetor passado no argumento 'dist', que deve ter
-/// o mesmo tamanho que o numero de nós do grafo.
+/// Executa busca por profundidade, ou 'depth-first search', a partir de um nó
+/// 'a'. O resultado é armazenado no vetor passado no argumento 'dist', que deve
+/// ter o mesmo tamanho que o numero de nós do grafo.
 void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist);
 
-/// Imprime todos os nós adjacentes ao nó dado.
-void grafo_imprimir_no(const grafo_t *grafo, size_t a);
+/// Imprime no arquivo dado todos os nós adjacentes ao nó dado.
+/// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.
+void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida);
+
+/// Imprime no arquivo dado a matriz de adjacência do grafo,
+/// usado para validar visualmente a conectividade do grafo.
+/// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.
+void grafo_imprimir_matriz(const grafo_t *grafo, FILE *saida);
+
+/// Imprime no arquivo dado todas as arestas do grafo, usado para
+/// renderizar o grafo em qualquer programa visualisador externo.
+/// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.
+void grafo_imprimir_arestas(const grafo_t *grafo, FILE *saida);
 
 /// Retorna a quantidade de nós no grafo.
 size_t grafo_tamanho(const grafo_t *grafo);
