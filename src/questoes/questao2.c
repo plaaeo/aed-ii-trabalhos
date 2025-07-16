@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,14 +12,46 @@ void questao2(const grafo_t *grafo, size_t origem) {
     if (!grafo) return;
 
     size_t tam = grafo_tamanho(grafo);
-    size_t dist[tam];
 
     printf("\n=== QUESTÃO 2 - BUSCA EM LARGURA (BFS) ===\n");
 
+    // Realizar busca em largura
+    size_t dist[tam];
     grafo_bfs(grafo, origem, dist);
 
-    printf("Distâncias a partir do nó %lu:\n", origem);
+    // Matriz onde cada linha equivale a um nível da árvore
+    size_t *arvore = calloc(tam * tam, sizeof(size_t));
+
+    // Vetor onde cada posição `i` equivale ao tamanho do nível `i` da árvore.
+    uint8_t tamanhos[tam];
     for (size_t i = 0; i < tam; i++) {
-        printf("Nó %zu: %zu\n", i, dist[i]);
+        tamanhos[i] = 0;
     }
+
+    // Preencher árvore com os dados da BFS
+    for (size_t i = 0; i < tam; i++) {
+        size_t nivel = dist[i];
+        size_t coluna = tamanhos[nivel];
+        size_t idx = (nivel * tam) + coluna;
+
+        arvore[idx] = i;
+        tamanhos[nivel]++;
+    }
+
+    // Imprimir árvore
+    for (size_t n = 0; tamanhos[n] > 0; n++) {
+        if (n == 0) {
+            printf("Raíz: ");
+        } else {
+            printf("Nível %lu: ", n);
+        }
+
+        for (size_t i = 0; i < tamanhos[n]; i++) {
+            printf("%lu ", arvore[n * tam + i]);
+        }
+
+        printf("\n");
+    }
+
+    free(arvore);
 }

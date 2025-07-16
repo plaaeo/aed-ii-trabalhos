@@ -14,6 +14,7 @@ void questao3(const grafo_t *grafo, size_t origem) {
 
     printf("\n=== QUESTÃO 3 - BUSCA EM PROFUNDIDADE ===\n");
 
+    // Realizar busca por profundidade
     size_t ordem[tam];
     grafo_dfs(grafo, origem, ordem);
 
