@@ -1,8 +1,6 @@
-#ifndef ciclo_h
-#define ciclo_h
-
+#pragma once
 #include <stdbool.h>
+#include "grafo.h"
 
-bool possuiCiclo(int **grafo, int n);
-
-#endif
+/// Retorna verdadeiro se o grafo contiver um ciclo de tamanho ≥ 3
+bool grafo_tem_ciclo(const grafo_t *grafo);
