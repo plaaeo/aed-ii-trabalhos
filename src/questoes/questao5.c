@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "ciclo.c"
+#include "ciclo.h"
 
 int q5() {
     int n = 4;
