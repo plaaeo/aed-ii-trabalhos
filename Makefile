@@ -11,6 +11,7 @@ CFLAGS = -Wall -Wextra -Werror -lm -std=c99 -I$(INCDIR)
 
 # Arquivos
 SRCS   := $(shell find $(SRCDIR) -name "*.c")
+SRCS = src/questao5.c src/ciclo.c
 OBJS   := $(patsubst $(SRCDIR)/%.c,$(OUTDIR)/%.o,$(SRCS))
 
 # Builda tudo
