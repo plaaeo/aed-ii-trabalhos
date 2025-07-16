@@ -2,7 +2,7 @@
 #include "grafo.h"
 #include "ciclo.h"
 
-int main() {
+int q5() {
     grafo_t *g = grafo_criar(4);
     grafo_definir_aresta(g, 0, 1, true);
     grafo_definir_aresta(g, 1, 2, true);
