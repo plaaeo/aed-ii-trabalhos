@@ -46,7 +46,6 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
     // - Garantir que o grafo é conexo -
     {
         // Vetor de conexões a serem feitas no grafo.
-        // Cada nó em 'conexoes[i]' se conecta ao nó 'conexoes[i + 1]'
         size_t *conexoes = malloc(tam * sizeof(size_t));
 
         // Gerar vetor de conexões básico, sem repetições

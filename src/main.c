@@ -21,13 +21,24 @@ void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
         printf(":-------------|");
     }
 
+    // Inicializar vetor da média
+    double somas[n_tamanhos];
+    for (size_t i = 0; i < n_tamanhos; i++) somas[i] = 0;
+
     // Imprimir linhas da tabela
     for (size_t g = 0; g < n_graus; g++) {
         printf("\n|       %6.2f%% |", graus[g] * 100);
         for (size_t t = 0; t < n_tamanhos; t++) {
             size_t idx = (t * n_graus) + g;
             printf(" %12.4lf |", (double)(tempos[idx]) / 1000.0);
+            somas[t] += tempos[idx];
         }
+    }
+
+    // Imprimir médias
+    printf("\n|        Medias |");
+    for (size_t t = 0; t < n_tamanhos; t++) {
+        printf(" %12.4lf |", (double)(somas[t]) / (n_tamanhos * 1000.0));
     }
 
     printf("\n");
