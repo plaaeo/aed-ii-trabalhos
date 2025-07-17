@@ -3,6 +3,7 @@
 #include <time.h>
 
 #include "grafo.h"
+#include "questoes.h"
 
 /**
  * Implementação da Questão 3 - Busca em Profundidade

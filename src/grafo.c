@@ -192,6 +192,7 @@ void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem) {
     dfs(grafo, a, dist, ordem, 0);
 };
 
+/// Usado abaixo para armazenar os dados de um caminho da DFS.
 typedef struct dfs_contexto_t {
     size_t indice;
     size_t *ordem;

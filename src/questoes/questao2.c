@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "grafo.h"
+#include "questoes.h"
 
 /**
  * Implementação da Questão 2 - Busca em Largura (BFS)

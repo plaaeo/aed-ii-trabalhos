@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "grafo.h"
+#include "questoes.h"
 #include "util.h"
 
 /**
@@ -27,13 +28,16 @@ void questao4() {
         printf(">- Mini-grafo de tamanho 6 com %.02f%% de conectividade -<\n",
                graus[g] * 100);
 
+        size_t origem = rand() % 6;
+        printf("> Origem escolhida para DFS: %lu\n", origem);
+
         // Imprime os pares de arestas do grafo.
         printf("\n> Pares de arestas do grafo:\n");
         grafo_imprimir_arestas(grafo, NULL);
 
         // Calcular todos os caminhos do grafo
         size_t quantos = 0;
-        size_t **matriz = grafo_calcular_caminhos(grafo, 0, &quantos);
+        size_t **matriz = grafo_calcular_caminhos(grafo, origem, &quantos);
 
         printf("\n> Caminhos gerados:\n");
         for (size_t i = 0; i < quantos; i++) {

@@ -1,50 +1,11 @@
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
-#include "fila.h"
 #include "grafo.h"
+#include "questoes.h"
 #include "util.h"
-
-/// Teste de criação de grafo conexo (remover na entrega)
-void teste_grafo() {}
-
-/// Teste do funcionamento da fila (remover na entrega)
-void teste_fila() {
-    size_t item;
-    fila_t *fila = fila_criar(8);
-
-    printf("testando funcionamento da fila\n");
-
-    for (size_t j = 0; j < 10; j++) {
-        // Inserir 8 elementos
-        for (size_t i = 0; i < 8; i++) {
-            bool res = fila_inserir(fila, i + 1);
-            printf("-> inserindo %lu (%s)\n", i + 1, res ? "ok" : "cheio");
-        }
-
-        // Remover uma quantidade cada vez menor de elementos (de 10 a 2)
-        for (size_t i = 10; j < i; i--) {
-            bool res = fila_remover(fila, &item);
-            printf("-> removendo item %lu ", 11 - i);
-
-            if (res)
-                printf("(ok, %lu)\n", item);
-            else
-                printf("(vazio)\n");
-        }
-    }
-
-    // Remover todos os itens da fila até esvaziar
-    while (fila_remover(fila, &item)) {
-        printf("-> removendo sobras (%lu)\n", item);
-    }
-
-    printf("-> fim do teste\n");
-}
-
-extern clock_t questao2(const grafo_t *grafo, size_t origem);
-extern clock_t questao3(const grafo_t *grafo, size_t origem);
-extern void questao4();
 
 /// Imprime a tabela de tempos para cada grafo em um dos algoritmos usados.
 void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
@@ -75,15 +36,40 @@ void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
 int main() {
     srand(time(NULL));
 
-    printf("> AED2 - Trabalho 4 - Grafos\n\n");
+    // Limpar a tela
+    printf("\033[2J\033[H");
+
+    printf("=== AED2 - Trabalho 4 - Grafos ===\n\n");
     printf("> Alunos: \n");
-    printf("- Paulo Victor Fernandes de Melo\n");
-    printf("- João Luiz Rodrigues da Silva\n");
-    printf("- Rebecca Aimée Lima de Lima\n");
-    printf("- Beatriz Jacaúna Martins\n\n");
-    printf("");
+    printf(". Paulo Victor Fernandes de Melo\n");
+    printf(". João Luiz Rodrigues da Silva\n");
+    printf(". Rebecca Aimée Lima de Lima\n");
+    printf(". Beatriz Jacaúna Martins\n\n");
+    printf(
+        "* Para apresentar os grafos, serão impressos listas de pares de "
+        "adjacência.\n");
+    printf(
+        "* Para visualizar os grafos, é recomendado que copie as "
+        "listas e use-as em https://csacademy.com/app/graph_editor/\n\n");
+
+    // Abrir arquivo da q2 e q3
+    FILE *q2q3 = fopen("q2q3.txt", "w");
+    if (q2q3) {
+        printf(
+            "* Para as questões 2 e 3, pelo tamanho excessivo dos grafos, as "
+            "listas de adjacência (exceto as de 100%% de conectividade) serão "
+            "salvas em 'q2q3.txt'.\n");
+    } else {
+        printf(
+            "! Os grafos das questões 2 e 3 não serão salvos, pois não foi "
+            "possível abrir o arquivo 'q2q3.txt'.\n");
+        printf("! Erro: %s\n", strerror(errno));
+    }
 
     aguardar_entrada();
+
+    // Executar questão 1
+    questao1();
 
     // Todos os possíveis tamanhos para os grafos
     size_t tamanhos[] = {16, 64, 512, 1024, 2048, 4096};
@@ -107,15 +93,26 @@ int main() {
 
             grafo_t *grafo = grafo_criar_conexo(tamanhos[t], graus[g]);
 
+            // Imprimir todos os grafos (menos os 100% conexos)
+            if (graus[g] != 1.00 && q2q3) {
+                // Imprimir nome do grafo
+                fprintf(
+                    q2q3,
+                    "- Grafo de tamanho %lu com %.02f%% de conectividade -\n",
+                    tamanhos[t], graus[g] * 100);
+
+                grafo_imprimir_arestas(grafo, q2q3);
+            }
+
             // Imprimir grafo para verificação posterior
             printf("=== QUESTÃO 2 e 3 - BFS e DFS ===\n\n");
             printf(
                 "--- Grafo de tamanho %lu com %.02f%% de "
-                "conectividade ---\n",
+                "conectividade ---\n\n",
                 tamanhos[t], graus[g] * 100);
 
             size_t origem = rand() % tamanhos[t];
-            printf("> Origem para DFS/BFS: %lu\n", origem);
+            printf("> Origem escolhida para DFS/BFS: %lu\n", origem);
 
             // Executar e medir questões
             tempos_bfs[idx] = questao2(grafo, origem);
@@ -128,6 +125,8 @@ int main() {
         }
     }
 
+    fclose(q2q3);
+
     // Imprimir tabelas da questão 2 e 3
     printf("=== QUESTÃO 2 e 3 - BFS e DFS ===\n\n");
     printf("\n--- Tempos de execução da BFS ---\n");
@@ -136,6 +135,7 @@ int main() {
     imprimir_tabela(tamanhos, graus, tempos_dfs, n_tamanhos, n_graus);
     aguardar_entrada();
 
-    // Executar a questão 4
+    // Executar a questão 4 e 5
     questao4();
+    questao5();
 }
