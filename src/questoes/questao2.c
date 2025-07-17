@@ -43,11 +43,7 @@ clock_t questao2(const grafo_t *grafo, size_t origem) {
 
     // Imprimir árvore
     for (size_t n = 0; tamanhos[n] > 0; n++) {
-        if (n == 0) {
-            printf("Raíz: ");
-        } else {
-            printf("Nível %lu: ", n);
-        }
+        printf("Nível %lu: ", n);
 
         for (size_t i = 0; i < tamanhos[n]; i++) {
             printf("%lu ", arvore[n * tam + i]);

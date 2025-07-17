@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "fila.h"
 
@@ -48,7 +50,9 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
         size_t *conexoes = malloc(tam * sizeof(size_t));
 
         // Gerar vetor de conexões básico, sem repetições
-        for (size_t i = 0; i < tam; i++) conexoes[i] = (i + 1) % tam;
+        for (size_t i = 0; i < tam; i++) {
+            conexoes[i] = (i + 1) % tam;
+        }
 
         // Embaralhar vetor
         for (size_t i = 0; i < tam; i++) {
@@ -79,20 +83,29 @@ grafo_t *grafo_criar_conexo(size_t tam, float grau) {
     size_t max_arestas = (tam - 1) * tam / 2;
 
     // Quantidade de arestas que se deve gerar
-    size_t alvo = grau * (tam - 1) * tam / 2;
-    for (; arestas < alvo; arestas++) {
-        // Gerar um par novo até que não seja definido e não seja da diagonal
-        size_t i, j;
-        do {
-            i = rand() % tam;
-            j = rand() % tam;
-        } while (i == j || grafo_tem_aresta(grafo, i, j));
+    size_t alvo = grau * max_arestas;
 
-        // Definir uma aresta aleatória
-        grafo_definir_aresta(grafo, i, j, true);
+    // Já temos um grafo com a quantidade adequada de arestas
+    if (alvo <= arestas) return grafo;
+
+    // Índice da próxima aresta livre
+    size_t n = rand() % ((max_arestas - arestas) / (alvo - arestas));
+
+    for (size_t i = 0; i < tam; i++) {
+        for (size_t j = i + 1; j < tam; j++) {
+            // Iterar apenas arestas livres
+            if (grafo_tem_aresta(grafo, i, j)) continue;
+
+            // Chegamos na aresta selecionada
+            if (n-- == 0) {
+                // Retornar caso tenhamos atingido o limite
+                if (++arestas >= alvo) return grafo;
+
+                grafo_definir_aresta(grafo, i, j, true);
+                n = rand() % ((max_arestas - arestas) / (alvo - arestas));
+            }
+        }
     }
-
-    (void)max_arestas;
 
     return grafo;
 }
@@ -159,7 +172,8 @@ size_t *dfs(const grafo_t *grafo, size_t a, size_t *visita, size_t *ordem,
     visita[a] = distancia;
 
     for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
-        if (visita[vizinho] == SIZE_MAX && grafo_tem_aresta(grafo, a, vizinho)) {
+        if (visita[vizinho] == SIZE_MAX &&
+            grafo_tem_aresta(grafo, a, vizinho)) {
             ordem = dfs(grafo, vizinho, visita, ordem + 1, distancia + 1);
         }
     }
@@ -178,6 +192,107 @@ void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem) {
     dfs(grafo, a, dist, ordem, 0);
 };
 
+typedef struct dfs_contexto_t {
+    size_t indice;
+    size_t *ordem;
+    uint8_t *visitas;
+    struct dfs_contexto_t *prox;
+} dfs_ctx_t;
+
+/// Copia o contexto dado.
+dfs_ctx_t *dfs_ctx_fork(const grafo_t *grafo, dfs_ctx_t *orig) {
+    dfs_ctx_t *copia = malloc(sizeof(dfs_ctx_t));
+    copia->ordem = malloc(grafo->tam * sizeof(size_t));
+    copia->visitas = malloc(grafo->tam * sizeof(uint8_t));
+
+    // Inserir como próximo da origem
+    copia->prox = orig->prox;
+    orig->prox = copia;
+
+    // Copiar dados do contexto original
+    copia->indice = orig->indice;
+    memcpy(copia->ordem, orig->ordem, orig->indice * sizeof(size_t));
+    memcpy(copia->visitas, orig->visitas, grafo->tam * sizeof(uint8_t));
+
+    // Definir todos os outros elementos da ordem como SIZE_MAX
+    memset(&copia->ordem[copia->indice], -1,
+           (grafo->tam - orig->indice) * sizeof(size_t));
+    return copia;
+}
+
+/// Modificação da DFS para gerar todos os caminhos possíveis.
+void dfs_caminhos(const grafo_t *grafo, size_t atual, dfs_ctx_t *ctx) {
+    ctx->ordem[ctx->indice++] = atual;
+    ctx->visitas[atual] = 1;
+
+    // Contar todos os vizinhos
+    size_t n_vizinhos = 0;
+    for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
+        // Ignorar nós visitados/desconectados
+        if (ctx->visitas[vizinho] == 1 ||
+            !grafo_tem_aresta(grafo, atual, vizinho)) {
+            continue;
+        }
+
+        n_vizinhos++;
+    }
+
+    for (size_t vizinho = 0; vizinho < grafo->tam; vizinho++) {
+        // Ignorar nós visitados/desconectados
+        if (ctx->visitas[vizinho] == 1 ||
+            !grafo_tem_aresta(grafo, atual, vizinho)) {
+            continue;
+        }
+
+        // Clonar contexto caso não seja o último vizinho
+        if (--n_vizinhos > 0) {
+            dfs_ctx_t *copia = dfs_ctx_fork(grafo, ctx);
+            dfs_caminhos(grafo, vizinho, copia);
+        } else {
+            dfs_caminhos(grafo, vizinho, ctx);
+        }
+    }
+}
+
+/// Utiliza busca por profundidade para calcular todos os caminhos possíveis no
+/// grafo.
+size_t **grafo_calcular_caminhos(const grafo_t *grafo, size_t origem,
+                                 size_t *quantos) {
+    dfs_ctx_t *inicial = malloc(sizeof(dfs_ctx_t));
+    inicial->indice = 0;
+    inicial->ordem = malloc(grafo->tam * sizeof(size_t));
+    inicial->visitas = calloc(grafo->tam, sizeof(uint8_t));
+    inicial->prox = NULL;
+
+    // Definir todos os elementos da ordem como SIZE_MAX
+    memset(inicial->ordem, -1, grafo->tam * sizeof(size_t));
+
+    // Calcular caminhos
+    dfs_caminhos(grafo, origem, inicial);
+
+    // Contar quantos caminhos existem
+    size_t n_caminhos = 0;
+    for (dfs_ctx_t *i = inicial; i != NULL; i = i->prox) {
+        n_caminhos++;
+    }
+
+    // Gerar matriz
+    size_t j = 0;
+    size_t **matriz = calloc(n_caminhos, sizeof(size_t *));
+    for (dfs_ctx_t *i = inicial; i != NULL;) {
+        matriz[j++] = i->ordem;
+
+        // Liberar memória do dfs_ctx_t
+        dfs_ctx_t *old_i = i;
+        i = i->prox;
+        free(old_i->visitas);
+        free(old_i);
+    }
+
+    *quantos = n_caminhos;
+    return matriz;
+};
+
 /// Função auxiliar de DFS para detecção de ciclos
 bool dfs_ciclo(const grafo_t *grafo, size_t atual, size_t pai, bool *visitado) {
     visitado[atual] = true;
@@ -189,7 +304,7 @@ bool dfs_ciclo(const grafo_t *grafo, size_t atual, size_t pai, bool *visitado) {
                     return true;
                 }
             } else if (vizinho != pai) {
-                return true; // Encontrou um ciclo (tamanho ≥ 3)
+                return true;  // Encontrou um ciclo (tamanho ≥ 3)
             }
         }
     }

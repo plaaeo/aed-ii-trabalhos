@@ -41,6 +41,12 @@ void grafo_dfs(const grafo_t *grafo, size_t a, size_t *dist, size_t *ordem);
 /// Retorna verdadeiro se o grafo contiver um ciclo de tamanho >= 3.
 bool grafo_tem_ciclo(const grafo_t *grafo);
 
+/// Utiliza busca por profundidade para calcular todos os caminhos possíveis no
+/// grafo, iniciando do nó dado. Armazena em `*quantos` a quantidade de caminhos
+/// calculados, e retorna uma matriz com os caminhos.
+size_t **grafo_calcular_caminhos(const grafo_t *grafo, size_t origem,
+                                 size_t *quantos);
+
 /// Imprime no arquivo dado todos os nós adjacentes ao nó dado.
 /// Caso `NULL` seja passado como arquivo, imprimirá na saída padrão.
 void grafo_imprimir_no(const grafo_t *grafo, size_t a, FILE *saida);

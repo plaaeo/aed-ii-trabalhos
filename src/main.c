@@ -3,6 +3,7 @@
 
 #include "fila.h"
 #include "grafo.h"
+#include "util.h"
 
 /// Teste de criação de grafo conexo (remover na entrega)
 void teste_grafo() {}
@@ -43,6 +44,7 @@ void teste_fila() {
 
 extern clock_t questao2(const grafo_t *grafo, size_t origem);
 extern clock_t questao3(const grafo_t *grafo, size_t origem);
+extern void questao4();
 
 /// Imprime a tabela de tempos para cada grafo em um dos algoritmos usados.
 void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
@@ -73,11 +75,21 @@ void imprimir_tabela(size_t tamanhos[], float graus[], clock_t tempos[],
 int main() {
     srand(time(NULL));
 
+    printf("> AED2 - Trabalho 4 - Grafos\n\n");
+    printf("> Alunos: \n");
+    printf("- Paulo Victor Fernandes de Melo\n");
+    printf("- João Luiz Rodrigues da Silva\n");
+    printf("- Rebecca Aimée Lima de Lima\n");
+    printf("- Beatriz Jacaúna Martins\n\n");
+    printf("");
+
+    aguardar_entrada();
+
     // Todos os possíveis tamanhos para os grafos
-    size_t tamanhos[] = {512, 1024, 2048, 4096};
+    size_t tamanhos[] = {16, 64, 512, 1024, 2048, 4096};
 
     // Todos os possíveis graus de conectividade dos grafos
-    float graus[] = {0.25, 0.50, 0.75, 1.00};
+    float graus[] = {0.10, 0.25, 0.50, 0.75, 1.00};
 
     // Hack para definir n_tamanhos e n_graus como 'constantes'
     enum {
@@ -96,11 +108,14 @@ int main() {
             grafo_t *grafo = grafo_criar_conexo(tamanhos[t], graus[g]);
 
             // Imprimir grafo para verificação posterior
+            printf("=== QUESTÃO 2 e 3 - BFS e DFS ===\n\n");
             printf(
-                "--- Grafo de tamanho %lu com %.02f%% de conectividade ---\n",
+                "--- Grafo de tamanho %lu com %.02f%% de "
+                "conectividade ---\n",
                 tamanhos[t], graus[g] * 100);
 
             size_t origem = rand() % tamanhos[t];
+            printf("> Origem para DFS/BFS: %lu\n", origem);
 
             // Executar e medir questões
             tempos_bfs[idx] = questao2(grafo, origem);
@@ -109,11 +124,18 @@ int main() {
             // Limpar memória
             grafo_free(grafo);
             printf("\n");
+            aguardar_entrada();
         }
     }
 
-    printf("--- Tempos BFS ---\n");
+    // Imprimir tabelas da questão 2 e 3
+    printf("=== QUESTÃO 2 e 3 - BFS e DFS ===\n\n");
+    printf("\n--- Tempos de execução da BFS ---\n");
     imprimir_tabela(tamanhos, graus, tempos_bfs, n_tamanhos, n_graus);
-    printf("\n--- Tempos DFS ---\n");
+    printf("\n--- Tempos de execução da DFS ---\n");
     imprimir_tabela(tamanhos, graus, tempos_dfs, n_tamanhos, n_graus);
+    aguardar_entrada();
+
+    // Executar a questão 4
+    questao4();
 }

@@ -24,7 +24,7 @@ clock_t questao3(const grafo_t *grafo, size_t origem) {
     printf("Ordem de visita a partir do vértice %lu:\n", origem);
     printf("%lu", origem);
     for (size_t i = 1; i < tam; i++) {
-        printf(" -> %lu", ordem[i]);
+        printf(", %lu", ordem[i]);
     }
     printf("\n");
 
